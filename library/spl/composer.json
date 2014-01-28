@@ -1,13 +1,13 @@
 {
-	"name": "umi/framework",
-    "description": "UMI.Framework",
+	"name": "umi/spl",
+    "description": "UMI.Framework Standard PHP Library extensions",
 	"type": "library",
     "license": "BSD-3-Clause",
 	"minimum-stability": "stable",
 	"homepage": "http://umi-framework.ru/",
 	"autoload": {
 		"psr-4": {
-			"umi\\": "library/"
+			"umi\\spl": "."
 		}
 	},
 	"require": {
