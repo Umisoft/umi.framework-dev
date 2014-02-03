@@ -7,18 +7,17 @@
  * @license   http://umi-framework.ru/license/bsd-3 BSD-3 License
  */
 
-namespace utest\hmvc\mock\controller;
-
-use umi\hmvc\controller\type\StaticPageController;
+namespace umi\acl;
 
 /**
- * Class MockStaticPageController
+ * Интерфейс субъекта, которому назначены роли.
  */
-class MockStaticPageController extends StaticPageController
+interface IAclRoleProvider
 {
     /**
-     * @var string $template шаблон
+     * Возвращает список имен ролей.
+     * @return string[]
      */
-    protected $template = 'mock';
+    public function getRoleNames();
 }
  
