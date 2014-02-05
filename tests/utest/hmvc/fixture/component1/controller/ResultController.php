@@ -24,7 +24,7 @@ class ResultController extends BaseController
     {
         $ex = $request->getVar(IHTTPComponentRequest::ROUTE, 'route');
 
-        return $this->createDisplayResponse(
+        return $this->createViewResponse(
             'result',
             [
                 'var'    => $ex,

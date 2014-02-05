@@ -24,7 +24,7 @@ class MockController extends BaseController
     {
         $data = $request->getVar(IHTTPComponentRequest::ROUTE, 'data', 'mock');
 
-        return $this->createPlainResponse($data);
+        return $this->createResponse($data);
     }
 }
  

@@ -32,12 +32,12 @@ class ComponentResponseTest extends HMVCTestCase
     public function testProcessing()
     {
         $this->assertTrue(
-            $this->response->isProcessable(),
+            $this->response->getIsCompleted(),
             'Ожидается, что по умолчанию результат работы компонента True.'
         );
 
-        $this->assertSame($this->response, $this->response->stopProcessing());
+        $this->assertSame($this->response, $this->response->setIsCompleted());
 
-        $this->assertFalse($this->response->isProcessable(), 'Ожидается, что результат работы компонента False.');
+        $this->assertFalse($this->response->getIsCompleted(), 'Ожидается, что результат работы компонента False.');
     }
 }

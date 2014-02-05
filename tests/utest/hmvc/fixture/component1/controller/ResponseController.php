@@ -24,6 +24,6 @@ class ResponseController extends BaseController
     {
         $ex = $request->getVar(IHTTPComponentRequest::ROUTE, 'route');
 
-        return $this->createPlainResponse($ex);
+        return $this->createResponse($ex);
     }
 }

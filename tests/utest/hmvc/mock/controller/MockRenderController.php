@@ -24,7 +24,7 @@ class MockRenderController extends BaseController
     {
         $data = $request->getVar(IHTTPComponentRequest::ROUTE, 'data', 'mock');
 
-        return $this->createDisplayResponse(
+        return $this->createViewResponse(
             'result',
             [
                 'data' => $data

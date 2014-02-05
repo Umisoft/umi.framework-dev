@@ -22,7 +22,7 @@ class TestController extends BaseController
      */
     public function __invoke(IHTTPComponentRequest $request)
     {
-        return $this->createDisplayResponse(
+        return $this->createViewResponse(
             'test',
             [
                 'name' => 'UMI'
