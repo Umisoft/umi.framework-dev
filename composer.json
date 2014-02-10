@@ -7,17 +7,12 @@
     "minimum-stability": "dev",
     "homepage": "http://umi-framework.ru/",
     "replace": {
-        "umi/framework" : "self.version"
+        "umi/framework" : "self.version",
+        "umi/extension-twig" : "self.version"
     },
     "require": {
-        "php": ">=5.4.0"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "3.7.*",
-        "umi/extension-twig": "*"
-    },
-    "suggest": {
-        "umi/extension-twig": "For using Twig template engine."
+        "php": ">=5.4.0",
+        "phpunit/phpunit": "3.7.*"
     },
     "autoload": {
         "psr-4": {
