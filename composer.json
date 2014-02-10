@@ -1,20 +1,19 @@
 {
-	"name": "umi/framework",
+    "name": "umi/framework",
     "description": "UMI.Framework",
-	"type": "library",
+    "type": "library",
     "license": "BSD-3-Clause",
-	"minimum-stability": "stable",
-	"homepage": "http://umi-framework.ru/",
-	"autoload": {
-		"psr-4": {
-			"umi\\": "library/"
-		}
-	},
-	"require": {
-		"php": ">=5.4.0",
-		"psr/log": "1.*",
-		"twig/twig": "1.*",
-		"doctrine/dbal": "2.4.*",
-		"symfony/http-foundation": "2.4.*"
-	}
+    "minimum-stability": "stable",
+    "homepage": "http://umi-framework.ru/",
+    "autoload": {
+        "psr-4": {
+            "umi\\": "library/"
+        }
+    },
+    "require": {
+        "php": ">=5.4.0",
+        "psr/log": "1.*",
+        "doctrine/dbal": "2.4.*",
+        "symfony/http-foundation": "2.4.*"
+    }
 }

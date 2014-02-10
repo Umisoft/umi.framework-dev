@@ -10,7 +10,7 @@
 namespace utest\templating\unit\engine;
 
 use umi\templating\engine\ITemplateEngine;
-use umi\templating\engine\twig\TwigTemplateEngine;
+use umi\extension\twig\TwigTemplateEngine;
 use umi\templating\extension\adapter\ExtensionAdapter;
 use umi\templating\toolbox\factory\ExtensionFactory;
 use utest\templating\TemplatingTestCase;
