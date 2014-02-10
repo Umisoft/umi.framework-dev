@@ -1,0 +1,16 @@
+{
+    "name": "umi/acl",
+    "description": "UMI.Framework ACL package",
+    "type": "library",
+    "license": "BSD-3-Clause",
+    "minimum-stability": "stable",
+    "homepage": "http://umi-framework.ru/",
+    "autoload": {
+        "psr-4": {
+            "umi\\acl\\": "."
+        }
+    },
+    "require": {
+        "php": ">=5.4.0"
+    }
+}

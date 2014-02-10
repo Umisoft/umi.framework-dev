@@ -9,8 +9,8 @@
 
 namespace utest\hmvc\mock\controller;
 
-use umi\hmvc\component\request\IComponentRequest;
-use umi\hmvc\controller\type\BaseController;
+use umi\hmvc\dispatcher\http\IHTTPComponentRequest;
+use umi\hmvc\controller\BaseController;
 
 /**
  * Class MockErrorController
@@ -34,9 +34,9 @@ class MockErrorController extends BaseController
     /**
      * {@inheritdoc}
      */
-    public function __invoke(IComponentRequest $request)
+    public function __invoke(IHTTPComponentRequest $request)
     {
-        return $this->createPlainResponse($this->exception->getMessage(), $this->exception->getCode());
+        return $this->createResponse($this->exception->getMessage(), $this->exception->getCode());
     }
 }
  

@@ -9,7 +9,7 @@
 
 namespace utest\session\unit;
 
-use umi\http\request\Request;
+use umi\http\Request;
 use umi\session\ISessionManager;
 use umi\session\SessionManager;
 use utest\session\SessionTestCase;

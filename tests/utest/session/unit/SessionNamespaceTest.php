@@ -9,7 +9,7 @@
 
 namespace utest\session\unit\ns;
 
-use umi\http\request\Request;
+use umi\http\Request;
 use umi\session\entity\ns\ISessionNamespace;
 use umi\session\entity\ns\SessionNamespace;
 use umi\session\ISessionManager;

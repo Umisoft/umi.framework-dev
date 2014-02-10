@@ -9,8 +9,8 @@
 
 namespace utest\hmvc\unit\component;
 
-use umi\hmvc\component\response\ComponentResponse;
-use umi\hmvc\component\response\IComponentResponse;
+use umi\hmvc\dispatcher\http\HTTPComponentResponse;
+use umi\hmvc\dispatcher\http\IHTTPComponentResponse;
 use utest\hmvc\HMVCTestCase;
 
 /**
@@ -19,25 +19,25 @@ use utest\hmvc\HMVCTestCase;
 class ComponentResponseTest extends HMVCTestCase
 {
     /**
-     * @var IComponentResponse $response
+     * @var IHTTPComponentResponse $response
      */
     private $response;
 
     public function setUpFixtures()
     {
-        $this->response = new ComponentResponse();
+        $this->response = new HTTPComponentResponse();
         $this->resolveOptionalDependencies($this->response);
     }
 
     public function testProcessing()
     {
         $this->assertTrue(
-            $this->response->isProcessable(),
+            $this->response->getIsCompleted(),
             'Ожидается, что по умолчанию результат работы компонента True.'
         );
 
-        $this->assertSame($this->response, $this->response->stopProcessing());
+        $this->assertSame($this->response, $this->response->setIsCompleted());
 
-        $this->assertFalse($this->response->isProcessable(), 'Ожидается, что результат работы компонента False.');
+        $this->assertFalse($this->response->getIsCompleted(), 'Ожидается, что результат работы компонента False.');
     }
 }

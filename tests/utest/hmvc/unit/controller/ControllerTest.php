@@ -6,9 +6,10 @@
  * @copyright Copyright (c) 2007-2013 Umisoft ltd. (http://umisoft.ru/)
  * @license   http://umi-framework.ru/license/bsd-3 BSD-3 License
  */
+
 namespace utest\hmvc\unit\controller;
 
-use umi\hmvc\component\response\IComponentResponse;
+use umi\hmvc\dispatcher\http\IHTTPComponentResponse;
 use utest\hmvc\HMVCTestCase;
 use utest\hmvc\mock\controller\MockRedirectController;
 
@@ -33,7 +34,7 @@ class ControllerTest extends HMVCTestCase
         $this->resolveOptionalDependencies($controller);
 
         /**
-         * @var IComponentResponse $response
+         * @var IHTTPComponentResponse $response
          */
         $response = $controller($this->getRequest('/'));
 

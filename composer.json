@@ -1,16 +1,16 @@
 {
-	"name": "umi/framework",
+    "name": "umi/framework",
     "description": "UMI.Framework",
-	"type": "library",
+    "type": "library",
     "license": "BSD-3-Clause",
-	"minimum-stability": "stable",
-	"homepage": "http://umi-framework.ru/",
-	"autoload": {
-		"psr-4": {
-			"umi\\": "library/"
-		}
-	},
-	"require": {
-		"php": ">=5.4.0"
-	}
+    "minimum-stability": "stable",
+    "homepage": "http://umi-framework.ru/",
+    "autoload": {
+        "psr-4": {
+            "umi\\": "library/"
+        }
+    },
+    "require": {
+        "php": ">=5.4.0"
+    }
 }
