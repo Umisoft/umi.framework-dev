@@ -17,7 +17,7 @@
     "autoload": {
         "psr-4": {
             "umi\\": "library/",
-            "umi\\extension\\twig\\" : "extension/twig"
+            "umi\\extension\\twig\\" : "extension/twig/"
         }
     }
 }
