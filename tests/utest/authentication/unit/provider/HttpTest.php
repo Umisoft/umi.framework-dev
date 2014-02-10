@@ -10,7 +10,7 @@
 namespace utest\authentication\unit\provider;
 
 use umi\authentication\provider\HttpProvider;
-use umi\http\request\Request;
+use umi\http\Request;
 use utest\authentication\AuthenticationTestCase;
 
 /**
