@@ -9,7 +9,7 @@
 
 namespace utest\session\unit\validator;
 
-use umi\http\request\Request;
+use umi\http\Request;
 use umi\session\entity\ns\SessionNamespace;
 use umi\session\entity\validator\UserAgent;
 use utest\session\SessionTestCase;

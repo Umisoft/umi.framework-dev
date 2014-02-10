@@ -1,7 +1,7 @@
 {
-	"name": "umi/framework",
+    "name": "umi/framework",
     "description": "UMI.Framework",
-	"type": "library",
+    "type": "library",
     "license": "BSD-3-Clause",
 	"minimum-stability": "stable",
 	"homepage": "http://umi-framework.ru/",

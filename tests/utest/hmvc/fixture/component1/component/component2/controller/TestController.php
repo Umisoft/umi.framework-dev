@@ -9,8 +9,8 @@
 
 namespace utest\hmvc\fixture\component1\component\component2\controller;
 
-use umi\hmvc\component\request\IComponentRequest;
-use umi\hmvc\controller\type\BaseController;
+use umi\hmvc\dispatcher\http\IHTTPComponentRequest;
+use umi\hmvc\controller\BaseController;
 
 /**
  * Class TestController
@@ -20,9 +20,9 @@ class TestController extends BaseController
     /**
      * {@inheritdoc}
      */
-    public function __invoke(IComponentRequest $request)
+    public function __invoke(IHTTPComponentRequest $request)
     {
-        return $this->createDisplayResponse(
+        return $this->createViewResponse(
             'test',
             [
                 'name' => 'UMI'
