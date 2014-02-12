@@ -1,0 +1,4 @@
+php_value session.auto_start 0
+
+RewriteEngine on
+RewriteRule ^(.*)$ public_html/$1

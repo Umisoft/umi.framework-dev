@@ -1,0 +1,18 @@
+{
+    "name": "umi/application-blog",
+    "description": "Simple blog application for UMI.Framework demonstration",
+    "license": "BSD-3-Clause",
+    "type": "project",
+    "autoload": {
+        "psr-0": {
+            "application\\": ""
+        }
+    },
+    "require": {
+        "umi/framework": "*",
+        "umi/extension-twig": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    }
+}

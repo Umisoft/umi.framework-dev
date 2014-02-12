@@ -1,0 +1,17 @@
+{
+    "name": "umi/application-skeleton",
+    "description": "Skeleton application for UMI.Framework",
+    "license": "BSD-3-Clause",
+    "type": "project",
+    "autoload": {
+        "psr-0": {
+            "application\\": ""
+        }
+    },
+    "require": {
+        "umi/framework": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    }
+}
