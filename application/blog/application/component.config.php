@@ -24,7 +24,7 @@ return [
     // зарегистрированные контроллеры
     IComponent::OPTION_CONTROLLERS => [
         IComponent::ERROR_CONTROLLER   => __NAMESPACE__ . '\controller\ErrorController',
-        Application::LAYOUT_CONTROLLER => __NAMESPACE__ . '\controller\LayoutController',
+        IComponent::LAYOUT_CONTROLLER  => __NAMESPACE__ . '\controller\LayoutController',
         'index'                        => __NAMESPACE__ . '\controller\IndexController'
     ],
     // настройки шаблонизатора

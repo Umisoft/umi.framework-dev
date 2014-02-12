@@ -38,14 +38,14 @@ return [
             // тип маршрута - простой расширеный
             'type'     => IRouteFactory::ROUTE_EXTENDED,
             // путь(маска) маршрута
-            'route'    => '/{lang}',
+            'route'    => '/{locale}',
 
             'rules' => [
-                'lang' => '[a-z]{2}-[A-Z]{2}'
+                'locale' => '[a-z]{2}-[A-Z]{2}'
             ],
 
             'defaults' => [
-                'lang'       => 'ru-RU',
+                'locale'       => 'ru-RU',
                 'controller' => 'index'
             ]
         ]
