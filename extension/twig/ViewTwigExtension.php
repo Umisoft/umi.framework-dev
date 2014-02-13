@@ -21,9 +21,9 @@ use umi\hmvc\view\helper\UrlHelper;
 class ViewTwigExtension extends Twig_Extension
 {
     /**
-     * @var string $macrosFunctionName имя функции для вызова макроса
+     * @var string $widgetFunctionName имя функции для вызова виджета
      */
-    public $macrosFunctionName = 'macros';
+    public $widgetFunctionName = 'widget';
     /**
      * @var string $urlFunctionName имя функции для генерации URL
      */
@@ -34,7 +34,7 @@ class ViewTwigExtension extends Twig_Extension
     public $isAllowedFunctionName = 'isAllowed';
 
     /**
-     * @var IDispatcher $dispatcher диспетчер для вызова макроса
+     * @var IDispatcher $dispatcher диспетчер
      */
     protected $dispatcher;
     /**
@@ -48,7 +48,7 @@ class ViewTwigExtension extends Twig_Extension
 
     /**
      * Конструктор.
-     * @param IDispatcher $dispatcher диспетчер для вызова макроса
+     * @param IDispatcher $dispatcher диспетчер
      */
     public function __construct(IDispatcher $dispatcher) {
         $this->dispatcher = $dispatcher;
@@ -70,8 +70,8 @@ class ViewTwigExtension extends Twig_Extension
 
         return [
             new Twig_SimpleFunction(
-                $this->macrosFunctionName,
-                $this->getMacrosHelper(),
+                $this->widgetFunctionName,
+                $this->getWidgetHelper(),
                 ['is_safe' => ['html']]
             ),
 
@@ -111,13 +111,13 @@ class ViewTwigExtension extends Twig_Extension
     }
 
     /**
-     * Возвращает помощник вида для вызова макросов
+     * Возвращает помощник вида для вызова виджетов
      * @return callable
      */
-    protected function getMacrosHelper()
+    protected function getWidgetHelper()
     {
-        return  function($macrosPath, array $args = []) {
-            return $this->dispatcher->executeMacros($macrosPath, $args);
+        return  function($widgetPath, array $args = []) {
+            return $this->dispatcher->executeWidget($widgetPath, $args);
         };
     }
 
