@@ -20,7 +20,7 @@ class MessageTransportTest extends MessageTestCase
         $attach = __DIR__ . '/../data/attach-plain.txt';
         $dumpPath = __DIR__ . '/tmp';
         $this->messagesTools->setTransport(new TestTransport($dumpPath));
-        $this->messagesTools->getService('umi\messages\ISwiftMailer', null)
+        $this->messagesTools->getService('umi\messages\SwiftMailer', null)
             ->sendMail('test', 'testbody', 'text/plain', [$attach]);
         $this->assertFileExists($dumpPath . '/test.txt', 'Sent letter must be stored at tmp dir');
         $content = file_get_contents($dumpPath . '/test.txt');

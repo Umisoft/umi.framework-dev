@@ -23,9 +23,9 @@ class MessagesConfigTest extends MessageTestCase
     {
         $this->messagesTools->mailerOptions = $config;
         $this->assertInstanceOf(
-            'umi\messages\ISwiftMailer',
+            'umi\messages\SwiftMailer',
             $this->messagesTools->getService('umi\messages\SwiftMailer', null),
-            'ISwiftMailer must be created on valid config'
+            'SwiftMailer must be created on valid config'
         );
     }
 

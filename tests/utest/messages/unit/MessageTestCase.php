@@ -24,7 +24,7 @@ class MessageTestCase extends TestCase
     {
         parent::setUpFixtures();
         $this->getTestToolkit()
-            ->registerToolbox(require TESTS_ROOT . '/utest/messages/toolbox/config.php');
+            ->registerToolbox(require LIBRARY_PATH . '/messages/toolbox/config.php');
         $this->messagesTools = $this->getTestToolkit()->getToolbox(MessagesTools::NAME);
         $this->messagesTools->mailerOptions['sender_address'] = ['test@from.localhost' => 'Indeets Joe'];
         $this->messagesTools->mailerOptions['delivery_address'] = ['test@to.localhost' => 'Mark Twain'];
