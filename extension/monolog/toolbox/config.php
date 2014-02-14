@@ -7,20 +7,19 @@
  * @license   http://umi-framework.ru/license/bsd-3 BSD-3 License
  */
 
-namespace utest\messages\toolbox;
+namespace umi\extension\monolog\toolbox;
 
 /**
  * Конфигурация для регистрации набора инструментов.
  */
-use umi\messages\toolbox\MessagesTools;
 
 return [
-    'name' => MessagesTools::NAME,
-    'class' => 'umi\messages\toolbox\MessagesTools',
+    'name'     => MonologTools::NAME,
+    'class'    => __NAMESPACE__ . '\MonologTools',
     'awareInterfaces' => [
-        'umi\messages\ISwiftMailerAware'
+        'Psr\Log\LoggerAwareInterface',
     ],
     'services' => [
-        'umi\messages\SwiftMailer'
+        'Psr\Log\LoggerInterface'
     ]
 ];

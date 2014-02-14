@@ -7,27 +7,27 @@
  * @license   http://umi-framework.ru/license/bsd-3 BSD-3 License
  */
 
-namespace umi\monolog;
+namespace umi\extension\monolog;
 
 use Monolog\Logger;
 
 /**
- * Трейт для поддержки логирования.
+ * Трейт для поддержки логирования через библиотеку Monolog {@link https://github.com/Seldaek/monolog}
  */
 trait TMonologAware
 {
     /**
-     * @var \Monolog\Logger $_logger логгер
+     * @var \Monolog\Logger $logger логгер
      */
-    private $logger;
+    private $traitLogger;
 
     /**
-     * Устанавливает логгер.
+     * Внедряет логгер.
      * @param \Monolog\Logger $logger логгер
      */
     public function setLogger(Logger $logger)
     {
-        $this->logger = $logger;
+        $this->traitLogger = $logger;
     }
 
     /**
@@ -39,8 +39,8 @@ trait TMonologAware
      */
     protected function log($level, $message, array $placeholders = [])
     {
-        if ($this->logger) {
-            $this->logger->log($level, $message, $placeholders);
+        if ($this->traitLogger) {
+            $this->traitLogger->log($level, $message, $placeholders);
         }
 
         return $this;

@@ -24,8 +24,8 @@ trait TMonologSupport
 
     protected function registerLogTools()
     {
-        $this->getTestToolkit()->registerToolbox(
-            require(LIBRARY_PATH . '/monolog/toolbox/config.php')
-        );
+        $this->getTestToolkit()
+            ->registerToolbox(require(EXTENSIONS_PATH . '/monolog/toolbox/config.php'))
+            ->registerToolbox(require(LIBRARY_PATH . '/messages/toolbox/config.php'));
     }
 }

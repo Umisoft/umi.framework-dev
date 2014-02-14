@@ -12,7 +12,7 @@ use Monolog\Handler\FirePHPHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SwiftMailerHandler;
 use Monolog\Logger;
-use umi\monolog\toolbox\MonologTools;
+use umi\extension\monolog\toolbox\MonologTools;
 use utest\monolog\MonologTestCase;
 
 /**
@@ -124,5 +124,4 @@ class MonologToolsTests extends MonologTestCase
             "Config must produce FirePHPHandler handler"
         );
     }
-
 }
