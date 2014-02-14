@@ -26,6 +26,6 @@ class MockValidationAware implements IValidationAware, IMockAware
      */
     public function getService()
     {
-        return $this->_validatorFactory;
+        return $this->traitValidatorFactory;
     }
 }

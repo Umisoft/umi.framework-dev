@@ -23,7 +23,6 @@ class TestClass1 implements ILocalizable
      */
     public function setTranslator(ITranslator $translator)
     {
-        return $this;
     }
 
     /**

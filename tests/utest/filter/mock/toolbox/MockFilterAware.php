@@ -23,6 +23,6 @@ class MockFilterAware implements IFilterAware, IMockAware
      */
     public function getService()
     {
-        return $this->_filterFactory;
+        return $this->traitFilterFactory;
     }
 }

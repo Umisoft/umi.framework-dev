@@ -23,6 +23,6 @@ class MockPaginationAware implements IPaginationAware, IMockAware
      */
     public function getService()
     {
-        return $this->_paginationFactory;
+        return $this->traitPaginationFactory;
     }
 }
