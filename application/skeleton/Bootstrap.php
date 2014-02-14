@@ -58,7 +58,7 @@ class Bootstrap
         /**
          * @var IMvcEntityFactory $mvcEntityFactory
          */
-        $mvcEntityFactory = $this->toolkit->getService('umi\hmvc\IMVCEntityFactory');
+        $mvcEntityFactory = $this->toolkit->getService('umi\hmvc\IMvcEntityFactory');
 
         return $mvcEntityFactory->createComponent('application', 'application', $appConfig);
     }
