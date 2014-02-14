@@ -11,7 +11,7 @@ use umi\config\io\IConfigIO;
 use umi\extension\twig\TemplatingTwigExtension;
 use umi\extension\twig\ViewTwigExtension;
 use umi\hmvc\dispatcher\IDispatcher;
-use umi\hmvc\IMVCEntityFactory;
+use umi\hmvc\IMvcEntityFactory;
 use umi\http\Request;
 use umi\http\Response;
 use umi\spl\config\TConfigSupport;
@@ -60,7 +60,7 @@ class Bootstrap
         $appConfig = $this->configToArray($this->configuration->get('application'));
 
         /**
-         * @var IMVCEntityFactory $MVCEntityFactory
+         * @var IMvcEntityFactory $MVCEntityFactory
          */
         $MVCEntityFactory = $this->toolkit->getService('umi\hmvc\IMVCEntityFactory');
 

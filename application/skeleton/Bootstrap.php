@@ -9,7 +9,7 @@
 use umi\config\entity\IConfig;
 use umi\config\io\IConfigIO;
 use umi\hmvc\dispatcher\IDispatcher;
-use umi\hmvc\IMVCEntityFactory;
+use umi\hmvc\IMvcEntityFactory;
 use umi\http\Request;
 use umi\http\Response;
 use umi\spl\config\TConfigSupport;
@@ -56,7 +56,7 @@ class Bootstrap
         $appConfig = $this->configToArray($this->configuration->get('application'));
 
         /**
-         * @var IMVCEntityFactory $mvcEntityFactory
+         * @var IMvcEntityFactory $mvcEntityFactory
          */
         $mvcEntityFactory = $this->toolkit->getService('umi\hmvc\IMVCEntityFactory');
 

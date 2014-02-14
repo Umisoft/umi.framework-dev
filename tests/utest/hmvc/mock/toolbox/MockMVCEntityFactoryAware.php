@@ -9,16 +9,16 @@
 
 namespace utest\hmvc\mock\toolbox;
 
-use umi\hmvc\IMVCEntityFactoryAware;
-use umi\hmvc\TMVCEntityFactoryAware;
+use umi\hmvc\IMvcEntityFactoryAware;
+use umi\hmvc\TMvcEntityFactoryAware;
 use utest\IMockAware;
 
 /**
  * Mock-class для aware интерфейса.
  */
-class MockMVCEntityFactoryAware implements IMockAware, IMVCEntityFactoryAware
+class MockMVCEntityFactoryAware implements IMockAware, IMvcEntityFactoryAware
 {
-    use TMVCEntityFactoryAware;
+    use TMvcEntityFactoryAware;
 
     /**
      * {@inheritdoc}
