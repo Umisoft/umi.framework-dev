@@ -24,6 +24,9 @@ if (!defined('TESTS_CONFIGURATION')) {
 if (!defined('LIBRARY_PATH')) {
     define('LIBRARY_PATH', dirname(TESTS_ROOT) . '/library');
 }
+if (!defined('EXTENSIONS_PATH')) {
+    define('EXTENSIONS_PATH', dirname(TESTS_ROOT) . '/extension');
+}
 
 $loader = require_once($vendorDir . '/autoload.php');
 $loader->add('utest', __DIR__);
