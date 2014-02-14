@@ -35,7 +35,7 @@ class MockComponent implements IComponent, IRouteAware, IMvcEntityFactoryAware
      */
     public function getChildComponent($name)
     {
-        return $this->createMVCComponent([]);
+        return $this->createMvcComponent([]);
     }
 
     /**

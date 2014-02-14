@@ -25,7 +25,7 @@ class MockMVCEntityFactoryAware implements IMockAware, IMvcEntityFactoryAware
      */
     public function getService()
     {
-        return $this->_MVCEntityFactory;
+        return $this->_mvcEntityFactory;
     }
 }
  

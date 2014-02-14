@@ -60,11 +60,11 @@ class Bootstrap
         $appConfig = $this->configToArray($this->configuration->get('application'));
 
         /**
-         * @var IMvcEntityFactory $MVCEntityFactory
+         * @var IMvcEntityFactory $mvcEntityFactory
          */
-        $MVCEntityFactory = $this->toolkit->getService('umi\hmvc\IMVCEntityFactory');
+        $mvcEntityFactory = $this->toolkit->getService('umi\hmvc\IMvcEntityFactory');
 
-        return $MVCEntityFactory->createComponent('application', 'application', $appConfig);
+        return $mvcEntityFactory->createComponent('application', 'application', $appConfig);
     }
 
     /**
