@@ -9,7 +9,7 @@
 
 namespace utest\hmvc\unit\toolbox\factory;
 
-use umi\hmvc\toolbox\factory\MVCEntityFactory;
+use umi\hmvc\toolbox\factory\MvcEntityFactory;
 use utest\hmvc\HMVCTestCase;
 
 /**
@@ -18,13 +18,13 @@ use utest\hmvc\HMVCTestCase;
 class MVCLayerFactoryTest extends HMVCTestCase
 {
     /**
-     * @var MVCEntityFactory $factory
+     * @var MvcEntityFactory $factory
      */
     private $factory;
 
     public function setUpFixtures()
     {
-        $this->factory = new MVCEntityFactory();
+        $this->factory = new MvcEntityFactory();
         $this->resolveOptionalDependencies($this->factory);
     }
 
