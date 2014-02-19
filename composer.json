@@ -6,12 +6,6 @@
     "license": "BSD-3-Clause",
     "minimum-stability": "dev",
     "homepage": "http://umi-framework.ru/",
-    "replace": {
-        "umi/framework" : "self.version",
-        "umi/extension-twig" : "self.version",
-        "umi/application-blog" : "self.version",
-        "umi/application-skeleton" : "self.version"
-    },
     "require": {
         "php": ">=5.4.0",
         "phpunit/phpunit": "3.7.*",
