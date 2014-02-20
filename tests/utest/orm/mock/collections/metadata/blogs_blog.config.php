@@ -87,7 +87,7 @@ return [
             ]
         ],
         'publishTime'                            => [
-            'type'       => IField::TYPE_DATE,
+            'type'       => IField::TYPE_DATE_TIME,
             'columnName' => 'publish_time'
         ],
         'subscribers'                            => [

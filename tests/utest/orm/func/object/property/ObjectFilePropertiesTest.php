@@ -7,7 +7,7 @@
  * @license   http://umi-framework.ru/license/bsd-3 BSD-3 License
  */
 
-namespace utest\orm\func\object;
+namespace utest\orm\func\object\property;
 
 use umi\orm\collection\ICollectionFactory;
 use umi\orm\object\property\file\File;

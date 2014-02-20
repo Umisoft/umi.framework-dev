@@ -7,7 +7,7 @@
  * @license   http://umi-framework.ru/license/bsd-3 BSD-3 License
  */
 
-namespace utest\orm\func\object;
+namespace utest\orm\func\object\property;
 
 use umi\i18n\ILocalesService;
 use umi\orm\collection\ICollectionFactory;
