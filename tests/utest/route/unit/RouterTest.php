@@ -37,6 +37,7 @@ class RouterTest extends RouteTestCase
                 IRoute::OPTION_DEFAULTS => ['matched' => 'first']
             ]
         );
+        $first->setPriority(1);
 
         $third = new FixedRoute(
             [
@@ -44,17 +45,20 @@ class RouterTest extends RouteTestCase
                 IRoute::OPTION_DEFAULTS => ['more' => 'third']
             ]
         );
+        $third->setPriority(1);
 
         $second = new FixedRoute(
             [
                 IRoute::OPTION_ROUTE    => '/second/route',
                 IRoute::OPTION_DEFAULTS => ['matched' => 'second']
             ], ['third' => $third]);
+        $second->setPriority(2);
 
         $empty = new FixedRoute([
             IRoute::OPTION_ROUTE    => '',
             IRoute::OPTION_DEFAULTS => ['matched' => 'empty']
         ]);
+        $empty->setPriority(3);
 
         $this->router = new Router([
             'first'  => $first,
@@ -62,7 +66,7 @@ class RouterTest extends RouteTestCase
             'empty'  => $empty,
         ]);
 
-        $this->router2 = new Router([
+       $this->router2 = new Router([
             'first'  => $first,
             'second' => $second,
         ]);
@@ -178,13 +182,5 @@ class RouterTest extends RouteTestCase
     public function routePathNotFound()
     {
         $this->router->assemble('second/five');
-    }
-
-    public function testBaseUrl()
-    {
-        $this->assertSame($this->router, $this->router->setBaseUrl('testUrl'));
-        $this->assertEquals('testUrl', $this->router->getBaseUrl());
-
-        $this->assertEquals($this->router->getBaseUrl(), $this->router->assemble(''));
     }
 }
