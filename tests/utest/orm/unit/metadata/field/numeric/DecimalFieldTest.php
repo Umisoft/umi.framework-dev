@@ -9,6 +9,7 @@
 
 namespace utest\orm\unit\metadata\field\numeric;
 
+use umi\orm\metadata\field\IField;
 use umi\orm\metadata\field\numeric\DecimalField;
 use utest\orm\unit\metadata\field\FieldTestCase;
 
@@ -25,7 +26,7 @@ class DecimalFieldTest extends FieldTestCase
 
     protected function setUpFixtures()
     {
-        $this->field = new DecimalField('decimal');
+        $this->field = new DecimalField('decimal', IField::TYPE_DECIMAL);
     }
 
     /**

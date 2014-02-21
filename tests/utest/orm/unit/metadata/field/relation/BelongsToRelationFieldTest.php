@@ -9,6 +9,7 @@
 
 namespace utest\orm\unit\metadata\field\relation;
 
+use umi\orm\metadata\field\IField;
 use umi\orm\metadata\field\relation\BelongsToRelationField;
 use utest\orm\unit\metadata\field\FieldTestCase;
 
@@ -23,16 +24,18 @@ class BelongsToRelationFieldTest extends FieldTestCase
      */
     protected function getField()
     {
-        return new BelongsToRelationField('mock', [
-            'target' => 'targetCollection'
-        ]);
+        return new BelongsToRelationField(
+            'mock',
+            IField::TYPE_BELONGS_TO,
+            ['target' => 'targetCollection']
+        );
     }
 
     public function testConfig()
     {
         $e = null;
         try {
-            new BelongsToRelationField('mock');
+            new BelongsToRelationField('mock', IField::TYPE_BELONGS_TO);
         } catch (\Exception $e) {
         }
         $this->assertInstanceOf(
@@ -42,16 +45,18 @@ class BelongsToRelationFieldTest extends FieldTestCase
         );
 
         $config = ['target' => 'targetCollection'];
-        $field1 = new BelongsToRelationField('mock', $config);
+        $field1 = new BelongsToRelationField('mock', IField::TYPE_BELONGS_TO, $config);
 
         $this->assertEquals('targetCollection', $field1->getTargetCollectionName(), 'Неверно прочитан конфиг');
     }
 
     public function testMethods()
     {
-        $field = new BelongsToRelationField('mock', [
-            'target' => 'targetCollection'
-        ]);
+        $field = new BelongsToRelationField(
+            'mock',
+            IField::TYPE_BELONGS_TO,
+            ['target' => 'targetCollection']
+        );
 
         $this->assertEquals(
             'integer',

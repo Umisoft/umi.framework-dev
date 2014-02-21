@@ -9,6 +9,7 @@
 
 namespace utest\orm\unit\metadata\field\relation;
 
+use umi\orm\metadata\field\IField;
 use umi\orm\metadata\field\relation\HasManyRelationField;
 use utest\orm\unit\metadata\field\FieldTestCase;
 
@@ -20,17 +21,21 @@ class HasManyRelationFieldTest extends FieldTestCase
      */
     protected function getField()
     {
-        return new HasManyRelationField('mock', [
-            'target'      => 'targetCollection',
-            'targetField' => 'targetField'
-        ]);
+        return new HasManyRelationField(
+            'mock',
+            IField::TYPE_HAS_MANY,
+            [
+                'target'      => 'targetCollection',
+                'targetField' => 'targetField'
+            ]
+        );
     }
 
     public function testConfig()
     {
         $e = null;
         try {
-            new HasManyRelationField('mock');
+            new HasManyRelationField('mock', IField::TYPE_HAS_MANY);
         } catch (\Exception $e) {
         }
         $this->assertInstanceOf(
@@ -42,7 +47,7 @@ class HasManyRelationFieldTest extends FieldTestCase
         $config = ['target' => 'targetCollection'];
         $e = null;
         try {
-            new HasManyRelationField('mock', $config);
+            new HasManyRelationField('mock', IField::TYPE_HAS_MANY,$config);
         } catch (\Exception $e) {
         }
         $this->assertInstanceOf(
@@ -53,7 +58,7 @@ class HasManyRelationFieldTest extends FieldTestCase
         );
 
         $config['targetField'] = 'targetField';
-        $field1 = new HasManyRelationField('mock', $config);
+        $field1 = new HasManyRelationField('mock', IField::TYPE_HAS_MANY, $config);
 
         $this->assertEquals('targetCollection', $field1->getTargetCollectionName(), 'Неверно прочитан конфиг');
         $this->assertEquals('targetField', $field1->getTargetFieldName(), 'Неверно прочитан конфиг');
@@ -63,10 +68,14 @@ class HasManyRelationFieldTest extends FieldTestCase
     public function testMethods()
     {
 
-        $field = new HasManyRelationField('mock', [
-            'target'      => 'targetCollection',
-            'targetField' => 'targetField'
-        ]);
+        $field = new HasManyRelationField(
+            'mock',
+            IField::TYPE_HAS_MANY,
+            [
+                'target'      => 'targetCollection',
+                'targetField' => 'targetField'
+            ]
+        );
 
         $this->assertNull($field->getDataType(), 'Ожидается, что тип данных у поля один ко многим - null');
     }

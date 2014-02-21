@@ -9,6 +9,7 @@
 
 namespace utest\orm\unit\object\property;
 
+use umi\orm\metadata\field\IField;
 use umi\orm\metadata\field\special\CounterField;
 use umi\orm\object\IObject;
 use umi\orm\object\property\calculable\CounterProperty;
@@ -27,7 +28,7 @@ class CounterPropertyTest extends ORMTestCase
          */
         $object = $this->getMock('umi\orm\object\Object', [], [], '', false);
 
-        $counterField = new CounterField('counter');
+        $counterField = new CounterField('counter', IField::TYPE_COUNTER);
         $counterProperty = new CounterProperty($object, $counterField);
 
         $counterProperty->setInitialValue(0);

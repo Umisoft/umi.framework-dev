@@ -35,15 +35,19 @@ class PropertyFactoryTest extends ORMTestCase
         /**
          * @var IField $commonField
          */
-        $commonField = new IntegerField('integer');
-        $calculableField = new MaterializedPathField('mpath');
-        $counterField = new CounterField('counter');
-        $localizedField = new StringField('string', [
-            'localizations' => [
-                'ru' => ['columnName' => 'field_ru'],
-                'en' => ['columnName' => 'field_en']
+        $commonField = new IntegerField('integer', IField::TYPE_INTEGER);
+        $calculableField = new MaterializedPathField('mpath', IField::TYPE_MPATH);
+        $counterField = new CounterField('counter', IField::TYPE_COUNTER);
+        $localizedField = new StringField(
+            'string',
+            IField::TYPE_STRING,
+            [
+                'localizations' => [
+                    'ru' => ['columnName' => 'field_ru'],
+                    'en' => ['columnName' => 'field_en']
+                ]
             ]
-        ]);
+        );
 
         $propertyFactory = new PropertyFactory();
         $this->resolveOptionalDependencies($propertyFactory);

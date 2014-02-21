@@ -10,6 +10,7 @@
 namespace utest\orm\unit\metadata\field\numeric;
 
 use Doctrine\DBAL\Types\Type;
+use umi\orm\metadata\field\IField;
 use umi\orm\metadata\field\numeric\BoolField;
 use utest\orm\unit\metadata\field\FieldTestCase;
 
@@ -26,7 +27,7 @@ class BoolFieldTest extends FieldTestCase
 
     protected function setUpFixtures()
     {
-        $this->field = new BoolField('boolean');
+        $this->field = new BoolField('boolean', IField::TYPE_BOOL);
     }
 
     /**

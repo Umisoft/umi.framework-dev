@@ -9,6 +9,7 @@
 
 namespace utest\orm\unit\metadata\field\relation;
 
+use umi\orm\metadata\field\IField;
 use umi\orm\metadata\field\relation\ManyToManyRelationField;
 use utest\orm\unit\metadata\field\FieldTestCase;
 
@@ -23,12 +24,15 @@ class ManyToManyRelationFieldTest extends FieldTestCase
      */
     protected function getField()
     {
-        return new ManyToManyRelationField('mock', [
-            'target'       => 'targetCollection',
-            'targetField'  => 'targetField',
-            'relatedField' => 'relatedField',
-            'bridge'       => 'bridgeCollection'
-        ]);
+        return new ManyToManyRelationField('mock',
+            IField::TYPE_MANY_TO_MANY,
+            [
+                'target'       => 'targetCollection',
+                'targetField'  => 'targetField',
+                'relatedField' => 'relatedField',
+                'bridge'       => 'bridgeCollection'
+            ]
+        );
     }
 
     public function testConfig()
@@ -36,7 +40,7 @@ class ManyToManyRelationFieldTest extends FieldTestCase
 
         $e = null;
         try {
-            new ManyToManyRelationField('field');
+            new ManyToManyRelationField('field', IField::TYPE_MANY_TO_MANY);
         } catch (\Exception $e) {
         }
         $this->assertInstanceOf(
@@ -48,7 +52,7 @@ class ManyToManyRelationFieldTest extends FieldTestCase
         $config = ['target' => 'targetCollection'];
         $e = null;
         try {
-            new ManyToManyRelationField('field', $config);
+            new ManyToManyRelationField('field', IField::TYPE_MANY_TO_MANY, $config);
         } catch (\Exception $e) {
         }
         $this->assertInstanceOf(
@@ -61,7 +65,7 @@ class ManyToManyRelationFieldTest extends FieldTestCase
         $config['targetField'] = 'targetField';
         $e = null;
         try {
-            new ManyToManyRelationField('field', $config);
+            new ManyToManyRelationField('field', IField::TYPE_MANY_TO_MANY, $config);
         } catch (\Exception $e) {
         }
         $this->assertInstanceOf(
@@ -74,7 +78,7 @@ class ManyToManyRelationFieldTest extends FieldTestCase
         $config['relatedField'] = 'relatedField';
         $e = null;
         try {
-            new ManyToManyRelationField('field', $config);
+            new ManyToManyRelationField('field', IField::TYPE_MANY_TO_MANY, $config);
         } catch (\Exception $e) {
         }
         $this->assertInstanceOf(
@@ -84,7 +88,7 @@ class ManyToManyRelationFieldTest extends FieldTestCase
         );
 
         $config['bridge'] = 'bridgeCollection';
-        $field = new ManyToManyRelationField('field', $config);
+        $field = new ManyToManyRelationField('field', IField::TYPE_MANY_TO_MANY, $config);
 
         $this->assertEquals('targetCollection', $field->getTargetCollectionName(), 'Неверно прочитан конфиг');
         $this->assertEquals('targetField', $field->getTargetFieldName(), 'Неверно прочитан конфиг');
@@ -95,12 +99,16 @@ class ManyToManyRelationFieldTest extends FieldTestCase
     public function testMethods()
     {
 
-        $field = new ManyToManyRelationField('mock', [
-            'target'       => 'targetCollection',
-            'targetField'  => 'targetField',
-            'relatedField' => 'relatedField',
-            'bridge'       => 'bridgeCollection'
-        ]);
+        $field = new ManyToManyRelationField(
+            'mock',
+            IField::TYPE_MANY_TO_MANY,
+            [
+                'target'       => 'targetCollection',
+                'targetField'  => 'targetField',
+                'relatedField' => 'relatedField',
+                'bridge'       => 'bridgeCollection'
+            ]
+        );
 
         $this->assertNull($field->getDataType(), 'Ожидается, что тип данных у поля многие ко многим - null');
     }

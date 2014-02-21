@@ -9,6 +9,7 @@
 
 namespace utest\orm\unit\metadata\field\numeric;
 
+use umi\orm\metadata\field\IField;
 use umi\orm\metadata\field\numeric\IntegerField;
 use utest\orm\unit\metadata\field\FieldTestCase;
 
@@ -25,7 +26,7 @@ class IntegerFieldTest extends FieldTestCase
 
     protected function setUpFixtures()
     {
-        $this->field = new IntegerField('integer');
+        $this->field = new IntegerField('integer', IField::TYPE_INTEGER);
     }
 
     /**

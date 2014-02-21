@@ -11,6 +11,7 @@ namespace utest\orm\unit\metadata\field;
 
 use Doctrine\DBAL\Types\Type;
 use umi\orm\metadata\field\BaseField;
+use umi\orm\metadata\field\IField;
 use umi\orm\object\IObject;
 
 /**
@@ -24,13 +25,13 @@ class BaseFieldTest extends FieldTestCase
      */
     protected function getField()
     {
-        return new MockField('mock');
+        return new MockField('mock', IField::TYPE_STRING);
     }
 
     public function testDefaultConfig()
     {
 
-        $field = new MockField('mock');
+        $field = new MockField('mock', IField::TYPE_STRING);
 
         $this->assertEquals('mock', $field->getName(), 'Неверное имя поля');
         $this->assertEquals(
@@ -53,6 +54,7 @@ class BaseFieldTest extends FieldTestCase
 
         $field = new MockField(
             'mock',
+            IField::TYPE_STRING,
             [
                 'columnName' => 'column_for_field',
                 'visible' => 0,
@@ -99,7 +101,7 @@ class BaseFieldTest extends FieldTestCase
 
         $e = null;
         try {
-            new MockField('mock', ['validators' => 'WrongValidatorsConfig']);
+            new MockField('mock', IField::TYPE_STRING, ['validators' => 'WrongValidatorsConfig']);
         } catch (\Exception $e) {
         }
         $this->assertInstanceOf(
@@ -110,7 +112,7 @@ class BaseFieldTest extends FieldTestCase
 
         $e = null;
         try {
-            new MockField('mock', ['filters' => 'WrongFiltersConfig']);
+            new MockField('mock', IField::TYPE_STRING, ['filters' => 'WrongFiltersConfig']);
         } catch (\Exception $e) {
         }
         $this->assertInstanceOf(
