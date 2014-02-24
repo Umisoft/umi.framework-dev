@@ -11,12 +11,13 @@
         "phpunit/phpunit": "3.7.*",
         "symfony/http-foundation": "2.4.*",
         "psr/log": "1.*",
-        "doctrine/dbal": "2.4.*"
+        "doctrine/dbal": "2.4.*",
+        "makhov/phpmorphy": "dev-master"
     },
     "autoload": {
         "psr-4": {
             "umi\\": "library/",
-            "umi\\extension\\twig\\" : "extension/twig/"
+            "umi\\extension\\twig\\": "extension/twig/"
         }
     }
 }
