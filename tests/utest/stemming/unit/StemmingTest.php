@@ -70,17 +70,16 @@ class StemmingTest extends TestCase
         }
     }
 
-    public function testParadigms()
+    public function testCommonRoots()
     {
-        foreach ($this->getWordFixtures('base') as $input => $variants) {
-            $paradigms = $this->getStemming()
-                ->getWordParadigms($input);
-            $this->assertInstanceOf(
-                'phpMorphy_Paradigm_Collection',
-                $paradigms,
-                'Words paradigms must be produced'
+        foreach ($this->getWordFixtures('roots') as $input => $expect) {
+            $root = $this->getStemming()
+                ->getCommonRoot($input);
+            $this->assertEquals(
+                $expect,
+                $root,
+                'Common root must be found correctly'
             );
-            $this->assertGreaterThan(0, $paradigms->count(), 'Paradigms must be filled');
         }
     }
 
