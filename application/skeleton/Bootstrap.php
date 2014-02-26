@@ -69,7 +69,7 @@ class Bootstrap
         $application = $this->createApplication();
 
         try {
-            $dispatcher->dispatchRequest($application, $request);
+            $dispatcher->dispatch($application, $request);
         } catch (\Exception $e) {
             throw new ErrorException(
                 'Unhandled exception thrown.', 0, 1, __FILE__, __LINE__, $e
