@@ -10,8 +10,9 @@ use umi\config\entity\IConfig;
 use umi\config\io\IConfigIO;
 use umi\extension\twig\TemplatingTwigExtension;
 use umi\extension\twig\ViewTwigExtension;
+use umi\hmvc\component\IComponent;
 use umi\hmvc\dispatcher\IDispatcher;
-use umi\hmvc\IMVCEntityFactory;
+use umi\hmvc\IMvcEntityFactory;
 use umi\http\Request;
 use umi\http\Response;
 use umi\spl\config\TConfigSupport;
@@ -53,21 +54,6 @@ class Bootstrap
     }
 
     /**
-     * Создает компонент приложения.
-     */
-    public function createApplication()
-    {
-        $appConfig = $this->configToArray($this->configuration->get('application'));
-
-        /**
-         * @var IMVCEntityFactory $MVCEntityFactory
-         */
-        $MVCEntityFactory = $this->toolkit->getService('umi\hmvc\IMVCEntityFactory');
-
-        return $MVCEntityFactory->createComponent('application', 'application', $appConfig);
-    }
-
-    /**
      * Запускает приложение.
      */
     public function runApplication()
@@ -87,7 +73,7 @@ class Bootstrap
         $application = $this->createApplication();
 
         try {
-            $dispatcher->dispatchRequest($application, $request);
+            $dispatcher->dispatch($application, $request);
         } catch (\Exception $e) {
             throw new ErrorException(
                 'Unhandled exception thrown.', 0, 1, __FILE__, __LINE__, $e
@@ -97,12 +83,27 @@ class Bootstrap
 
     /**
      * Возвращает toolkit.
-     *
      * @return IToolkit
      */
-    public function getToolkit()
+    protected function getToolkit()
     {
         return $this->toolkit;
+    }
+
+    /**
+     * Создает компонент приложения.
+     * @return IComponent
+     */
+    protected function createApplication()
+    {
+        $appConfig = $this->configToArray($this->configuration->get('application'));
+
+        /**
+         * @var IMvcEntityFactory $mvcEntityFactory
+         */
+        $mvcEntityFactory = $this->toolkit->getService('umi\hmvc\IMvcEntityFactory');
+
+        return $mvcEntityFactory->createComponent('application', 'application', $appConfig);
     }
 
     /**

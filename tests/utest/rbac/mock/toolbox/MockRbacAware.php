@@ -23,6 +23,6 @@ class MockRbacAware implements IRbacAware, IMockAware
      */
     public function getService()
     {
-        return $this->_rbacRoleFactory;
+        return $this->traitRbacRoleFactory;
     }
 }

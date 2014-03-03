@@ -6,12 +6,6 @@
     "license": "BSD-3-Clause",
     "minimum-stability": "dev",
     "homepage": "http://umi-framework.ru/",
-    "replace": {
-        "umi/framework" : "self.version",
-        "umi/extension-twig" : "self.version",
-        "umi/application-blog" : "self.version",
-        "umi/application-skeleton" : "self.version"
-    },
     "require": {
         "php": ">=5.4.0",
         "phpunit/phpunit": "3.7.*",
@@ -19,7 +13,8 @@
         "psr/log": "1.*",
         "monolog/monolog": "1.7.*",
         "doctrine/dbal": "2.4.*",
-        "swiftmailer/swiftmailer": "5.0.*"
+        "swiftmailer/swiftmailer": "5.0.*",
+        "makhov/phpmorphy": "dev-master"
     },
     "autoload": {
         "psr-4": {

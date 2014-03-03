@@ -25,7 +25,7 @@ class MockTemplatingAware implements ITemplateEngineAware, IMockAware
      */
     public function getService()
     {
-        return $this->_templatingFactory;
+        return $this->traitTemplatingFactory;
     }
 }
  

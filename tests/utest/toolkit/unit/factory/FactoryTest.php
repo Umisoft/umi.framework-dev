@@ -43,7 +43,7 @@ class FactoryTest extends TestCase implements IFactory
             'Ожидается, что у любой фабрики есть фабрика прототипов'
         );
 
-        $this->_prototypeFactory = null;
+        $this->traitPrototypeFactory = null;
 
         $e = null;
         try {

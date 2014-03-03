@@ -104,6 +104,12 @@ class RouteTest extends RouteTestCase
         );
     }
 
+    public function testPriority()
+    {
+        $result = $this->router->match('/admin');
+        $this->assertEquals('admin', $result->getName(), 'Ожидается, что был выбран более приоритетный маршрут.');
+    }
+
     public function testAssemble()
     {
         $this->assertEquals(

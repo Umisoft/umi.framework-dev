@@ -9,6 +9,7 @@
 
 namespace utest\orm\unit\metadata\field\string;
 
+use umi\orm\metadata\field\IField;
 use umi\orm\metadata\field\string\StringField;
 use utest\orm\unit\metadata\field\FieldTestCase;
 
@@ -22,7 +23,7 @@ class StringFieldTest extends FieldTestCase
 
     protected function setUpFixtures()
     {
-        $this->field = new StringField('string');
+        $this->field = new StringField('string', IField::TYPE_STRING);
     }
 
     /**

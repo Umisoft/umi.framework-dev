@@ -12,6 +12,7 @@ namespace utest\orm\unit\metadata\field;
 use umi\i18n\ILocalesAware;
 use umi\i18n\TLocalesAware;
 use umi\orm\metadata\field\BaseField;
+use umi\orm\metadata\field\IField;
 use umi\orm\metadata\field\ILocalizableField;
 use umi\orm\metadata\field\TLocalizableField;
 use umi\orm\object\IObject;
@@ -27,12 +28,12 @@ class LocalizableFieldTest extends FieldTestCase
      */
     protected function getField()
     {
-        return new MockLocalizableField('mock');
+        return new MockLocalizableField('mock', IField::TYPE_STRING);
     }
 
     public function testEmptyLocalesConfig()
     {
-        $field = new MockLocalizableField('mock', ['localizations' => []]);
+        $field = new MockLocalizableField('mock', IField::TYPE_STRING, ['localizations' => []]);
         $this->assertFalse(
             $field->getIsLocalized(),
             'Ожидается, что локализуемое поле не локализовано, если у него не указаны локали'
@@ -47,7 +48,7 @@ class LocalizableFieldTest extends FieldTestCase
     {
         $e = null;
         try {
-            new MockLocalizableField('mock', ['localizations' => 'wrongLocalizationsConfig']);
+            new MockLocalizableField('mock', IField::TYPE_STRING, ['localizations' => 'wrongLocalizationsConfig']);
         } catch (\Exception $e) {
         }
         $this->assertInstanceOf(
@@ -72,6 +73,7 @@ class LocalizableFieldTest extends FieldTestCase
 
         $field = new MockLocalizableField(
             'mock',
+            IField::TYPE_STRING,
             [
                 'columnName'    => 'field_ru',
                 'defaultValue'  => 'default_ru',

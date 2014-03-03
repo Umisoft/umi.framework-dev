@@ -9,6 +9,7 @@
 
 namespace utest\orm\unit\object\property;
 
+use umi\orm\metadata\field\IField;
 use umi\orm\metadata\field\special\FileField;
 use umi\orm\object\IObject;
 use umi\orm\object\property\file\File;
@@ -34,6 +35,7 @@ class FileTest extends ORMTestCase
         $object = $this->getMock('umi\orm\object\Object', [], [], '', false);
         $fileField = new FileField(
             'file',
+            IField::TYPE_FILE,
             [
                 'sourcePath' => '',
                 'sourceURI' => ''

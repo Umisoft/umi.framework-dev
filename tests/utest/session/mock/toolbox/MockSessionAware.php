@@ -26,6 +26,6 @@ class MockSessionAware implements ISessionAware, IMockAware
      */
     public function getService()
     {
-        return $this->_sessionService;
+        return $this->traitSessionService;
     }
 }

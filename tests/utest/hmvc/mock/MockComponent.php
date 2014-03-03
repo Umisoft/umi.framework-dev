@@ -10,18 +10,18 @@
 namespace utest\hmvc\mock;
 
 use umi\hmvc\component\IComponent;
-use umi\hmvc\IMVCEntityFactoryAware;
-use umi\hmvc\TMVCEntityFactoryAware;
+use umi\hmvc\IMvcEntityFactoryAware;
+use umi\hmvc\TMvcEntityFactoryAware;
 use umi\route\IRouteAware;
 use umi\route\TRouteAware;
 
 /**
  * Class MockComponent
  */
-class MockComponent implements IComponent, IRouteAware, IMVCEntityFactoryAware
+class MockComponent implements IComponent, IRouteAware, IMvcEntityFactoryAware
 {
     use TRouteAware;
-    use TMVCEntityFactoryAware;
+    use TMvcEntityFactoryAware;
 
     /**
      * {@inheritdoc}
@@ -35,7 +35,7 @@ class MockComponent implements IComponent, IRouteAware, IMVCEntityFactoryAware
      */
     public function getChildComponent($name)
     {
-        return $this->createMVCComponent([]);
+        return $this->createMvcComponent([]);
     }
 
     /**

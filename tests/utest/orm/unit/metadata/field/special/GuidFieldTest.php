@@ -9,6 +9,7 @@
 
 namespace utest\orm\unit\metadata\field\special;
 
+use umi\orm\metadata\field\IField;
 use umi\orm\metadata\field\special\GuidField;
 use umi\orm\object\IObject;
 use utest\orm\unit\metadata\field\FieldTestCase;
@@ -26,7 +27,7 @@ class GuidFieldTest extends FieldTestCase
 
     protected function setUpFixtures()
     {
-        $this->field = new GuidField(IObject::FIELD_GUID);
+        $this->field = new GuidField(IObject::FIELD_GUID, IField::TYPE_GUID);
     }
 
     /**

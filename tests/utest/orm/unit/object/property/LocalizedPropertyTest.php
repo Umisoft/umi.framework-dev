@@ -9,6 +9,7 @@
 
 namespace utest\orm\unit\object\property;
 
+use umi\orm\metadata\field\IField;
 use umi\orm\metadata\field\string\TextField;
 use umi\orm\object\IObject;
 use umi\orm\object\property\localized\LocalizedProperty;
@@ -28,12 +29,15 @@ class LocalizedPropertyTest extends ORMTestCase
          */
         $object = $this->getMock('umi\orm\object\Object', [], [], '', false);
 
-        $localizedField = new TextField('title', [
-            'localizations' => [
-                'en' => ['columnName' => 'title_en'],
-                'ru' => ['columnName' => 'title']
+        $localizedField = new TextField('title',
+            IField::TYPE_STRING,
+            [
+                'localizations' => [
+                    'en' => ['columnName' => 'title_en'],
+                    'ru' => ['columnName' => 'title']
+                ]
             ]
-        ]);
+        );
         $localizedProperty = new LocalizedProperty($object, $localizedField, 'en');
 
         $this->assertEquals(

@@ -22,6 +22,6 @@ class MockRouteAware implements IRouteAware, IMockAware
      */
     public function getService()
     {
-        return $this->_routeFactory;
+        return $this->traitRouteFactory;
     }
 }

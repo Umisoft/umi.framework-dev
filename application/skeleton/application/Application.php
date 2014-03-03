@@ -9,34 +9,29 @@
 namespace application;
 
 use umi\hmvc\component\Component;
-use umi\i18n\ILocalesService;
-use umi\toolkit\IToolkitAware;
-use umi\toolkit\TToolkitAware;
+use umi\hmvc\dispatcher\IDispatchContext;
+use umi\http\Request;
+use umi\i18n\ILocalesAware;
+use umi\i18n\TLocalesAware;
 
 /**
  * MVC Application.
  */
-class Application extends Component implements IToolkitAware
+class Application extends Component implements ILocalesAware
 {
-    use TToolkitAware;
+    use TLocalesAware;
 
     /**
      * {@inheritdoc}
      */
-    protected function route(IComponentRequest $request)
+    public function onDispatchRequest(IDispatchContext $context, Request $request)
     {
-        $result = parent::route($request);
 
-        /**
-         * @var ILocalesService $service
-         */
-        $service = $this->getToolkit()
-            ->getService('umi\i18n\ILocalesService');
-        $service->setCurrentLocale(
-            $request->getVar(IComponentRequest::ROUTE, 'lang', 'en-US')
-        );
+        $routeParams = $context->getRouteParams();
 
-        return $result;
+        if (isset($routeParams['locale'])) {
+            $this->setCurrentLocale($routeParams['locale']);
+        }
     }
 
 }

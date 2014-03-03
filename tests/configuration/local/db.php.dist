@@ -1,0 +1,33 @@
+<?php
+use umi\dbal\toolbox\DbalTools;
+
+return [
+    DbalTools::NAME => [
+        'servers' => [
+            [
+                'id' => 'sqliteMaster',
+                'type' => 'master',
+                'connection' => [
+                    'type' => DbalTools::CONNECTION_TYPE_PDOSQLITE,
+                    'options' => [
+                        'memory' => true
+                    ]
+                ]
+            ],
+//            [
+//                'id' => 'mysqlMaster',
+//                'type' => 'master',
+//                'connection' => [
+//                    'type' => DbalTools::CONNECTION_TYPE_PDOMYSQL,
+//                    'options' => [
+//                        'dbname' => 'umi_framework',
+//                        'user' => 'root',
+//                        'password' => '',
+//                        'host' => '127.0.0.1',
+//                        'charset' => 'utf8'
+//                    ]
+//                ]
+//            ],
+        ]
+    ],
+];

@@ -26,6 +26,6 @@ class MockHttpAware implements IHttpAware, IMockAware
      */
     public function getService()
     {
-        return $this->_httpFactory;
+        return $this->traitHttpFactory;
     }
 }

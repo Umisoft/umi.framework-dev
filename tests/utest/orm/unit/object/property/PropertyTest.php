@@ -9,6 +9,7 @@
 
 namespace utest\orm\unit\object\property;
 
+use umi\orm\metadata\field\IField;
 use umi\orm\metadata\field\string\TextField;
 use umi\orm\object\IObject;
 use umi\orm\object\property\Property;
@@ -45,7 +46,7 @@ class PropertyTest extends ORMTestCase
             ->will($this->returnCallback([$this, 'mockFullyLoad']));
         $this->resolveOptionalDependencies($object);
 
-        $commonField = new TextField('login', ['accessor' => 'getLogin', 'mutator' => 'setLogin']);
+        $commonField = new TextField('login', IField::TYPE_STRING, ['accessor' => 'getLogin', 'mutator' => 'setLogin']);
         $this->commonProperty = new Property($object, $commonField);
     }
 

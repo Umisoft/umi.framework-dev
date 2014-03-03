@@ -30,7 +30,15 @@ return [
             ]
         ]
     ],
+    'index'       => [
+        'type'      => 'fixed',
+        'route'     => '/',
+        'defaults'  => [
+            'application' => 'index',
+        ],
+    ],
     'admin'       => [
+        'priority'  => 0,
         'type'      => 'fixed',
         'route'     => '/admin',
         'defaults'  => [

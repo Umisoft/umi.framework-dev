@@ -9,6 +9,7 @@
 
 namespace utest\orm\unit\metadata\field\numeric;
 
+use umi\orm\metadata\field\IField;
 use umi\orm\metadata\field\numeric\RealField;
 use utest\orm\unit\metadata\field\FieldTestCase;
 
@@ -25,7 +26,7 @@ class RealFieldTest extends FieldTestCase
 
     protected function setUpFixtures()
     {
-        $this->field = new RealField('real');
+        $this->field = new RealField('real', IField::TYPE_REAL);
     }
 
     /**

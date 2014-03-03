@@ -9,6 +9,7 @@
 
 namespace utest\orm\unit\metadata\field\special;
 
+use umi\orm\metadata\field\IField;
 use umi\orm\metadata\field\special\FileField;
 use utest\orm\unit\metadata\field\FieldTestCase;
 
@@ -25,6 +26,7 @@ class FileFieldTest extends FieldTestCase
     {
         return new FileField(
             'mock',
+            IField::TYPE_FILE,
             [
                 'sourcePath' => TESTS_ROOT . '/utest/orm/mock',
                 'sourceURI' => 'http://example.com'
@@ -36,7 +38,7 @@ class FileFieldTest extends FieldTestCase
     {
         $e = null;
         try {
-            new FileField('mock');
+            new FileField('mock', IField::TYPE_FILE);
         } catch (\Exception $e) {
         }
         $this->assertInstanceOf(
@@ -47,7 +49,7 @@ class FileFieldTest extends FieldTestCase
 
         $e = null;
         try {
-            new FileField('mock', ['sourcePath' => TESTS_ROOT . '/utest/orm/mock']);
+            new FileField('mock', IField::TYPE_FILE, ['sourcePath' => TESTS_ROOT . '/utest/orm/mock']);
         } catch (\Exception $e) {
         }
         $this->assertInstanceOf(

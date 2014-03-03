@@ -178,67 +178,19 @@ class SelectorTest extends ORMDbTestCase
         $this->assertCount(
             1,
             $result->fetchAll(),
-            'Ожидается, что выборка c ограничением по полу height равному 170 вернет objectsSet из 1 объекта'
+            'Ожидается, что выборка c ограничением по полю height равному 170 вернет objectsSet из 1 объекта'
         );
     }
 
-    public function testSelectorWhereNotEquals()
+    public function testSelectorWhereEqualsNull()
     {
         $this->selector->where('height')
-            ->notEquals(170);
-        $result = $this->selector->getResult();
-        $this->assertCount(
-            3,
-            $result->fetchAll(),
-            'Ожидается, что выборка c ограничением по полу height не равному 170 вернет objectsSet из 3 объекта'
-        );
-    }
-
-    public function testSelectorWhereLess()
-    {
-        $this->selector->where('height')
-            ->less(181);
-        $result = $this->selector->getResult();
-        $this->assertCount(
-            2,
-            $result->fetchAll(),
-            'Ожидается, что выборка c ограничением по полу height меньше 181 вернет objectsSet из 2 объектов'
-        );
-    }
-
-    public function testSelectorWhereMore()
-    {
-        $this->selector->where('height')
-            ->more(181);
+            ->equals(NULL);
         $result = $this->selector->getResult();
         $this->assertCount(
             1,
             $result->fetchAll(),
-            'Ожидается, что выборка c ограничением по полу height больше 181 вернет objectsSet из 1 объекта'
-        );
-    }
-
-    public function testSelectorWhereLessOrEquals()
-    {
-        $this->selector->where('height')
-            ->equalsOrLess(181);
-        $result = $this->selector->getResult();
-        $this->assertCount(
-            3,
-            $result->fetchAll(),
-            'Ожидается, что выборка c ограничением по полу height меньше или равно 181 вернет objectsSet из 3 объектов'
-        );
-    }
-
-    public function testSelectorWhereMoreOrEquals()
-    {
-        $this->selector->where('height')
-            ->equalsOrMore(181);
-        $result = $this->selector->getResult();
-        $this->assertCount(
-            2,
-            $result->fetchAll(),
-            'Ожидается, что выборка c ограничением по полу height больше или равно 181 вернет objectsSet из 2 объектов'
+            'Ожидается, что выборка c ограничением по полю height равному NULL вернет objectsSet из 1 объекта'
         );
     }
 
@@ -250,7 +202,31 @@ class SelectorTest extends ORMDbTestCase
         $this->assertCount(
             1,
             $result->fetchAll(),
-            'Ожидается, что выборка c ограничением по полу height равному NULL вернет objectsSet из 1 объект'
+            'Ожидается, что выборка c ограничением по полю height равному NULL вернет objectsSet из 1 объект'
+        );
+    }
+
+    public function testSelectorWhereNotEquals()
+    {
+        $this->selector->where('height')
+            ->notEquals(170);
+        $result = $this->selector->getResult();
+        $this->assertCount(
+            3,
+            $result->fetchAll(),
+            'Ожидается, что выборка c ограничением по полю height не равному 170 вернет objectsSet из 3 объекта'
+        );
+    }
+
+    public function testSelectorWhereNotEqualsNull()
+    {
+        $this->selector->where('height')
+            ->notEquals(NULL);
+        $result = $this->selector->getResult();
+        $this->assertCount(
+            4,
+            $result->fetchAll(),
+            'Ожидается, что выборка c ограничением по полю height не равному NULL вернет objectsSet из 4 объектов'
         );
     }
 
@@ -262,7 +238,55 @@ class SelectorTest extends ORMDbTestCase
         $this->assertCount(
             4,
             $result->fetchAll(),
-            'Ожидается, что выборка c ограничением по полу height неравному NULL вернет objectsSet из 4 объекта'
+            'Ожидается, что выборка c ограничением по полю height неравному NULL вернет objectsSet из 4 объекта'
+        );
+    }
+
+    public function testSelectorWhereLess()
+    {
+        $this->selector->where('height')
+            ->less(181);
+        $result = $this->selector->getResult();
+        $this->assertCount(
+            2,
+            $result->fetchAll(),
+            'Ожидается, что выборка c ограничением по полю height меньше 181 вернет objectsSet из 2 объектов'
+        );
+    }
+
+    public function testSelectorWhereMore()
+    {
+        $this->selector->where('height')
+            ->more(181);
+        $result = $this->selector->getResult();
+        $this->assertCount(
+            1,
+            $result->fetchAll(),
+            'Ожидается, что выборка c ограничением по полю height больше 181 вернет objectsSet из 1 объекта'
+        );
+    }
+
+    public function testSelectorWhereLessOrEquals()
+    {
+        $this->selector->where('height')
+            ->equalsOrLess(181);
+        $result = $this->selector->getResult();
+        $this->assertCount(
+            3,
+            $result->fetchAll(),
+            'Ожидается, что выборка c ограничением по полю height меньше или равно 181 вернет objectsSet из 3 объектов'
+        );
+    }
+
+    public function testSelectorWhereMoreOrEquals()
+    {
+        $this->selector->where('height')
+            ->equalsOrMore(181);
+        $result = $this->selector->getResult();
+        $this->assertCount(
+            2,
+            $result->fetchAll(),
+            'Ожидается, что выборка c ограничением по полю height больше или равно 181 вернет objectsSet из 2 объектов'
         );
     }
 
@@ -274,7 +298,7 @@ class SelectorTest extends ORMDbTestCase
         $this->assertCount(
             2,
             $result->fetchAll(),
-            'Ожидается, что выборка c ограничением по полу height между 167 и 170  вернет objectsSet из 2 объекта'
+            'Ожидается, что выборка c ограничением по полю height между 167 и 170  вернет objectsSet из 2 объекта'
         );
     }
 
@@ -286,7 +310,7 @@ class SelectorTest extends ORMDbTestCase
         $this->assertCount(
             3,
             $result->fetchAll(),
-            'Ожидается, что выборка c ограничением по полу height со значениями 167, 183 и 181 '
+            'Ожидается, что выборка c ограничением по полю height со значениями 167, 183 и 181 '
             . 'вернет objectsSet из 3x объектов'
         );
     }
@@ -299,7 +323,7 @@ class SelectorTest extends ORMDbTestCase
         $this->assertCount(
             2,
             $result->fetchAll(),
-            'Ожидается, что выборка c ограничением по полу login вернет objectsSet из 2 объектов'
+            'Ожидается, что выборка c ограничением по полю login вернет objectsSet из 2 объектов'
         );
     }
 
@@ -389,7 +413,7 @@ class SelectorTest extends ORMDbTestCase
         $this->assertCount(
             3,
             $result->fetchAll(),
-            'Ожидается, что выборка c ограничением по полу height со значениями 167, 183 и 181 '
+            'Ожидается, что выборка c ограничением по полю height со значениями 167, 183 и 181 '
             . 'вернет objectsSet из 3x объектов'
         );
 

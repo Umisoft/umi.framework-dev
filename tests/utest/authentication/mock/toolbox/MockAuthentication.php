@@ -23,6 +23,6 @@ class MockAuthentication implements IAuthenticationAware, IMockAware
      */
     public function getService()
     {
-        return $this->_authFactory;
+        return $this->traitAuthFactory;
     }
 }
