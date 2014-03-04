@@ -12,8 +12,7 @@ namespace utest\templating\unit\helper;
 use umi\form\IForm;
 use umi\form\toolbox\factory\EntityFactory;
 use umi\templating\exception\InvalidArgumentException;
-use umi\templating\extension\helper\type\form\FormHelper;
-use umi\templating\extension\helper\type\form\FormHelper;
+use umi\templating\helper\form\FormHelper;
 use utest\templating\TemplatingTestCase;
 
 /**
