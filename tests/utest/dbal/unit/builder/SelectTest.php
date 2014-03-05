@@ -292,4 +292,27 @@ class SelectTest extends DbalTestCase
 
         $this->assertEquals($expected, $this->query->getGroupByConditions());
     }
+
+    public function testGetSql()
+    {
+        $sql = $this->query->getSql();
+        $this->query->where()->expr('foo','=',':bar');
+        $sqlNext = $this->query->getSql();
+        $this->assertNotEquals($sql, $sqlNext, 'Query sql must change on every modification');
+
+        $this->query->orderBy('foo');
+        $sql = $sqlNext;
+        $sqlNext = $this->query->getSql();
+        $this->assertNotEquals($sql, $sqlNext, 'Query sql must change on every modification');
+
+        $this->query->groupBy('foo');
+        $sql = $sqlNext;
+        $sqlNext = $this->query->getSql();
+        $this->assertNotEquals($sql, $sqlNext, 'Query sql must change on every modification');
+
+        $this->query->having()->expr('foo','!=',':barbar');
+        $sql = $sqlNext;
+        $sqlNext = $this->query->getSql();
+        $this->assertNotEquals($sql, $sqlNext, 'Query sql must change on every modification');
+    }
 }
