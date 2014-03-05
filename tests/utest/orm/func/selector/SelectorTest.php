@@ -315,6 +315,19 @@ class SelectorTest extends ORMDbTestCase
         );
     }
 
+    public function testSelectorWhereNotIn()
+    {
+        $this->selector->where('height')
+            ->notIn([167, 183, 181]);
+        $result = $this->selector->getResult();
+        $this->assertCount(
+            1,
+            $result->fetchAll(),
+            'Ожидается, что выборка c ограничением по полю height со значениями, исключающими 167, 183 и 181, '
+            . 'вернет objectsSet из 1-го объекта'
+        );
+    }
+
     public function testSelectorWhereLike()
     {
         $this->selector->where('login')
