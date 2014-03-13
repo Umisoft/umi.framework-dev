@@ -22,67 +22,6 @@ class StemmingTest extends TestCase
             ->registerToolbox(require LIBRARY_PATH . '/stemming/toolbox/config.php');
     }
 
-    public function testService()
-    {
-        /** @var $stemming IStemming */
-        $stemming = $this->getTestToolkit()
-            ->getService('umi\stemming\IStemming');
-        $this->assertInstanceOf(
-            'umi\stemming\IStemming',
-            $stemming,
-            'Stemming service must be registered'
-        );
-    }
-
-    public function testBaseForms()
-    {
-        foreach ($this->getWordFixtures('base') as $input => $variants) {
-            $this->assertEquals(
-                $variants,
-                $this->getStemming()
-                    ->getBaseForm($input),
-                'Word base must be detected correctly'
-            );
-        }
-    }
-
-    public function testAllForms()
-    {
-        foreach ($this->getWordFixtures('all') as $input => $variants) {
-            $this->assertEquals(
-                $variants,
-                $this->getStemming()
-                    ->getAllForms($input),
-                'Word forms must be detected correctly'
-            );
-        }
-    }
-
-    public function testPartsOfSpeech()
-    {
-        foreach ($this->getWordFixtures('parts-of-speech') as $input => $variants) {
-            $this->assertEquals(
-                $variants,
-                $this->getStemming()
-                    ->getPartOfSpeech($input),
-                'Part of speech must be detected correctly'
-            );
-        }
-    }
-
-    public function testCommonRoots()
-    {
-        foreach ($this->getWordFixtures('roots') as $input => $expect) {
-            $root = $this->getStemming()
-                ->getCommonRoot($input);
-            $this->assertEquals(
-                $expect,
-                $root,
-                'Common root must be found correctly'
-            );
-        }
-    }
-
     /**
      * @param $type
      * @return array
@@ -100,5 +39,113 @@ class StemmingTest extends TestCase
     {
         return $this->getTestToolkit()
             ->getService('umi\stemming\IStemming');
+    }
+
+    public function testService()
+    {
+        /** @var $stemming IStemming */
+        $stemming = $this->getTestToolkit()
+            ->getService('umi\stemming\IStemming');
+        $this->assertInstanceOf(
+            'umi\stemming\IStemming',
+            $stemming,
+            'Stemming service must be registered'
+        );
+    }
+
+    /**
+     * @dataProvider provideBases
+     * @param $input
+     * @param $variants
+     */
+    public function testGetBaseForm($input, $variants)
+    {
+        $this->assertEquals(
+            $variants,
+            $this->getStemming()
+                ->getBaseForm($input),
+            'Word base must be detected correctly'
+        );
+    }
+
+    /**
+     * @dataProvider provideAllForms
+     * @param $input
+     * @param $variants
+     */
+    public function testGetAllForms($input, $variants)
+    {
+        $this->assertEquals(
+            $variants,
+            $this->getStemming()
+                ->getAllForms($input),
+            'Word forms must be detected correctly'
+        );
+    }
+
+    /**
+     * @dataProvider providePartsOfSpeech
+     * @param $input
+     * @param $variants
+     */
+    public function testGetPartsOfSpeech($input, $variants)
+    {
+        $this->assertEquals(
+            $variants,
+            $this->getStemming()
+                ->getPartOfSpeech($input),
+            'Part of speech must be detected correctly'
+        );
+    }
+
+    /**
+     * @dataProvider provideCommonRoots
+     * @param $input
+     * @param $expect
+     */
+    public function testGetCommonRoot($input, $expect)
+    {
+        $root = $this->getStemming()
+            ->getCommonRoot($input);
+        $this->assertEquals(
+            $expect,
+            $root,
+            'Common root must be found correctly'
+        );
+    }
+
+    /**
+     * @dataProvider provideSearchableRoots
+     */
+    public function testGetSearchableRoot($input, $expect)
+    {
+        $root = $this->getStemming()
+            ->getSearchableRoot($input, 3);
+        $this->assertEquals($expect, $root, 'Searchable root must be found correctly');
+    }
+
+    public function provideBases()
+    {
+        return $this->getWordFixtures('base');
+    }
+
+    public function provideAllForms()
+    {
+        return $this->getWordFixtures('all');
+    }
+
+    public function providePartsOfSpeech()
+    {
+        return $this->getWordFixtures('parts-of-speech');
+    }
+
+    public function provideCommonRoots()
+    {
+        return $this->getWordFixtures('roots');
+    }
+
+    public function provideSearchableRoots()
+    {
+        return $this->getWordFixtures('roots-searchable');
     }
 }
