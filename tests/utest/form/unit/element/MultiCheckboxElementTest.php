@@ -9,7 +9,7 @@
 
 namespace utest\form\unit\element;
 
-use umi\form\element\MultiCheckbox;
+use umi\form\element\CheckboxGroup;
 
 /**
  * Тесты элемента формы - Флаги
@@ -22,7 +22,7 @@ class MultiCheckboxElementTest extends BaseMultiElementTest
      */
     public function getElement($name, array $attributes = [], array $options = [])
     {
-        $e = new MultiCheckbox($name, $attributes, $options);
+        $e = new CheckboxGroup($name, $attributes, $options);
 
         $this->resolveOptionalDependencies($e);
 

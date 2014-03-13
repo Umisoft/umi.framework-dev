@@ -9,7 +9,7 @@
 
 namespace utest\form\unit;
 
-use umi\form\element\IElement;
+use umi\form\element\IFormElement;
 use umi\form\exception\OutOfBoundsException;
 use umi\form\toolbox\factory\EntityFactory;
 use umi\toolkit\factory\TFactory;
@@ -49,7 +49,7 @@ class EntityFactoryTest extends FormTestCase
         );
 
         $this->assertInstanceOf(
-            $this->factory->fieldsetTypes['fieldset'],
+            $this->factory->fieldSetTypes['fieldset'],
             $this->factory->createEntity('test', ['elements' => ['test' => ['type' => 'text']]]),
             'Ожидается, что будет создана группа полей.'
         );
@@ -78,7 +78,7 @@ class EntityFactoryTest extends FormTestCase
 
         $this->assertCount(2, $elements, 'Ожидается, что будет создано 2 элемента.');
         /**
-         * @var IElement $element
+         * @var IFormElement $element
          */
         $element = $elements['test1'];
         $this->assertInstanceOf(

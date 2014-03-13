@@ -9,12 +9,12 @@
 
 namespace utest\form\mock\interfaces;
 
-use umi\form\FormEntity as BaseFormEntity;
+use umi\form\BaseFormEntity as BaseFormEntity;
 
 /**
  * Мок-класс элемента формы.
  */
-class FormEntity extends BaseFormEntity
+class BaseFormEntity extends BaseFormEntity
 {
 
     /**

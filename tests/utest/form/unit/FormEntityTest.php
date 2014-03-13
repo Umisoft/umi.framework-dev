@@ -11,7 +11,7 @@ namespace utest\form\unit\interfaces;
 
 use umi\form\IFormEntity;
 use utest\form\FormTestCase;
-use utest\form\mock\interfaces\FormEntity;
+use utest\form\mock\interfaces\BaseFormEntity;
 
 /**
  * Тесты трейта "Элемент формы".
@@ -25,7 +25,7 @@ class TFormEntityTest extends FormTestCase
 
     public function setUpFixtures()
     {
-        $this->entity = new FormEntity('test');
+        $this->entity = new BaseFormEntity('test');
     }
 
     /**

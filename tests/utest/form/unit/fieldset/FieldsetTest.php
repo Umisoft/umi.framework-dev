@@ -10,7 +10,7 @@
 namespace utest\form\unit\fieldset;
 
 use umi\form\element\Text;
-use umi\form\fieldset\Fieldset;
+use umi\form\fieldset\FieldSet;
 use utest\TestCase;
 
 /**
@@ -19,7 +19,7 @@ use utest\TestCase;
 class FieldsetTest extends TestCase
 {
     /**
-     * @var Fieldset $fieldset группа полей
+     * @var FieldSet $fieldset группа полей
      */
     public $fieldset;
 
@@ -31,7 +31,7 @@ class FieldsetTest extends TestCase
             'element3' => new Text('element3'),
         ];
 
-        $this->fieldset = new Fieldset('test', [], [], $elements);
+        $this->fieldset = new FieldSet('test', [], [], $elements);
     }
 
     /**
@@ -115,7 +115,7 @@ class FieldsetTest extends TestCase
      */
     public function wrongTypeElement()
     {
-        new Fieldset('', [], [], [
+        new FieldSet('', [], [], [
             'element' => 'Not An Element'
         ]);
     }
@@ -125,11 +125,11 @@ class FieldsetTest extends TestCase
      */
     public function testFieldsetOfFieldset()
     {
-        $this->fieldset = new Fieldset('test', [], [], [
+        $this->fieldset = new FieldSet('test', [], [], [
             'element1' => new Text('element1'),
             'element2' => new Text('element2'),
             'element3' => new Text('element3'),
-            'fieldset' => new Fieldset('test', [], [], [
+            'fieldset' => new FieldSet('test', [], [], [
                     'element4' => new Text('element4')
                 ])
         ]);

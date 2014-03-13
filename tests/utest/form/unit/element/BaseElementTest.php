@@ -12,7 +12,7 @@ namespace utest\form\unit\element;
 use umi\filter\IFilterCollection;
 use umi\filter\IFilterFactory;
 use umi\filter\toolbox\factory\FilterFactory;
-use umi\form\element\IElement;
+use umi\form\element\IFormElement;
 use umi\validation\IValidatorCollection;
 use umi\validation\IValidatorFactory;
 use umi\validation\toolbox\factory\ValidatorFactory;
@@ -28,7 +28,7 @@ abstract class BaseElementTest extends FormTestCase
      * @param string $name имя элемента
      * @param array $attributes аттрибуты
      * @param array $options опции
-     * @return IElement элемент
+     * @return IFormElement элемент
      */
     abstract public function getElement($name, array $attributes = [], array $options = []);
 
