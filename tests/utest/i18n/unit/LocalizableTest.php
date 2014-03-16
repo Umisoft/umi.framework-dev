@@ -72,7 +72,7 @@ class LocalizableTest extends I18nTestCase implements ILocalizable
                 'utest\i18n',
                 'utest',
             ],
-            $this->getI18nDictionaries(),
+            $this->getI18nDictionaryNames(),
             'Ожидаются названия словарей в соответствии с полным именем класса'
         );
 
