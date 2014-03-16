@@ -59,12 +59,6 @@ class LocalizableTest extends I18nTestCase implements ILocalizable
 
     public function testLocalizable()
     {
-        $this->assertInstanceOf(
-            'utest\i18n\unit\LocalizableTest',
-            $this->setTranslator($this->translator),
-            'Ожидается, что ILocalizable::setTranslator() вернет себя'
-        );
-
         $this->assertEquals(
             [
                 'utest\i18n\unit\LocalizableTest',
