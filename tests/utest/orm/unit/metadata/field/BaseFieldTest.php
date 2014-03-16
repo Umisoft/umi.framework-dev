@@ -44,8 +44,8 @@ class BaseFieldTest extends FieldTestCase
         $this->assertNull($field->getDefaultValue(), 'Ожидается, что по умолчанию дефолное значение у поля null');
         $this->assertNull($field->getAccessor(), 'Ожидается, что по умолчанию метод доступа к значению не установлен');
         $this->assertNull($field->getMutator(), 'Ожидается, что по умолчанию метод изменения значения не установлен');
-        $this->assertEmpty($field->getValidators(), 'Ожидается, что по умолчанию валидаторы для поля не установлены');
-        $this->assertEmpty($field->getFilters(), 'Ожидается, что по умолчанию фильтры для поля не установлены');
+        $this->assertEmpty($field->getValidatorsConfig(), 'Ожидается, что по умолчанию валидаторы для поля не установлены');
+        $this->assertEmpty($field->getFiltersConfig(), 'Ожидается, что по умолчанию фильтры для поля не установлены');
 
     }
 
@@ -84,12 +84,12 @@ class BaseFieldTest extends FieldTestCase
         $this->assertEquals('setField', $field->getMutator(), 'Неверно прочитан метод модификации значения поля');
         $this->assertEquals(
             ['fieldValidator' => ['from' => 5, 'to' => 15]],
-            $field->getValidators(),
+            $field->getValidatorsConfig(),
             'Неверно прочитаны валидаторы поля'
         );
         $this->assertEquals(
             ['fieldFilter' => ['from' => 5, 'to' => 15]],
-            $field->getFilters(),
+            $field->getFiltersConfig(),
             'Неверно прочитаны фильтры поля'
         );
     }
