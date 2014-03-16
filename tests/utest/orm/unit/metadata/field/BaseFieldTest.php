@@ -39,7 +39,7 @@ class BaseFieldTest extends FieldTestCase
             $field->getColumnName(),
             'Ожидается, что по умолчанию имя колонки совпадает с именем поля'
         );
-        $this->assertTrue($field->getIsVisible(), 'Ожидается, что по умолчанию поле видимое');
+
         $this->assertFalse($field->getIsReadOnly(), 'Ожидается, что по умолчанию поле доступно на изменение');
         $this->assertNull($field->getDefaultValue(), 'Ожидается, что по умолчанию дефолное значение у поля null');
         $this->assertNull($field->getAccessor(), 'Ожидается, что по умолчанию метод доступа к значению не установлен');
@@ -57,7 +57,6 @@ class BaseFieldTest extends FieldTestCase
             IField::TYPE_STRING,
             [
                 'columnName' => 'column_for_field',
-                'visible' => 0,
                 'locked' => 1,
                 'readOnly' => 1,
                 'defaultValue' => 10,
@@ -79,7 +78,6 @@ class BaseFieldTest extends FieldTestCase
         );
 
         $this->assertEquals('column_for_field', $field->getColumnName(), 'Неверно определено имя колонки бд для поля');
-        $this->assertFalse($field->getIsVisible(), 'Неверно прочитана видимость поля');
         $this->assertTrue($field->getIsReadOnly(), 'Неверно прочитана возможность редактировать поле');
         $this->assertSame(10, $field->getDefaultValue(), 'Неверно прочитано дефолтное значение поля');
         $this->assertEquals('getField', $field->getAccessor(), 'Неверно прочитан метод доступа к значению поля');
