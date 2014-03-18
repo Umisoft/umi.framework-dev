@@ -12,7 +12,7 @@ use umi\stemming\IStemming;
 use utest\TestCase;
 
 /**
- * Class StemmingTest
+ * Набор тестов для инструментов штемминга.
  */
 class StemmingTest extends TestCase
 {
