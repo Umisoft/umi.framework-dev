@@ -90,7 +90,7 @@ class MonologTools implements IToolbox, ISwiftMailerAware
             [],
             function (Logger $logger) {
                 if (!is_array($this->default) && (!$this->default instanceof Traversable)) {
-                    throw new \InvalidArgumentException("Config must be array or Traversable");
+                    throw new RuntimeException("Config must be array or Traversable");
                 }
                 $handlerConfigs = $this->default['handlers'];
                 foreach ($handlerConfigs as $config) {
