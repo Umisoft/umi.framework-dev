@@ -15,6 +15,8 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SwiftMailerHandler;
 use Monolog\Logger;
 use Psr\Log\LoggerAwareInterface;
+use Traversable;
+use umi\extension\monolog\exception\RuntimeException;
 use umi\messages\ISwiftMailerAware;
 use umi\messages\TSwiftMailerAware;
 use umi\toolkit\exception\UnsupportedServiceException;
@@ -23,13 +25,16 @@ use umi\toolkit\toolbox\TToolbox;
 
 /**
  * Набор инструментов логирования.
- * Логеры конфигурируются и вызываются поименно, каждый содержит свой набор обработчиков и постпроцессоров
+ * Логеры конфигурируются и вызываются поименно, каждый содержит свой набор обработчиков и постпроцессоров.
  */
 class MonologTools implements IToolbox, ISwiftMailerAware
 {
     use TToolbox;
     use TSwiftMailerAware;
 
+    /**
+     * Имя набора инструментов.
+     */
     const NAME = 'monolog';
 
     /**
@@ -42,7 +47,8 @@ class MonologTools implements IToolbox, ISwiftMailerAware
     ];
 
     /**
-     * @var array $options опции логгера
+     * Опции логгера
+     * @var array $options
      */
     public $options = [];
 
@@ -72,7 +78,7 @@ class MonologTools implements IToolbox, ISwiftMailerAware
     }
 
     /**
-     * Возвращает экземпляр логгера
+     * Возвращает экземпляр логгера.
      * @return Logger
      */
     protected function getLogger()
@@ -83,7 +89,7 @@ class MonologTools implements IToolbox, ISwiftMailerAware
             ['default'],
             [],
             function (Logger $logger) {
-                if (!is_array($this->default) && (!$this->default instanceof \Traversable)) {
+                if (!is_array($this->default) && (!$this->default instanceof Traversable)) {
                     throw new \InvalidArgumentException("Config must be array or Traversable");
                 }
                 $handlerConfigs = $this->default['handlers'];
@@ -95,17 +101,18 @@ class MonologTools implements IToolbox, ISwiftMailerAware
     }
 
     /**
-     * @param $config
+     * Создает обработчик логирования.
+     * @param array|Traversable $config
+     * @throws RuntimeException
      * @return HandlerInterface
-     * @throws \InvalidArgumentException
      */
     private function createHandler($config)
     {
-        if (!is_array($config) && (!$config instanceof \Traversable)) {
-            throw new \InvalidArgumentException("Config must be array or Traversable");
+        if (!is_array($config) && (!$config instanceof Traversable)) {
+            throw new RuntimeException("Config must be array or Traversable");
         }
         if (!isset($config['type'])) {
-            throw new \InvalidArgumentException("No handler type specified");
+            throw new RuntimeException("No handler type specified");
         }
         $bubble = isset($config['bubble']) ? (bool) $config['bubble'] : true;
         switch ($config['type']) {
@@ -128,7 +135,7 @@ class MonologTools implements IToolbox, ISwiftMailerAware
                 );
                 break;
             default:
-                throw new \InvalidArgumentException("Unsupported type {$config['type']}");
+                throw new RuntimeException("Unsupported type {$config['type']}");
         }
         return $handler;
     }

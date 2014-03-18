@@ -17,13 +17,13 @@ use Monolog\Logger;
 trait TMonologAware
 {
     /**
-     * @var \Monolog\Logger $logger логгер
+     * @var Logger $traitLogger Логгер Monolog
      */
     private $traitLogger;
 
     /**
-     * Внедряет логгер.
-     * @param \Monolog\Logger $logger логгер
+     * Внедряет {@see $traitLogger логгер Monolog.}
+     * @param Logger $logger логгер
      */
     public function setLogger(Logger $logger)
     {
@@ -35,7 +35,7 @@ trait TMonologAware
      * @param string $level уровень критичности сообщения
      * @param string $message сообщение, поддерживает плейсхолдеры в формате {placeholder}
      * @param array $placeholders список плейсхолдеров
-     * @return $this
+     * @return self
      */
     protected function log($level, $message, array $placeholders = [])
     {
@@ -47,10 +47,10 @@ trait TMonologAware
     }
 
     /**
-     * Pаписывает сообщение для отладки в лог (level = LOG_DEBUG)
+     * Записывает сообщение для отладки в лог (level = LOG_DEBUG).
      * @param string $message сообщение, поддерживает плейсхолдеры в формате {placeholder}
      * @param array $placeholders список плейсхолдеров
-     * @return $this
+     * @return self
      */
     protected final function trace($message, array $placeholders = [])
     {
