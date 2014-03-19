@@ -6,12 +6,11 @@
  * @copyright Copyright (c) 2007-2013 Umisoft ltd. (http://umisoft.ru/)
  * @license   http://umi-framework.ru/license/bsd-3 BSD-3 License
  */
-namespace umi\messages\exception;
+namespace umi\extension\monolog\exception;
 
 /**
- * Исключения, вызываемые неверной конфигурацией тулбокса
+ * Class RuntimeException
  */
-class InvalidArgumentException extends \InvalidArgumentException implements IException
+class RuntimeException extends \RuntimeException implements IException
 {
-
 }

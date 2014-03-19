@@ -19,13 +19,14 @@ class MessagesConfigTest extends MessageTestCase
     /**
      * @dataProvider provideValidConfigs
      */
-    public function testValidConfigs($config)
+    public function testValidConfigs($mailerOptions, $transportOptions)
     {
-        $this->messagesTools->mailerOptions = $config;
+        $this->messagesTools->mailerOptions = $mailerOptions;
+        $this->messagesTools->transportOptions = $transportOptions;
         $this->assertInstanceOf(
             'umi\messages\SwiftMailer',
             $this->messagesTools->getService('umi\messages\SwiftMailer', null),
-            'SwiftMailer must be created on valid config'
+            'SwiftMailer must be created on valid mailerOptions'
         );
     }
 
@@ -33,9 +34,10 @@ class MessagesConfigTest extends MessageTestCase
      * @dataProvider provideInvalidConfigs
      * @expectedException InvalidArgumentException
      */
-    public function testInvalidConfigs($config)
+    public function testInvalidConfigs($mailerOptions, $transportOptions)
     {
-        $this->messagesTools->mailerOptions = $config;
+        $this->messagesTools->mailerOptions = $mailerOptions;
+        $this->messagesTools->transportOptions = $transportOptions;
         $this->messagesTools->getService('umi\messages\SwiftMailer', null);
     }
 
@@ -49,13 +51,16 @@ class MessagesConfigTest extends MessageTestCase
         $base = ['sender_address' => ['foo@bar.com'], 'delivery_address' => ['sir@foo.com']];
         return [
             [
-                array_merge($base, ['transport' => 'mail'])
+                array_merge($base, ['transport' => 'mail']),
+                []
             ],
             [
-                array_merge($base, ['transport' => 'sendmail'])
+                array_merge($base, ['transport' => 'sendmail']),
+                []
             ],
             [
-                array_merge($base, ['transport' => 'smtp', 'host' => '127.0.0.1'])
+                array_merge($base, ['transport' => 'smtp',]),
+                ['smtp' => ['host' => '127.0.0.1']]
             ],
         ];
     }
@@ -70,13 +75,13 @@ class MessagesConfigTest extends MessageTestCase
         $base = ['sender_address' => ['foo@bar.com'], 'delivery_address' => ['sir@foo.com']];
         return [
             [
-                array_merge($base, ['transport' => 'foo']),
+                array_merge($base, ['transport' => 'foo']),[]
             ],
             [
-                array_merge($base, ['transport' => 'smtp']),
+                array_merge($base, ['transport' => 'smtp']),[]
             ],
             [
-                ['transport' => 'mail'],
+                ['transport' => 'mail'],[]
             ],
         ];
     }

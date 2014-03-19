@@ -12,6 +12,7 @@ use Monolog\Handler\FirePHPHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SwiftMailerHandler;
 use Monolog\Logger;
+use umi\extension\monolog\exception\RuntimeException;
 use umi\extension\monolog\toolbox\MonologTools;
 use utest\monolog\MonologTestCase;
 
@@ -46,7 +47,7 @@ class MonologToolsTests extends MonologTestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException RuntimeException
      */
     public function testWrongConfig()
     {
