@@ -37,12 +37,12 @@ class LocalizableTest extends I18nTestCase implements ILocalizable
                     'test' => 'utest'
                 ]
             ],
-            'utest\i18n\unit' => [
+            'utest.i18n.unit' => [
                 'en' => [
                     'test' => 'utest\i18n\unit'
                 ]
             ],
-            'utest\i18n' => [
+            'utest.i18n' => [
                 'en' => [
                     'test' => 'utest\i18n'
                 ]
@@ -55,15 +55,17 @@ class LocalizableTest extends I18nTestCase implements ILocalizable
         $this->translator = new Translator($dictionaries);
         $this->translator->setLocalesService($localesService);
 
+        $this->setTranslator($this->translator);
+
     }
 
     public function testLocalizable()
     {
         $this->assertEquals(
             [
-                'utest\i18n\unit\LocalizableTest',
-                'utest\i18n\unit',
-                'utest\i18n',
+                'utest.i18n.unit.LocalizableTest',
+                'utest.i18n.unit',
+                'utest.i18n',
                 'utest',
             ],
             $this->getI18nDictionaryNames(),
