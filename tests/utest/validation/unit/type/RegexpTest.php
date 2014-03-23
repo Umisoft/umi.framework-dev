@@ -25,23 +25,24 @@ class RegexpValidatorTests extends ValidationTestCase
      */
     public function wrongValidatorPattern()
     {
-        new Regexp([]);
+        $validator = new Regexp();
+        $validator->isValid('1234');
     }
 
     public function testValidate()
     {
         $validator = new Regexp(['pattern' => '/[0-9]+/']);
         $this->assertTrue($validator->isValid("1234"), "Ожидается, что число пройдет валидацию");
-        $this->assertEmpty($validator->getMessages(), "Ожидается, что сообщений об ошибках не будет");
+        $this->assertNull($validator->getMessage(), "Ожидается, что сообщений об ошибках не будет");
 
         $this->assertFalse($validator->isValid("NaN"), "Ожидается, что не число не пройдет валидацию");
-        $this->assertContains(
+        $this->assertEquals(
             "String does not meet regular expression.",
-            $validator->getMessages(),
+            $validator->getMessage(),
             "Ожидается, что будет сообщение о неверной валидации"
         );
 
         $validator->isValid("1234");
-        $this->assertEmpty($validator->getMessages(), "Ожидается, что сообщений об ошибках не будет");
+        $this->assertNull($validator->getMessage(), "Ожидается, что сообщений об ошибках не будет");
     }
 }

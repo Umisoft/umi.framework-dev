@@ -9,7 +9,7 @@
 
 namespace utest\validation\unit;
 
-use umi\validation\IValidator;
+use umi\validation\IValidatorCollection;
 use umi\validation\ValidatorCollection;
 use utest\validation\mock\ValidatorFixture;
 use utest\validation\ValidationTestCase;
@@ -21,12 +21,12 @@ class ValidatorCollectionTests extends ValidationTestCase
 {
 
     /**
-     * @var IValidator $validCollection
+     * @var IValidatorCollection $validCollection
      */
     private $validCollection = null;
 
     /**
-     * @var IValidator $invalidCollection
+     * @var IValidatorCollection $invalidCollection
      */
     private $invalidCollection = null;
 

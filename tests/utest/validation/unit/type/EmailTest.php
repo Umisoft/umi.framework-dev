@@ -38,12 +38,12 @@ class EmailValidatorTests extends ValidationTestCase
     public function testMessages()
     {
         $this->validator->isValid("email@example.com");
-        $this->assertEmpty($this->validator->getMessages(), "Ожидается, что сообщений об ошибках не будет");
+        $this->assertNull($this->validator->getMessage(), "Ожидается, что сообщений об ошибках не будет");
 
         $this->validator->isValid("not a email");
-        $this->assertContains(
+        $this->assertEquals(
             'Wrong email format.',
-            $this->validator->getMessages(),
+            $this->validator->getMessage(),
             "Ожидается, что будет сообщение о неверной валидации email"
         );
     }

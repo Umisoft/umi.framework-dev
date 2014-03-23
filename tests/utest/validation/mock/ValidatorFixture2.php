@@ -20,9 +20,17 @@ class ValidatorFixture2 implements IValidator
     /**
      * {@inheritdoc}
      */
-    public function getMessages()
+    public function getMessage()
     {
-        return [];
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getErrorLabel()
+    {
+        return '';
     }
 
     /**

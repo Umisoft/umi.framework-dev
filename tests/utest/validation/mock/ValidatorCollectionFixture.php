@@ -46,9 +46,7 @@ class ValidatorCollectionFixture implements IValidatorCollection
     }
 
     /**
-     * Добавляет валидатор в конец цепочки валидаторов.
-     * @param IValidator $validator валидатор
-     * @return self
+     * {@inheritdoc}
      */
     public function appendValidator(IValidator $validator)
     {
@@ -58,9 +56,7 @@ class ValidatorCollectionFixture implements IValidatorCollection
     }
 
     /**
-     * Добавляет валидатор в начало цепочки валидаторов.
-     * @param IValidator $validator валидатор
-     * @return self
+     * {@inheritdoc}
      */
     public function prependValidator(IValidator $validator)
     {

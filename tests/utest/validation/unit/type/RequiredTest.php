@@ -41,12 +41,12 @@ class RequiredValidatorTests extends ValidationTestCase
     public function testMessages()
     {
         $this->validator->isValid("not empty string");
-        $this->assertEmpty($this->validator->getMessages(), "Ожидается, что сообщений об ошибках не будет");
+        $this->assertNull($this->validator->getMessage(), "Ожидается, что сообщений об ошибках не будет");
 
         $this->validator->isValid("");
-        $this->assertContains(
+        $this->assertEquals(
             'Value is required.',
-            $this->validator->getMessages(),
+            $this->validator->getMessage(),
             "Ожидается, что будет сообщение о неверной валидации"
         );
     }

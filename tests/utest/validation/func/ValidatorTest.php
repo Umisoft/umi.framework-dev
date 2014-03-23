@@ -10,6 +10,7 @@
 namespace utest\validation\func;
 
 use umi\validation\IValidator;
+use umi\validation\IValidatorCollection;
 use umi\validation\IValidatorFactory;
 use utest\validation\ValidationTestCase;
 
@@ -52,8 +53,8 @@ class ValidatorTest extends ValidationTestCase
         );
 
         $this->assertEquals(
-            ["String does not meet regular expression."],
-            $validator->getMessages(),
+            "String does not meet regular expression.",
+            $validator->getMessage(),
             "Ожидается, что валидатор содержит сообщение об ошибке"
         );
     }
@@ -64,21 +65,21 @@ class ValidatorTest extends ValidationTestCase
     public function testMultipleValidator()
     {
         /**
-         * @var IValidator $validator
+         * @var IValidatorCollection $validatorCollection
          */
-        $validator = $this->factory->createValidatorCollection(
+        $validatorCollection = $this->factory->createValidatorCollection(
             [
                 IValidatorFactory::TYPE_REQUIRED => [],
                 IValidatorFactory::TYPE_EMAIL    => []
             ]
         );
 
-        $this->assertTrue($validator->isValid("example@email.com"), "Ожидается, что email должен пройти валидацию");
-        $this->assertFalse($validator->isValid(""), "Ожидается, что пустая строка не должна пройти валидацию");
+        $this->assertTrue($validatorCollection->isValid("example@email.com"), "Ожидается, что email должен пройти валидацию");
+        $this->assertFalse($validatorCollection->isValid(""), "Ожидается, что пустая строка не должна пройти валидацию");
 
         $this->assertEquals(
             ['Value is required.', 'Wrong email format.'],
-            $validator->getMessages(),
+            $validatorCollection->getMessages(),
             "Ожидается, что оба валидатора вернут сообщение об ошибке"
         );
     }
@@ -89,15 +90,15 @@ class ValidatorTest extends ValidationTestCase
     public function testMultipleValidatorOptions()
     {
         /**
-         * @var IValidator $validator
+         * @var IValidatorCollection $validatorCollection
          */
-        $validator = $this->factory->createValidatorCollection(
+        $validatorCollection = $this->factory->createValidatorCollection(
             [
                 IValidatorFactory::TYPE_REQUIRED => [],
                 IValidatorFactory::TYPE_REGEXP   => ['pattern' => '/[0-9]+/']
             ]
         );
 
-        $this->assertTrue($validator->isValid("1234"), "Ожидается, что число должно пройти валидацию");
+        $this->assertTrue($validatorCollection->isValid("1234"), "Ожидается, что число должно пройти валидацию");
     }
 }

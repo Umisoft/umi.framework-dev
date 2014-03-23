@@ -22,9 +22,9 @@ class ValidatorFixture implements IValidator
      */
     protected $options;
     /**
-     * @var array $messages сообщения об ошибках
+     * @var array $message сообщение об ошибках
      */
-    protected $messages = [];
+    protected $message;
     /**
      * @var bool $isValid "валидность" валидатора
      */
@@ -36,16 +36,22 @@ class ValidatorFixture implements IValidator
     public function __construct(array $options)
     {
         $this->options = $options;
-
-        return $this;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getMessages()
+    public function getErrorLabel()
     {
-        return $this->messages;
+        return 'Invalid validator';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMessage()
+    {
+        return $this->message;
     }
 
     /**
@@ -53,11 +59,11 @@ class ValidatorFixture implements IValidator
      */
     public function isValid($var)
     {
-        $this->messages = [];
+        $this->message = null;
 
         if (isset($this->options['is_valid'])) {
             if (!$this->options['is_valid']) {
-                $this->messages[] = "Invalid validator";
+                $this->message = $this->getErrorLabel();
 
                 return false;
             } else {
