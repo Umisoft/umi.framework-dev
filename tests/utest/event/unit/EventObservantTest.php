@@ -72,10 +72,9 @@ class EventObservantTest extends EventTestCase
             ),
             'Ожидается, что IEventObservant::bindEvent() вернет свой менеджер событий'
         );
-        $this->assertEquals(
-            $eventManager,
+        $this->assertTrue(
             $this->observant1->fireEvent('test'),
-            'Ожидается, что IEventObservant::fireEvent() вернет свой менеджер событий'
+            'Ожидается, что IEventObservant::fireEvent() вернет true, если были вызваны обработчики событий'
         );
         $this->assertEquals(
             $eventManager,

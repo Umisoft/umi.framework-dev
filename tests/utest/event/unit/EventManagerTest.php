@@ -48,10 +48,9 @@ class EventManagerTest extends EventTestCase
         $target = new \stdClass();
         $events = [];
 
-        $this->assertInstanceOf(
-            'umi\event\IEventManager',
+        $this->assertFalse(
             $eventManager->fireEvent('testEvent', $target),
-            'Ожидается, что IEventManager::fireEvent() вернет себя, даже если нет обработчиков'
+            'Ожидается, что IEventManager::fireEvent() вернет false, если нет обработчиков'
         );
         $this->assertInstanceOf(
             'umi\event\IEventManager',
@@ -68,7 +67,7 @@ class EventManagerTest extends EventTestCase
             $eventManager->bindEvent('testEvent', $eventHandler),
             'Ожидается, что IEventManager::bindEvent() вернет себя'
         );
-        $eventManager->bindEvent('testEvent', array($this, 'eventHandler'));
+        $eventManager->bindEvent('testEvent', [$this, 'eventHandler']);
 
         $childEventManager = new EventManager($this->eventFactory);
         $this->assertInstanceOf(
