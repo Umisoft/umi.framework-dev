@@ -25,10 +25,6 @@ class ToolboxTest extends TestCase implements IToolbox
 
     use TToolbox;
 
-    /**
-     * Метод для создания специфического окружения тест-кейса.
-     * Может быть перегружен в конкретном тест-кейсе, если это необходимо
-     */
     protected function setUpFixtures()
     {
         $toolkit = new Toolkit();
