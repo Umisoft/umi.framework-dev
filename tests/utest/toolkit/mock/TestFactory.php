@@ -30,4 +30,15 @@ class TestFactory implements IFactory
     {
         return $this->name;
     }
+
+    /**
+     * @return TestObject
+     */
+    public function createObject()
+    {
+        return $this->getPrototype(
+            'utest\toolkit\mock\TestObject'
+        )
+            ->createInstance();
+    }
 }

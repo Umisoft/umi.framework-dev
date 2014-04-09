@@ -6,6 +6,7 @@
  * @copyright Copyright (c) 2007-2013 Umisoft ltd. (http://umisoft.ru/)
  * @license   http://umi-framework.ru/license/bsd-3 BSD-3 License
  */
+
 namespace utest\toolkit\func;
 
 use stdClass;
@@ -35,10 +36,6 @@ class PrototypeTest extends TestCase implements IFactory
      */
     protected $toolkit;
 
-    /**
-     * Метод для создания специфического окружения тест-кейса.
-     * Может быть перегружен в конкретном тест-кейсе, если это необходимо
-     */
     protected function setUpFixtures()
     {
         $this->toolkit = new Toolkit();
