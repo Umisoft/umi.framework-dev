@@ -28,8 +28,16 @@ class RssTest extends RssTestCase
         $dateTime = new DateTime();
         $dateTime2 = new DateTime();
 
-        $feed->addItem('http://example.com/item/1', 'title item 1', 'content item 1', $dateTime);
-        $feed->addItem('http://example.com/item/2', 'title item 2', 'content item 2', $dateTime2);
+        $feed->addItem()
+            ->setTitle('title item 1')
+            ->setContent('content item 1')
+            ->setUrl('http://example.com/item/1')
+            ->setDate($dateTime);
+        $feed->addItem()
+            ->setTitle('title item 2')
+            ->setContent('content item 2')
+            ->setUrl('http://example.com/item/2')
+            ->setDate($dateTime2);
 
         $this->assertEquals($feed->getUrl(), 'http://example.com/');
         $this->assertEquals($feed->getTitle(), 'title');
@@ -62,7 +70,12 @@ class RssTest extends RssTestCase
         $dateTime = new DateTime();
         $dateTime2 = new DateTime();
 
-        $rssItem = new RssItem('http://example.com/', 'title', 'content', $dateTime);
+        $rssItem = new RssItem();
+
+        $rssItem->setTitle('title')
+            ->setContent('content')
+            ->setUrl('http://example.com/')
+            ->setDate($dateTime);
 
         $this->assertEquals($rssItem->getUrl(), 'http://example.com/');
         $this->assertEquals($rssItem->getTitle(), 'title');
