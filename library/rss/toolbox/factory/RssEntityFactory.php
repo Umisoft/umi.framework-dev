@@ -107,7 +107,7 @@ class RssEntityFactory implements IRssEntityFactory, IFactory
     protected function createItemFromXml($item, $rssFeed)
     {
         if (!isset($item->title) || !isset($item->description)) {
-            throw new RuntimeException('Item title or description is not specified');
+            throw new RuntimeException('Cannot create rss item. Title or description is not specified');
         }
 
         $newItem = $rssFeed->addItem();
