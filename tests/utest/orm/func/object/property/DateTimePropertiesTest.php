@@ -126,7 +126,9 @@ class DateTimePropertiesTest extends ORMDbTestCase
     public function testSetValue()
     {
         $blog = $this->blogCollection->get($this->blogGuid);
-        $blog->setValue('publishTime', new \DateTime($this->time));
+
+        $dateTimeValue = new \DateTime($this->time, new \DateTimeZone('Europe/Moscow'));
+        $blog->setValue('publishTime', $dateTimeValue);
         $this->getObjectPersister()->commit();
         $this->getObjectManager()->unloadObjects();
 
@@ -135,7 +137,7 @@ class DateTimePropertiesTest extends ORMDbTestCase
          * @var DateTime $dateTime
          */
         $dateTime = $blog->getValue('publishTime');
-        $this->assertEquals(strtotime($this->time), $dateTime->getTimestamp());
+        $this->assertEquals($this->time, $dateTime->format('Y-m-d H:i:s'));
 
     }
 
