@@ -71,7 +71,7 @@ class DateTimePropertiesTest extends ORMDbTestCase
         $this->blogGuid = $this->blog->getGUID();
     }
 
-    public function testImpossibleSetValue()
+    public function testWrongSetValue()
     {
         $e = null;
         try {
@@ -79,9 +79,9 @@ class DateTimePropertiesTest extends ORMDbTestCase
         } catch (\Exception $e) {}
 
         $this->assertInstanceOf(
-            'umi\orm\exception\NotAllowedOperationException',
+            'umi\orm\exception\InvalidArgumentException',
             $e,
-            'Ожидается исключение при попытке выставить значение для свойства типа DateTime'
+            'Ожидается исключение при попытке выставить в качестве значения не DateTime'
         );
     }
 
@@ -96,7 +96,7 @@ class DateTimePropertiesTest extends ORMDbTestCase
 
     }
 
-    public function testSave()
+    public function testSaveModifiedDateTime()
     {
         /**
          * @var DateTime $dateTime
@@ -121,6 +121,22 @@ class DateTimePropertiesTest extends ORMDbTestCase
         $dateTime = $blog->getValue('publishTime');
         $this->assertInstanceOf('umi\orm\object\property\datetime\DateTime', $dateTime);
         $this->assertFalse($dateTime->getIsTimeSet());
+    }
+
+    public function testSetValue()
+    {
+        $blog = $this->blogCollection->get($this->blogGuid);
+        $blog->setValue('publishTime', new \DateTime($this->time));
+        $this->getObjectPersister()->commit();
+        $this->getObjectManager()->unloadObjects();
+
+        $blog = $this->blogCollection->get($this->blogGuid);
+        /**
+         * @var DateTime $dateTime
+         */
+        $dateTime = $blog->getValue('publishTime');
+        $this->assertEquals(strtotime($this->time), $dateTime->getTimestamp());
+
     }
 
     public function testChangeTime()
