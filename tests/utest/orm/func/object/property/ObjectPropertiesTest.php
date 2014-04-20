@@ -55,9 +55,8 @@ class ObjectPropertiesTest extends ORMDbTestCase
         $blog = $this->getCollectionManager()->getCollection(self::BLOGS_BLOG)
             ->add('test')
             ->setValue('title', 'testRussianTitle')
-            ->setValue('title', 'testEnglishTitle', 'en-US');
-
-        $blog->getValue('publishTime')->setTimestamp(time());
+            ->setValue('title', 'testEnglishTitle', 'en-US')
+            ->setValue('publishTime', new \DateTime());
 
         $this->getObjectPersister()->commit();
         $this->blogGuid = $blog->getGUID();
