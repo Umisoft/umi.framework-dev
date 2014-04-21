@@ -19,13 +19,16 @@ use umi\templating\engine\ITemplateEngine;
  */
 class TwigTemplateEngine implements ITemplateEngine
 {
+    /**
+     * Имя
+     */
     const NAME = 'twig';
     /**
-     * Директория расположения шаблонов
+     * Опция для задания директорий расположения шаблонов
      */
-    const OPTION_TEMPLATE_DIRECTORY = 'directory';
+    const OPTION_TEMPLATE_DIRECTORIES = 'directories';
     /**
-     * Расширение файлов шаблонов
+     * Опция для задания расширения файлов шаблонов
      */
     const OPTION_TEMPLATE_FILE_EXTENSION = 'extension';
     /**
@@ -81,14 +84,14 @@ class TwigTemplateEngine implements ITemplateEngine
     protected function getEnvironment()
     {
         if (!$this->environment) {
-            $baseDirectory = isset($this->options[self::OPTION_TEMPLATE_DIRECTORY]) ? $this->options[self::OPTION_TEMPLATE_DIRECTORY] : '';
+            $templateDirectories = isset($this->options[self::OPTION_TEMPLATE_DIRECTORIES]) ? $this->options[self::OPTION_TEMPLATE_DIRECTORIES] : [];
 
             $environmentOptions = [];
             if (isset($this->options[self::OPTION_ENVIRONMENT]) && is_array($this->options[self::OPTION_ENVIRONMENT])) {
                 $environmentOptions = $this->options[self::OPTION_ENVIRONMENT];
             }
 
-            $twigLoader = new Twig_Loader_Filesystem($baseDirectory);
+            $twigLoader = new Twig_Loader_Filesystem($templateDirectories);
             $this->environment = new Twig_Environment($twigLoader, $environmentOptions);
         }
 

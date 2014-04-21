@@ -27,7 +27,7 @@ class TwigTemplateEngineTest extends TemplatingTestCase
         $this->engine = new TwigTemplateEngine();
         $this->engine->setOptions(
             [
-                TwigTemplateEngine::OPTION_TEMPLATE_DIRECTORY => __DIR__ . '/data/twig',
+                TwigTemplateEngine::OPTION_TEMPLATE_DIRECTORIES => __DIR__ . '/data/twig',
                 TwigTemplateEngine::OPTION_TEMPLATE_FILE_EXTENSION => 'twig',
             ]
         );

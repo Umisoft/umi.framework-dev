@@ -27,7 +27,7 @@ class PhpTemplateEngineTest extends TemplatingTestCase
         $this->engine = new PhpTemplateEngine();
         $this->engine->setOptions(
             [
-                PhpTemplateEngine::OPTION_TEMPLATE_DIRECTORY => __DIR__ . '/data/php',
+                PhpTemplateEngine::OPTION_TEMPLATE_DIRECTORIES => __DIR__ . '/data/php',
                 PhpTemplateEngine::OPTION_TEMPLATE_FILE_EXTENSION => 'phtml',
 
             ]
