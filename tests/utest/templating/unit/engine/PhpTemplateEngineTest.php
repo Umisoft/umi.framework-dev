@@ -9,10 +9,7 @@
 
 namespace utest\templating\unit\engine;
 
-use umi\templating\engine\ITemplateEngine;
 use umi\templating\engine\php\PhpTemplateEngine;
-use umi\templating\extension\adapter\ExtensionAdapter;
-use umi\templating\extension\IExtensionFactory;
 use utest\templating\TemplatingTestCase;
 
 /**
@@ -21,24 +18,27 @@ use utest\templating\TemplatingTestCase;
 class PhpTemplateEngineTest extends TemplatingTestCase
 {
     /**
-     * @var PhpTemplateEngine $view
+     * @var PhpTemplateEngine $engine
      */
-    protected $view;
+    protected $engine;
 
     public function setUpFixtures()
     {
-        $this->view = new PhpTemplateEngine([
-            ITemplateEngine::OPTION_TEMPLATE_DIRECTORY => __DIR__ . '/data/php',
-            ITemplateEngine::OPTION_TEMPLATE_FILE_EXTENSION => 'phtml',
+        $this->engine = new PhpTemplateEngine();
+        $this->engine->setOptions(
+            [
+                PhpTemplateEngine::OPTION_TEMPLATE_DIRECTORY => __DIR__ . '/data/php',
+                PhpTemplateEngine::OPTION_TEMPLATE_FILE_EXTENSION => 'phtml',
 
-        ]);
+            ]
+        );
 
-        $this->resolveOptionalDependencies($this->view);
+        $this->resolveOptionalDependencies($this->engine);
     }
 
     public function testRender()
     {
-        $response = $this->view->render('example', ['var' => 'testVal']);
+        $response = $this->engine->render('example', ['var' => 'testVal']);
 
         $this->assertEquals(
             'Hello world! testVal',
@@ -51,7 +51,7 @@ class PhpTemplateEngineTest extends TemplatingTestCase
     {
         $e = null;
         try {
-            $this->view->render('wrong', []);
+            $this->engine->render('wrong', []);
         } catch (\Exception $e) {
         }
 
@@ -59,30 +59,9 @@ class PhpTemplateEngineTest extends TemplatingTestCase
         $this->assertNotContains('wrong', ob_get_contents(), 'Ожидается, что буффер будет очищен.');
     }
 
-    public function testHelpers()
-    {
-        $adapter = new ExtensionAdapter();
-        $this->resolveOptionalDependencies($adapter);
-
-        /**
-         * @var IExtensionFactory $extensionFactory
-         */
-        $extensionFactory = $this->getTestToolkit()->getService('umi\templating\extension\IExtensionFactory');
-
-        $collection = $extensionFactory->createHelperCollection();
-        $collection->addHelper('mock', 'utest\templating\mock\helper\MockViewHelper');
-
-        $adapter->addHelperCollection('test', $collection);
-        $this->view->setExtensionAdapter($adapter);
-
-        $response = $this->view->render('helper', []);
-
-        $this->assertEquals('Helper: mock', $response, 'Ожидается, что mock будет вызван.');
-    }
-
     public function testPartial()
     {
-        $response = $this->view->render('partial', []);
+        $response = $this->engine->render('partial', []);
 
         $this->assertEquals(
             'Partial: Hello world! test',
