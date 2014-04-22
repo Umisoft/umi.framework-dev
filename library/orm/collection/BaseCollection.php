@@ -13,7 +13,6 @@ use umi\i18n\ILocalesAware;
 use umi\i18n\ILocalizable;
 use umi\i18n\TLocalesAware;
 use umi\i18n\TLocalizable;
-use umi\orm\exception\IException;
 use umi\orm\exception\InvalidArgumentException;
 use umi\orm\exception\LoadEntityException;
 use umi\orm\exception\NonexistentEntityException;
@@ -103,26 +102,18 @@ abstract class BaseCollection
     }
 
     /**
-     * Возвращает иерархический объект по уникальному GUID
-     * @param integer|string $guid GUID объекта
-     * @param bool $withLocalization загружать ли значения локализованных свойств объекта.
-     * По умолчанию выключено.
-     * @throws IException если не удалось получить объект
-     * @return IObject
+     * {@inheritdoc}
      */
     public function get($guid, $withLocalization = false)
     {
-        if (!$this->getGUIDField()
-            ->checkGUIDFormat($guid)
-        ) {
+        if (!$this->getGUIDField()->checkGUIDFormat($guid)) {
             throw new InvalidArgumentException($this->translate(
                 'Cannot get object by GUID "{guid}". Wrong GUID format.',
                 ['guid' => $guid]
             ));
         }
-        if (!$object = $this->getObjectManager()
-            ->getObjectInstanceByGuid($guid)
-        ) {
+
+        if (!$object = $this->getObjectManager()->getObjectInstanceByGuid($guid)) {
             $objectsSet = $this->select()
                 ->where(
                     $this->getGUIDField()
@@ -148,20 +139,11 @@ abstract class BaseCollection
     }
 
     /**
-     * Возвращает объект по уникальному идентификатору в БД.
-     * Используется ORM для внутренних целей, запрещено использовать в высокоуровневом коде.
-     * @internal
-     * @param integer|string $objectId
-     * @param bool $withLocalization загружать ли значения локализованных свойств объекта.
-     * По умолчанию выключено.
-     * @throws IException если не удалось получить объект
-     * @return IObject
+     * {@inheritdoc}
      */
     public function getById($objectId, $withLocalization = false)
     {
-        if (!$object = $this->getObjectManager()
-            ->getObjectInstanceById($this, $objectId)
-        ) {
+        if (!$object = $this->getObjectManager()->getObjectInstanceById($this, $objectId)) {
             $objectsSet = $this->select()
                 ->where(
                     $this->getIdentifyField()
@@ -190,10 +172,9 @@ abstract class BaseCollection
      */
     public function loadObject(IObjectType $objectType, array $objectInfo)
     {
-        $identify = $this->getIdentifyField()
-            ->getName();
-        $guid = $this->getGUIDField()
-            ->getName();
+        $identify = $this->getIdentifyField()->getName();
+        $guid = $this->getGUIDField()->getName();
+
         if (!isset($objectInfo[$identify])) {
             throw new LoadEntityException($this->translate(
                 'Cannot load object. Identify field value is not found.'
@@ -226,8 +207,8 @@ abstract class BaseCollection
         $fieldsToLoad = [];
         $loadedValues = $object->getInitialValues();
 
-        foreach ($object->getType()
-            ->getFields() as $fieldName => $field) {
+        foreach ($object->getType()->getFields() as $fieldName => $field) {
+
             if ((!$withLocalization && !isset($loadedValues[$fieldName]))
                 || ($withLocalization && $field instanceof ILocalizableField && $field->getIsLocalized())
             ) {
@@ -236,8 +217,8 @@ abstract class BaseCollection
         }
 
         if (count($fieldsToLoad)) {
-            $pkFiledName = $this->getIdentifyField()
-                ->getName();
+
+            $pkFiledName = $this->getIdentifyField()->getName();
 
             $objectsSet = $this->select()
                 ->fields($fieldsToLoad)
@@ -281,8 +262,7 @@ abstract class BaseCollection
                 'Cannot delete object. Object from another collection given.'
             ));
         }
-        $this->getObjectPersister()
-            ->markAsDeleted($object);
+        $this->getObjectPersister()->markAsDeleted($object);
 
         return $this;
     }
@@ -385,9 +365,7 @@ abstract class BaseCollection
                 ->bindValue(
                     ':' . $identifyColumnName,
                     $object->getId(),
-                    $this
-                        ->getIdentifyField()
-                        ->getDataType()
+                    $this->getIdentifyField()->getDataType()
                 );
         }
 
@@ -399,11 +377,8 @@ abstract class BaseCollection
         $insertBuilder->bindValue(':' . $columnName, $typeName, $objectTypeField->getDataType());
 
         foreach ($object->getModifiedProperties() as $property) {
-            if ($this->getMetadata()
-                ->getFieldExists($property->getName())
-            ) {
-                $field = $this->getMetadata()
-                    ->getField($property->getName());
+            if ($this->getMetadata()->getFieldExists($property->getName())) {
+                $field = $this->getMetadata()->getField($property->getName());
                 $field->persistProperty($object, $property, $insertBuilder);
             }
         }
@@ -439,23 +414,18 @@ abstract class BaseCollection
             return;
         }
 
-        $dataSource = $this->getMetadata()
-            ->getCollectionDataSource();
-        $identifyColumnName = $this->getIdentifyField()
-            ->getColumnName();
+        $dataSource = $this->getMetadata()->getCollectionDataSource();
+        $identifyColumnName = $this->getIdentifyField()->getColumnName();
 
         $updateBuilder = $dataSource->update();
 
         $calculableProperties = [];
         foreach ($object->getModifiedProperties() as $property) {
-            if ($this->getMetadata()
-                ->getFieldExists($property->getName())
-            ) {
+            if ($this->getMetadata()->getFieldExists($property->getName())) {
                 if ($property instanceof ICalculableProperty) {
                     $calculableProperties[] = $property;
                 } else {
-                    $field = $this->getMetadata()
-                        ->getField($property->getName());
+                    $field = $this->getMetadata()->getField($property->getName());
                     $field->persistProperty($object, $property, $updateBuilder);
                 }
             }
@@ -468,19 +438,16 @@ abstract class BaseCollection
             $newVersion = $version + 1;
             $versionProperty->setValue($newVersion);
 
-            $versionColumnName = $this->getVersionField()
-                ->getColumnName();
+            $versionColumnName = $this->getVersionField()->getColumnName();
 
-            $this->getVersionField()
-                ->persistProperty($object, $versionProperty, $updateBuilder);
+            $this->getVersionField()->persistProperty($object, $versionProperty, $updateBuilder);
 
             $updateBuilder->where()
                 ->expr($identifyColumnName, '=', ':objectId');
             $updateBuilder->bindValue(
                 ':objectId',
                 $object->getId(),
-                $this->getIdentifyField()
-                    ->getDataType()
+                $this->getIdentifyField()->getDataType()
             );
 
             $updateBuilder->where()
@@ -488,8 +455,7 @@ abstract class BaseCollection
             $updateBuilder->bindValue(
                 ':' . $versionColumnName,
                 $version,
-                $this->getVersionField()
-                    ->getDataType()
+                $this->getVersionField()->getDataType()
             );
 
             $result = $updateBuilder->execute();
@@ -502,8 +468,7 @@ abstract class BaseCollection
                 $selectBuilder->bindValue(
                     ':objectId',
                     $object->getId(),
-                    $this->getIdentifyField()
-                        ->getDataType()
+                    $this->getIdentifyField()->getDataType()
                 );
 
                 $selectResult = $selectBuilder->execute();
@@ -536,25 +501,18 @@ abstract class BaseCollection
                 'Cannot persist deleted object. Object from another collection given.'
             ));
         }
-        $dataSource = $this->getMetadata()
-            ->getCollectionDataSource();
+        $dataSource = $this->getMetadata()->getCollectionDataSource();
 
         $deleteBuilder = $dataSource->delete();
 
         $deleteBuilder
             ->where()
-            ->expr(
-                $this
-                    ->getIdentifyField()
-                    ->getColumnName(),
-                '=',
-                ':objectId'
-            );
+                ->expr($this->getIdentifyField()->getColumnName(), '=', ':objectId');
+
         $deleteBuilder->bindValue(
             ':objectId',
             $object->getId(),
-            $this->getIdentifyField()
-                ->getDataType()
+            $this->getIdentifyField()->getDataType()
         );
 
         $result = $deleteBuilder->execute();
@@ -575,9 +533,7 @@ abstract class BaseCollection
     protected function persistCalculableProperties(IObject $object, array $calculableProperties)
     {
 
-        $updateBuilder = $this->getMetadata()
-            ->getCollectionDataSource()
-            ->update();
+        $updateBuilder = $this->getMetadata()->getCollectionDataSource()->update();
 
         $updateBuilder
             ->where()
@@ -596,11 +552,8 @@ abstract class BaseCollection
         );
 
         foreach ($calculableProperties as $property) {
-            if ($this->getMetadata()
-                ->getFieldExists($property->getName())
-            ) {
-                $field = $this->getMetadata()
-                    ->getField($property->getName());
+            if ($this->getMetadata()->getFieldExists($property->getName())) {
+                $field = $this->getMetadata()->getField($property->getName());
                 $field->persistProperty($object, $property, $updateBuilder);
             }
         }

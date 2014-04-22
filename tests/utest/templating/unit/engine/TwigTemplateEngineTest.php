@@ -9,10 +9,7 @@
 
 namespace utest\templating\unit\engine;
 
-use umi\templating\engine\ITemplateEngine;
 use umi\extension\twig\TwigTemplateEngine;
-use umi\templating\extension\adapter\ExtensionAdapter;
-use umi\templating\toolbox\factory\ExtensionFactory;
 use utest\templating\TemplatingTestCase;
 
 /**
@@ -21,22 +18,25 @@ use utest\templating\TemplatingTestCase;
 class TwigTemplateEngineTest extends TemplatingTestCase
 {
     /**
-     * @var TwigTemplateEngine $view
+     * @var TwigTemplateEngine $engine
      */
-    protected $view;
+    protected $engine;
 
     public function setUpFixtures()
     {
-        $this->view = new TwigTemplateEngine([
-            ITemplateEngine::OPTION_TEMPLATE_DIRECTORY => __DIR__ . '/data/twig',
-            ITemplateEngine::OPTION_TEMPLATE_FILE_EXTENSION => 'twig',
-        ]);
-        $this->resolveOptionalDependencies($this->view);
+        $this->engine = new TwigTemplateEngine();
+        $this->engine->setOptions(
+            [
+                TwigTemplateEngine::OPTION_TEMPLATE_DIRECTORIES => __DIR__ . '/data/twig',
+                TwigTemplateEngine::OPTION_TEMPLATE_FILE_EXTENSION => 'twig',
+            ]
+        );
+        $this->resolveOptionalDependencies($this->engine);
     }
 
     public function testRender()
     {
-        $response = $this->view->render(
+        $response = $this->engine->render(
             'example',
             [
                 'var' => 'testVal'
@@ -48,27 +48,6 @@ class TwigTemplateEngineTest extends TemplatingTestCase
             $response,
             'Ожидается, что контент будет установлен.'
         );
-    }
-
-    public function testHelpers()
-    {
-        $adapter = new ExtensionAdapter();
-        $this->resolveOptionalDependencies($adapter);
-
-        $extensionFactory = new ExtensionFactory();
-        $this->resolveOptionalDependencies($extensionFactory);
-
-        $collection = $extensionFactory->createHelperCollection();
-        $this->resolveOptionalDependencies($collection);
-        $collection->addHelper('mock', 'utest\templating\mock\helper\MockViewHelper');
-
-        $adapter->addHelperCollection('test', $collection);
-
-        $this->view->setExtensionAdapter($adapter);
-
-        $response = $this->view->render('helper', []);
-
-        $this->assertEquals('Helper: mock', $response, 'Ожидается, что mock будет вызван.');
     }
 
 }

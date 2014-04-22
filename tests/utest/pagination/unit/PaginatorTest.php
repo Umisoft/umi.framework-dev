@@ -63,6 +63,12 @@ class PaginatorTest extends PaginationTestCase
             $this->paginator->getPageItems(),
             'Ожидается, что элементы страницы будут сфомированы верно.'
         );
+
+        $array = [];
+        foreach ($this->paginator as $item) {
+            $array[] = $item;
+        }
+        $this->assertEquals(range(10, 19), $array, 'Ожидается, что пагинатор правильно итерируется, если страницы заданы массивом');
     }
 
     /**
@@ -76,6 +82,12 @@ class PaginatorTest extends PaginationTestCase
             $paginator->getPageItems(),
             'Ожидается, что метод вернет оъект типа Traversable.'
         );
+
+        $array = [];
+        foreach ($this->paginator as $item) {
+            $array[] = $item;
+        }
+        $this->assertEquals(range(0, 9), $array, 'Ожидается, что пагинатор правильно итерируется, если страницы \Traversable');
     }
 
     /**

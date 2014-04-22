@@ -11,7 +11,7 @@ namespace utest\templating\unit\helper;
 use umi\pagination\adapter\ArrayPaginationAdapter;
 use umi\pagination\Paginator;
 use umi\templating\exception\InvalidArgumentException;
-use umi\templating\extension\helper\type\pagination\PaginationHelperCollection;
+use umi\templating\helper\pagination\PaginationHelper;
 use utest\TestCase;
 
 /**
@@ -25,9 +25,9 @@ class PaginationHelpersTest extends TestCase
     protected $paginator;
 
     /**
-     * @var PaginationHelperCollection $helperCollection
+     * @var PaginationHelper $helper
      */
-    protected $helperCollection;
+    protected $helper;
 
     public function setUpFixtures()
     {
@@ -35,7 +35,7 @@ class PaginationHelpersTest extends TestCase
 
         $this->paginator->setCurrentPage(5);
 
-        $this->helperCollection = new PaginationHelperCollection();
+        $this->helper = new PaginationHelper();
     }
 
     public function testAllPagination()
@@ -55,7 +55,7 @@ class PaginationHelpersTest extends TestCase
             'lastItemNumber'    => 50,
         ];
 
-        $this->assertEquals($context, $this->helperCollection->all($this->paginator));
+        $this->assertEquals($context, $this->helper->all($this->paginator));
     }
 
     public function testJumpingPagination()
@@ -75,7 +75,7 @@ class PaginationHelpersTest extends TestCase
             'firstItemNumber'   => 41,
             'lastItemNumber'    => 50,
         ];
-        $this->assertEquals($context, $this->helperCollection->jumping($this->paginator, 3));
+        $this->assertEquals($context, $this->helper->jumping($this->paginator, 3));
 
         $this->paginator->setCurrentPage(2);
         $firstRangeContext = [
@@ -92,7 +92,7 @@ class PaginationHelpersTest extends TestCase
             'firstItemNumber'   => 11,
             'lastItemNumber'    => 20,
         ];
-        $this->assertEquals($firstRangeContext, $this->helperCollection->jumping($this->paginator, 3));
+        $this->assertEquals($firstRangeContext, $this->helper->jumping($this->paginator, 3));
 
         $this->paginator->setCurrentPage(3);
         $lastInRangeContext = [
@@ -109,7 +109,7 @@ class PaginationHelpersTest extends TestCase
             'firstItemNumber'   => 21,
             'lastItemNumber'    => 30,
         ];
-        $this->assertEquals($lastInRangeContext, $this->helperCollection->jumping($this->paginator, 3));
+        $this->assertEquals($lastInRangeContext, $this->helper->jumping($this->paginator, 3));
 
         $this->paginator->setCurrentPage(10);
         $lastPageContext = [
@@ -126,7 +126,7 @@ class PaginationHelpersTest extends TestCase
             'firstItemNumber'   => 91,
             'lastItemNumber'    => 100,
         ];
-        $this->assertEquals($lastPageContext, $this->helperCollection->jumping($this->paginator, 3));
+        $this->assertEquals($lastPageContext, $this->helper->jumping($this->paginator, 3));
 
         $paginator = new Paginator(new ArrayPaginationAdapter(range(0, 78)), 10);
         $paginator->setCurrentPage(8);
@@ -144,7 +144,7 @@ class PaginationHelpersTest extends TestCase
             'firstItemNumber'   => 71,
             'lastItemNumber'    => 79,
         ];
-        $this->assertEquals($preLastPageContext, $this->helperCollection->jumping($paginator, 3));
+        $this->assertEquals($preLastPageContext, $this->helper->jumping($paginator, 3));
 
         $paginator = new Paginator(new ArrayPaginationAdapter(range(0, 20)), 10);
         $paginator->setCurrentPage(2);
@@ -162,7 +162,7 @@ class PaginationHelpersTest extends TestCase
             'firstItemNumber'   => 11,
             'lastItemNumber'    => 20,
         ];
-        $this->assertEquals($notMuchPagesContext, $this->helperCollection->jumping($paginator, 5));
+        $this->assertEquals($notMuchPagesContext, $this->helper->jumping($paginator, 5));
     }
 
     public function testSlidingPagination()
@@ -181,7 +181,7 @@ class PaginationHelpersTest extends TestCase
             'firstItemNumber'   => 41,
             'lastItemNumber'    => 50,
         ];
-        $this->assertEquals($context, $this->helperCollection->sliding($this->paginator, 3));
+        $this->assertEquals($context, $this->helper->sliding($this->paginator, 3));
 
         $evenRangeContext = [
             'firstPage'         => 1,
@@ -197,7 +197,7 @@ class PaginationHelpersTest extends TestCase
             'firstItemNumber'   => 41,
             'lastItemNumber'    => 50,
         ];
-        $this->assertEquals($evenRangeContext, $this->helperCollection->sliding($this->paginator, 4));
+        $this->assertEquals($evenRangeContext, $this->helper->sliding($this->paginator, 4));
 
         $this->paginator->setCurrentPage(2);
         $firstRangeContext = [
@@ -214,7 +214,7 @@ class PaginationHelpersTest extends TestCase
             'firstItemNumber'   => 11,
             'lastItemNumber'    => 20,
         ];
-        $this->assertEquals($firstRangeContext, $this->helperCollection->sliding($this->paginator, 5));
+        $this->assertEquals($firstRangeContext, $this->helper->sliding($this->paginator, 5));
 
         $this->paginator->setCurrentPage(9);
         $lastRangeContext = [
@@ -231,7 +231,7 @@ class PaginationHelpersTest extends TestCase
             'firstItemNumber'   => 81,
             'lastItemNumber'    => 90,
         ];
-        $this->assertEquals($lastRangeContext, $this->helperCollection->sliding($this->paginator, 5));
+        $this->assertEquals($lastRangeContext, $this->helper->sliding($this->paginator, 5));
 
         $paginator = new Paginator(new ArrayPaginationAdapter(range(0, 22)), 10);
         $paginator->setCurrentPage(2);
@@ -249,7 +249,7 @@ class PaginationHelpersTest extends TestCase
             'firstItemNumber'   => 11,
             'lastItemNumber'    => 20,
         ];
-        $this->assertEquals($smallPagesContext, $this->helperCollection->sliding($paginator, 7));
+        $this->assertEquals($smallPagesContext, $this->helper->sliding($paginator, 7));
 
         $paginator = new Paginator(new ArrayPaginationAdapter(range(0, 39)), 10);
         $paginator->setCurrentPage(4);
@@ -267,7 +267,7 @@ class PaginationHelpersTest extends TestCase
             'firstItemNumber'   => 31,
             'lastItemNumber'    => 40,
         ];
-        $this->assertEquals($smallPagesContext, $this->helperCollection->sliding($paginator, 5));
+        $this->assertEquals($smallPagesContext, $this->helper->sliding($paginator, 5));
     }
 
     public function testElasticPagination()
@@ -286,7 +286,7 @@ class PaginationHelpersTest extends TestCase
             'firstItemNumber'   => 41,
             'lastItemNumber'    => 50
         ];
-        $this->assertEquals($context, $this->helperCollection->elastic($this->paginator, 5));
+        $this->assertEquals($context, $this->helper->elastic($this->paginator, 5));
 
         $this->paginator->setCurrentPage(1);
         $firstPageContext = [
@@ -303,7 +303,7 @@ class PaginationHelpersTest extends TestCase
             'firstItemNumber'   => 1,
             'lastItemNumber'    => 10
         ];
-        $this->assertEquals($firstPageContext, $this->helperCollection->elastic($this->paginator, 5));
+        $this->assertEquals($firstPageContext, $this->helper->elastic($this->paginator, 5));
 
         $this->paginator->setCurrentPage(5);
         $evenRangeContext = [
@@ -320,7 +320,7 @@ class PaginationHelpersTest extends TestCase
             'firstItemNumber'   => 41,
             'lastItemNumber'    => 50,
         ];
-        $this->assertEquals($evenRangeContext, $this->helperCollection->elastic($this->paginator, 6));
+        $this->assertEquals($evenRangeContext, $this->helper->elastic($this->paginator, 6));
 
         $this->paginator->setCurrentPage(10);
         $lastPageContext = [
@@ -337,7 +337,7 @@ class PaginationHelpersTest extends TestCase
             'firstItemNumber'   => 91,
             'lastItemNumber'    => 100
         ];
-        $this->assertEquals($lastPageContext, $this->helperCollection->elastic($this->paginator, 5));
+        $this->assertEquals($lastPageContext, $this->helper->elastic($this->paginator, 5));
     }
 
     /**
@@ -346,7 +346,7 @@ class PaginationHelpersTest extends TestCase
      */
     public function jumpingWrongPageInRange()
     {
-        $this->helperCollection->jumping($this->paginator, -1);
+        $this->helper->jumping($this->paginator, -1);
     }
 
     /**
@@ -355,7 +355,7 @@ class PaginationHelpersTest extends TestCase
      */
     public function slidingWrongPageInRange()
     {
-        $this->helperCollection->sliding($this->paginator, -1);
+        $this->helper->sliding($this->paginator, -1);
     }
 
     /**
@@ -364,7 +364,7 @@ class PaginationHelpersTest extends TestCase
      */
     public function elasticWrongPageInRange()
     {
-        $this->helperCollection->sliding($this->paginator, -1);
+        $this->helper->sliding($this->paginator, -1);
     }
 
 }

@@ -13,7 +13,6 @@ use umi\orm\collection\ICollectionFactory;
 use umi\orm\object\HierarchicObject;
 use umi\orm\object\IHierarchicObject;
 use umi\orm\object\IObject;
-use umi\orm\object\property\datetime\DateTime;
 use umi\orm\object\property\localized\ILocalizedProperty;
 use umi\orm\toolbox\factory\PropertyFactory;
 use utest\orm\mock\collections\User;
@@ -411,6 +410,7 @@ class ObjectTest extends ORMDbTestCase
 
     public function testObjectGUID()
     {
+        $this->user->setIsNew(true);
         $this->assertInstanceOf(
             'umi\orm\object\IObject',
             $this->user->setGUID('9ee6745f-f40d-46d8-8043-d959594628ce'),
@@ -421,6 +421,19 @@ class ObjectTest extends ORMDbTestCase
             $this->user->getGUID(),
             'Ожидается, что объекту можно принудительно задать guid'
         );
+
+        $this->user->setIsNew(false);
+        $e = null;
+        try {
+            $this->user->setGUID('9ee6745f-f40d-46d8-8043-d959594628ce');
+        } catch (\Exception $e) {
+        }
+        $this->assertInstanceOf(
+            'umi\orm\exception\NotAllowedOperationException',
+            $e,
+            'Ожидается исключение при попытке уставновить значение GUID для ненового объекта'
+        );
+
     }
 
     public function testObjectVersion()
@@ -518,7 +531,7 @@ class ObjectTest extends ORMDbTestCase
             [
                 'title#ru-RU' => 'ruTitle',
                 'title#en-US' => 'enTitle',
-                'publishTime' => new DateTime('12-12-2012', null, $this->blog->getProperty('publishTime'))
+                'publishTime' => new \DateTime('12-12-2012')
             ],
             $objectArray
         );

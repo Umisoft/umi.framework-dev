@@ -12,7 +12,6 @@ namespace utest\orm\func\object\property;
 use umi\orm\collection\ICollectionFactory;
 use umi\orm\collection\IHierarchicCollection;
 use umi\orm\object\IHierarchicObject;
-use umi\orm\object\property\datetime\DateTime;
 use utest\orm\ORMDbTestCase;
 
 /**
@@ -71,7 +70,7 @@ class DateTimePropertiesTest extends ORMDbTestCase
         $this->blogGuid = $this->blog->getGUID();
     }
 
-    public function testImpossibleSetValue()
+    public function testWrongSetValue()
     {
         $e = null;
         try {
@@ -79,67 +78,36 @@ class DateTimePropertiesTest extends ORMDbTestCase
         } catch (\Exception $e) {}
 
         $this->assertInstanceOf(
-            'umi\orm\exception\NotAllowedOperationException',
+            'umi\orm\exception\InvalidArgumentException',
             $e,
-            'Ожидается исключение при попытке выставить значение для свойства типа DateTime'
+            'Ожидается исключение при попытке выставить в качестве значения не DateTime'
         );
     }
 
-    public function testNullValue()
+    public function testSetValue()
     {
-        /**
-         * @var DateTime $dateTime
-         */
-        $dateTime = $this->blog->getValue('publishTime');
-        $this->assertInstanceOf('umi\orm\object\property\datetime\DateTime', $dateTime);
-        $this->assertFalse($dateTime->getIsTimeSet());
 
-    }
+        $this->assertNull($this->blog->getValue('publishTime'));
 
-    public function testSave()
-    {
-        /**
-         * @var DateTime $dateTime
-         */
-        $dateTime = $this->blog->getValue('publishTime');
-        $dateTime->setTimestamp(strtotime($this->time));
-
+        $dateTimeValue = new \DateTime($this->time, new \DateTimeZone('Europe/Moscow'));
+        $this->blog->setValue('publishTime', $dateTimeValue);
         $this->getObjectPersister()->commit();
         $this->getObjectManager()->unloadObjects();
 
         $blog = $this->blogCollection->get($this->blogGuid);
+        /**
+         * @var \DateTime $dateTime
+         */
         $dateTime = $blog->getValue('publishTime');
-        $this->assertInstanceOf('umi\orm\object\property\datetime\DateTime', $dateTime);
-        $this->assertTrue($dateTime->getIsTimeSet());
-        $this->assertEquals($dateTime->format('Y-m-d H:i:s'), $this->time);
+        $this->assertInstanceOf('DateTime', $dateTime);
+        $this->assertEquals($this->time, $dateTime->format('Y-m-d H:i:s'));
 
-        $dateTime->clear();
+        $blog->setValue('publishTime', null);
         $this->getObjectPersister()->commit();
         $this->getObjectManager()->unloadObjects();
 
         $blog = $this->blogCollection->get($this->blogGuid);
-        $dateTime = $blog->getValue('publishTime');
-        $this->assertInstanceOf('umi\orm\object\property\datetime\DateTime', $dateTime);
-        $this->assertFalse($dateTime->getIsTimeSet());
-    }
-
-    public function testChangeTime()
-    {
-
-        /**
-         * @var DateTime $dateTime
-         */
-        $dateTime = $this->blog->getValue('publishTime');
-        $dateTime->setTimestamp(strtotime($this->time));
-
-        $this->getObjectPersister()->commit();
-
-        $dateTime->setTimestamp(strtotime($this->time));
-        $this->assertFalse($this->blog->getIsModified());
-
-        $dateTime->setTimestamp(time());
-        $this->assertTrue($this->blog->getIsModified());
-
+        $this->assertNull($blog->getValue('publishTime'));
     }
 
 }

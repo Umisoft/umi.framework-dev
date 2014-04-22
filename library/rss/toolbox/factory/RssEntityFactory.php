@@ -54,21 +54,29 @@ class RssEntityFactory implements IRssEntityFactory, IFactory
         try {
             $rssElement = new SimpleXMLElement($xml);
         } catch (Exception $e) {
-            throw new RuntimeException('Cannot create feed from xml. XML is not wellformed.');
+            throw new RuntimeException('Cannot create RSS feed from xml. XML is not wellformed.');
         }
 
+        return $this->createFeedFromSimpleXml($rssElement);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createFeedFromSimpleXml(SimpleXMLElement $rssElement)
+    {
         if (!isset($rssElement->channel)) {
-            throw new RuntimeException('Cannot create feed. Channel section is not specified');
+            throw new RuntimeException('Cannot create RSS feed. Channel section is not specified.');
         }
 
         if (!isset($rssElement->channel->link)) {
-            throw new RuntimeException('Cannot create feed. Channel link is not specified');
+            throw new RuntimeException('Cannot create RSS feed. Channel link is not specified.');
         }
         if (!isset($rssElement->channel->title)) {
-            throw new RuntimeException('Cannot create feed. Channel title is not specified');
+            throw new RuntimeException('Cannot create RSS feed. Channel title is not specified.');
         }
         if (!isset($rssElement->channel->description)) {
-            throw new RuntimeException('Cannot create feed. Channel description is not specified');
+            throw new RuntimeException('Cannot create RSS feed. Channel description is not specified.');
         }
 
         $rssFeed = $this->createFeed(
@@ -106,23 +114,23 @@ class RssEntityFactory implements IRssEntityFactory, IFactory
      */
     protected function createItemFromXml($item, $rssFeed)
     {
-        if (!isset($item->title) || !isset($item->description)) {
-            throw new RuntimeException('Cannot create rss item. Title or description is not specified');
+        if (!isset($item->title) && !isset($item->description)) {
+            throw new RuntimeException('Cannot create RSS item. Item title or description is not specified.');
         }
 
         $newItem = $rssFeed->addItem();
 
         if (isset($item->title)) {
-            $newItem->setTitle($item->title);
+            $newItem->setTitle((string) $item->title);
         }
         if (isset($item->link)) {
-            $newItem->setUrl($item->link);
+            $newItem->setUrl((string) $item->link);
         }
         if (isset($item->description)) {
-            $newItem->setContent($item->description);
+            $newItem->setContent((string) $item->description);
         }
         if (isset($item->pubDate)) {
-            $pubDate = new DateTime((string)$item->pubDate);
+            $pubDate = new DateTime((string) $item->pubDate);
             $newItem->setDate($pubDate);
         }
     }
