@@ -187,7 +187,7 @@ WHERE "id" = :objectId AND "version" = :version',
 
         $this->resetQueries();
 
-        $blog->getValue('publishTime')->setTimestamp(time());
+        $blog->setValue('publishTime', new DateTime());
         $this->getObjectPersister()->commit();
         $expectedResult = [
             '"START TRANSACTION"',

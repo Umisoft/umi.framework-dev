@@ -13,7 +13,6 @@ use umi\orm\collection\ICollectionFactory;
 use umi\orm\object\HierarchicObject;
 use umi\orm\object\IHierarchicObject;
 use umi\orm\object\IObject;
-use umi\orm\object\property\datetime\DateTime;
 use umi\orm\object\property\localized\ILocalizedProperty;
 use umi\orm\toolbox\factory\PropertyFactory;
 use utest\orm\mock\collections\User;
@@ -532,7 +531,7 @@ class ObjectTest extends ORMDbTestCase
             [
                 'title#ru-RU' => 'ruTitle',
                 'title#en-US' => 'enTitle',
-                'publishTime' => new DateTime('12-12-2012', null, $this->blog->getProperty('publishTime'))
+                'publishTime' => new \DateTime('12-12-2012')
             ],
             $objectArray
         );

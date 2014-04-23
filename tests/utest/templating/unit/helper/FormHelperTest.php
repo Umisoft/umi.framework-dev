@@ -9,9 +9,13 @@
 
 namespace utest\templating\unit\helper;
 
+use umi\form\element\Button;
+use umi\form\element\Checkbox;
+use umi\form\element\Hidden;
+use umi\form\element\Select;
+use umi\form\element\Textarea;
 use umi\form\IForm;
 use umi\form\toolbox\factory\EntityFactory;
-use umi\templating\exception\InvalidArgumentException;
 use umi\templating\helper\form\FormHelper;
 use utest\templating\TemplatingTestCase;
 
@@ -38,27 +42,27 @@ class FormHelperTest extends TemplatingTestCase
         $this->form = $entityFactory
             ->createForm(
             [
-                'name'       => 'contact',
-                'action'     => '/contact',
-                'method'     => 'post',
                 'attributes' => [
+                    'name'       => 'contact',
+                    'action'     => '/contact',
+                    'method'     => 'post',
                     'class' => 'form-horizontal'
                 ],
                 'elements'   => [
                     'input'    => [
-                        'type'       => 'hidden',
+                        'type'       => Hidden::TYPE_NAME,
                         'attributes' => [
                             'data-id' => '123'
                         ]
                     ],
                     'textarea' => [
-                        'type'       => 'textarea',
+                        'type'       => Textarea::TYPE_NAME,
                         'attributes' => [
                             'data-id' => '321'
                         ]
                     ],
                     'select'   => [
-                        'type'    => 'select',
+                        'type'    => Select::TYPE_NAME,
                         'options' => [
                             'choices' => [
                                 'val1' => 'Label 1',
@@ -67,13 +71,13 @@ class FormHelperTest extends TemplatingTestCase
                         ]
                     ],
                     'checkbox' => [
-                        'type'       => 'checkbox',
+                        'type'       => Checkbox::TYPE_NAME,
                         'attributes' => [
                             'data-id' => '111'
                         ]
                     ],
                     'button'   => [
-                        'type'       => 'button',
+                        'type'       => Button::TYPE_NAME,
                         'label'      => 'Label',
                         'attributes' => [
                             'data-id' => '222'
@@ -84,37 +88,18 @@ class FormHelperTest extends TemplatingTestCase
         );
     }
 
-    /**
-     * @return FormHelper
-     */
-    protected function getFormHelperCollection()
-    {
-        $helper = $this->helper;
-
-        return $helper();
-    }
-
-    public function testBasic()
-    {
-        $this->assertInstanceOf(
-            'umi\templating\extension\helper\type\form\FormHelperCollection',
-            $this->getFormHelperCollection(),
-            'Ожидается, что вернется коллекция помощников вида.'
-        );
-    }
-
     public function testOpenAndCloseTag()
     {
         $this->assertEquals(
-            '<form name="contact" class="form-horizontal" method="post" action="/contact">',
-            $this->getFormHelperCollection()
+            '<form name="contact" action="/contact" method="post" class="form-horizontal">',
+            $this->helper
                 ->openTag($this->form),
             'Ожидается, что будет получен открывающий тэг формы.'
         );
 
         $this->assertEquals(
             '</form>',
-            $this->getFormHelperCollection()
+            $this->helper
                 ->closeTag(),
             'Ожидается, что будет получен закрывающий тэг формы.'
         );
@@ -123,9 +108,9 @@ class FormHelperTest extends TemplatingTestCase
     public function testInput()
     {
         $this->assertEquals(
-            '<input name="input" data-id="123" type="hidden" value="" />',
-            $this->getFormHelperCollection()
-                ->formInput($this->form->getElement('input')),
+            '<input data-id="123" type="hidden" name="input" value="" />',
+            $this->helper
+                ->formInput($this->form->get('input')),
             'Ожидается, что будет получен <input> элемент формы.'
         );
     }
@@ -133,9 +118,9 @@ class FormHelperTest extends TemplatingTestCase
     public function testTextarea()
     {
         $this->assertEquals(
-            '<textarea name="textarea" data-id="321"></textarea>',
-            $this->getFormHelperCollection()
-                ->formTextarea($this->form->getElement('textarea')),
+            '<textarea data-id="321" name="textarea" ></textarea>',
+            $this->helper
+                ->formTextarea($this->form->get('textarea')),
             'Ожидается, что будет получен <textarea> элемент формы.'
         );
     }
@@ -143,43 +128,33 @@ class FormHelperTest extends TemplatingTestCase
     public function testSelect()
     {
         $this->assertEquals(
-            '<select name="select" value=""><option value="val1">Label 1</option><option value="val2">Label 2</option></select>',
-            $this->getFormHelperCollection()
-                ->formSelect($this->form->getElement('select')),
+            '<select name="select" ><option value="val1">Label 1</option><option value="val2">Label 2</option></select>',
+            $this->helper
+                ->formSelect($this->form->get('select')),
             'Ожидается, что будет получен <select> элемент формы.'
         );
     }
 
     public function testElement()
     {
-        $helpers = $this->getFormHelperCollection();
+        $helpers = $this->helper;
         $this->assertEquals(
-            $helpers->formInput($this->form->getElement('input')),
-            $helpers->formElement($this->form->getElement('input')),
+            $helpers->formInput($this->form->get('input')),
+            $helpers->formElement($this->form->get('input')),
             'Ожидается, что будет вызван верный Helper.'
         );
 
         $this->assertEquals(
-            $helpers->formSelect($this->form->getElement('select')),
-            $helpers->formElement($this->form->getElement('select')),
+            $helpers->formSelect($this->form->get('select')),
+            $helpers->formElement($this->form->get('select')),
             'Ожидается, что будет вызван верный Helper.'
         );
 
         $this->assertEquals(
-            $helpers->formTextarea($this->form->getElement('textarea')),
-            $helpers->formElement($this->form->getElement('textarea')),
+            $helpers->formTextarea($this->form->get('textarea')),
+            $helpers->formElement($this->form->get('textarea')),
             'Ожидается, что будет вызван верный Helper.'
         );
-    }
-
-    /**
-     * @test
-     * @expectedException InvalidArgumentException
-     */
-    public function buttonIsNotSupported()
-    {
-        $helpers = $this->getFormHelperCollection();
-        $helpers->formElement($this->form->getElement('button'));
     }
 
 }

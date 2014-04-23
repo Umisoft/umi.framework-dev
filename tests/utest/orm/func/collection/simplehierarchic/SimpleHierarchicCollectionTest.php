@@ -169,27 +169,4 @@ class SimpleHierarchicCollectionTest extends ORMDbTestCase
             'Ожидается, что при удалении объекта у его родителя уменьшится количество детей'
         );
     }
-
-    public function testGetByUri()
-    {
-        $this->getObjectPersister()->commit();
-
-        $this->assertInstanceOf(
-            'umi\orm\object\IHierarchicObject',
-            $this->collection->getByUri('/menuItem1/menuItem2'),
-            'Ожидается, что метод IHierarchicCollection::getByUri() вернет IHierarchicObject'
-        );
-
-        $e = null;
-        try {
-            $this->collection->getByUri('/wrongUri');
-        } catch (\Exception $e) {
-        }
-        $this->assertInstanceOf(
-            'umi\orm\exception\NonexistentEntityException',
-            $e,
-            'Ожидается, исключение, если объект не был найден по URI'
-        );
-
-    }
 }

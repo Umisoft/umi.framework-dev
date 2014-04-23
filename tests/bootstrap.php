@@ -7,6 +7,8 @@
  * @license   http://umi-framework.ru/license/bsd-3 BSD-3 License
  */
 
+date_default_timezone_set('Europe/Moscow');
+
 $vendorDir = dirname(__DIR__) . '/vendor';
 
 if (!is_readable($vendorDir . '/autoload.php')) {
