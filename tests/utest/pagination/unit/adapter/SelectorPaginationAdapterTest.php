@@ -10,7 +10,7 @@
 namespace utest\unit\pagination\adapter;
 
 use umi\orm\collection\ICollectionFactory;
-use umi\orm\objectset\IObjectSet;
+use umi\orm\selector\ISelector;
 use umi\pagination\adapter\IPaginationAdapter;
 use umi\pagination\adapter\SelectorPaginationAdapter;
 use utest\event\TEventSupport;
@@ -91,16 +91,14 @@ class SelectorPaginatorAdapterTest extends PaginationTestCase
     {
         $this->assertEquals($this->adapter->getTotal(), 5, 'Ожидается, что количество элементов в адаптере равно 5.');
         /**
-         * @var IObjectSet $items
+         * @var ISelector $items
          */
         $items = $this->adapter->getItems(1, 3);
 
-        $this->assertCount(1, $items, 'Ожидается, что список элементов будет сформирован верно.');
+        $this->assertCount(1, $items->result(), 'Ожидается, что список элементов будет сформирован верно.');
         $this->assertSame(
             $this->user,
-            $items
-                ->reset()
-                ->fetch(),
+            $items->result()->fetch(),
             'Ожидается, что список элементов будет сформирован верно.'
         );
     }
