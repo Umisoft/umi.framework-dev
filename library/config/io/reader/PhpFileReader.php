@@ -117,11 +117,12 @@ class PhpFileReader implements IReader, ILocalizable, IConfigAliasResolverAware,
                         $masterValue->set($localValue, IConfigValue::KEY_LOCAL)
                             ->save();
                     } catch (InvalidArgumentException $e) {
-                        throw new UnexpectedValueException(
-                            $this->translate(
+                        throw new UnexpectedValueException($this->translate(
                                 'Local property "{key}" should be scalar.',
                                 ['key' => $key]
-                            ), 0, $e
+                            ),
+                            0,
+                            $e
                         );
                     }
                 } else {
