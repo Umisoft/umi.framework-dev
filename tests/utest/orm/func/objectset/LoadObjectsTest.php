@@ -44,11 +44,14 @@ class LoadObjectsTest extends ORMDbTestCase
 
     protected function setUpFixtures()
     {
-
         $this->objectsSet = $this->getMock('umi\orm\objectset\ObjectSet', ['getQueryResultRow']);
         $this->objectsSet->expects($this->any())
             ->method('getQueryResultRow')
             ->will($this->returnCallback([$this, 'mockGetQueryResultRow']));
+
+        $selector = $this->getMock('umi\orm\selector\Selector', [], [], '', false);
+        /** @noinspection PhpUndefinedMethodInspection */
+        $this->objectsSet->setSelector($selector);
 
         $this->resolveOptionalDependencies($this->objectsSet);
         $this->counterId = 1;

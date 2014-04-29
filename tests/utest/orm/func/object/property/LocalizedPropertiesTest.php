@@ -88,6 +88,18 @@ WHERE (("blogs_blog"."guid" = :value0))'
 
         $blog->getValue('title', 'en-GB');
 
+            'SELECT "blogs_blog"."id" AS "blogs_blog:id", "blogs_blog"."guid" AS "blogs_blog:guid",
+            "blogs_blog"."type" AS "blogs_blog:type", "blogs_blog"."version" AS "blogs_blog:version",
+            "blogs_blog"."pid" AS "blogs_blog:parent", "blogs_blog"."mpath" AS "blogs_blog:mpath",
+            "blogs_blog"."slug" AS "blogs_blog:slug", "blogs_blog"."uri" AS "blogs_blog:uri",
+            "blogs_blog"."title" AS "blogs_blog:title#ru-RU",
+            "blogs_blog"."title_en" AS "blogs_blog:title#en-US",
+            "blogs_blog"."title_gb" AS "blogs_blog:title#en-GB",
+            "blogs_blog"."title_ua" AS "blogs_blog:title#ru-UA",
+            "blogs_blog"."publish_time" AS "blogs_blog:publishTime"
+     FROM "umi_mock_blogs" AS "blogs_blog"
+     WHERE (("blogs_blog"."id" = :value0))';
+
         $this->assertEquals(
             [
                 'SELECT "blogs_blog"."id" AS "blogs_blog:id", "blogs_blog"."guid" AS "blogs_blog:guid", '
@@ -423,6 +435,77 @@ WHERE "id" = :objectId AND "version" = :version',
             $blog->getValue('title'),
             'Ожидается, что значение без локали будет равно выставленному значению для текущей локали '
             . 'с указанием локали'
+        );
+    }
+
+    public function testLoadWithLocale()
+    {
+        $blogsCollection = $this->getCollectionManager()->getCollection(self::BLOGS_BLOG);
+
+        $blog = $blogsCollection->add('blog');
+        $blog->setValue('title', 'GB', 'en-GB');
+        $blogGuid = $blog->getGUID();
+        $this->getObjectPersister()->commit();
+        $this->getObjectManager()->unloadObjects();
+        $this->resetQueries();
+
+        $blog = $blogsCollection->get($blogGuid, 'en-GB');
+
+        $this->assertEquals(
+            [
+                'SELECT "blogs_blog"."id" AS "blogs_blog:id", "blogs_blog"."guid" AS "blogs_blog:guid", '
+                . '"blogs_blog"."type" AS "blogs_blog:type", "blogs_blog"."version" AS "blogs_blog:version", '
+                . '"blogs_blog"."pid" AS "blogs_blog:parent", "blogs_blog"."mpath" AS "blogs_blog:mpath", '
+                . '"blogs_blog"."slug" AS "blogs_blog:slug", "blogs_blog"."uri" AS "blogs_blog:uri", '
+                . '"blogs_blog"."child_count" AS "blogs_blog:childCount", '
+                . '"blogs_blog"."order" AS "blogs_blog:order", "blogs_blog"."level" AS "blogs_blog:level", '
+                . '"blogs_blog"."title_gb" AS "blogs_blog:title#en-GB", '
+                . '"blogs_blog"."title_en" AS "blogs_blog:title#en-US", '
+                . '"blogs_blog"."publish_time" AS "blogs_blog:publishTime", '
+                . '"blogs_blog"."owner_id" AS "blogs_blog:owner"
+FROM "umi_mock_blogs" AS "blogs_blog"
+WHERE (("blogs_blog"."guid" = :value0))'
+            ],
+            $this->getQueries(),
+            'Ожидается, что при получении объекта в конкретной локали в запросе участвуют только указанная и дефолтная локали'
+        );
+
+        $this->assertEquals('GB', $blog->getValue('title'), 'Ожидается, что все значения отдаются в локали загрузки объекта');
+    }
+
+    public function testFullyLoadWithLocale()
+    {
+        $blogsCollection = $this->getCollectionManager()->getCollection(self::BLOGS_BLOG);
+
+        $blogsCollection->add('blog');
+        $this->getObjectPersister()->commit();
+        $this->getObjectManager()->unloadObjects();
+
+        $blog = $blogsCollection->select()
+            ->fields(['owner', 'publishTime'])
+            ->localization('en-GB')
+            ->result()
+            ->fetch();
+        $this->resetQueries();
+
+        $blog->getValue('title');
+
+        $this->assertEquals(
+            [
+                'SELECT "blogs_blog"."id" AS "blogs_blog:id", "blogs_blog"."guid" AS "blogs_blog:guid", '
+                . '"blogs_blog"."type" AS "blogs_blog:type", "blogs_blog"."version" AS "blogs_blog:version", '
+                . '"blogs_blog"."pid" AS "blogs_blog:parent", "blogs_blog"."mpath" AS "blogs_blog:mpath", '
+                . '"blogs_blog"."slug" AS "blogs_blog:slug", "blogs_blog"."uri" AS "blogs_blog:uri", '
+                . '"blogs_blog"."child_count" AS "blogs_blog:childCount", '
+                . '"blogs_blog"."order" AS "blogs_blog:order", "blogs_blog"."level" AS "blogs_blog:level", '
+                . '"blogs_blog"."title_gb" AS "blogs_blog:title#en-GB", '
+                . '"blogs_blog"."title_en" AS "blogs_blog:title#en-US"
+FROM "umi_mock_blogs" AS "blogs_blog"
+WHERE (("blogs_blog"."id" = :value0))'
+            ],
+            $this->getQueries(),
+            'Ожидается, что при запросе незагруженного свойства объекта в локали загрузки объекта объект будет' .
+            'дозагружен только в начальной и дефолтных локалях'
         );
     }
 }

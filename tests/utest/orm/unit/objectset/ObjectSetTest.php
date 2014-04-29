@@ -13,6 +13,7 @@ use umi\orm\collection\ICollectionFactory;
 use umi\orm\object\IObject;
 use umi\orm\objectset\IObjectSet;
 use umi\orm\selector\ISelector;
+use umi\orm\selector\Selector;
 use utest\orm\ORMDbTestCase;
 
 /**
@@ -52,6 +53,10 @@ class ObjectSetTest extends ORMDbTestCase
             ->method('getQueryResultRow')
             ->will($this->returnCallback([$this, 'mockGetQueryResultRow']));
 
+        $selector = $this->getMock('umi\orm\selector\Selector', [], [], '', false);
+        /** @noinspection PhpUndefinedMethodInspection */
+        $this->objectsSet->setSelector($selector);
+
         $this->resolveOptionalDependencies($this->objectsSet);
         $this->counterId = 1;
     }
@@ -78,49 +83,6 @@ class ObjectSetTest extends ORMDbTestCase
     public function testInstance()
     {
         $this->assertInstanceOf('umi\orm\objectset\IObjectSet', $this->objectsSet, 'Неверно создан мок-объект');
-    }
-
-    public function testSelector()
-    {
-
-        $e = null;
-        try {
-            $this->objectsSet->getSelector();
-        } catch (\Exception $e) {
-        }
-        $this->assertInstanceOf(
-            'umi\orm\exception\RuntimeException',
-            $e,
-            'Ожидается исключение при попытке получить селектор у набора объектов, если он не был установлен'
-        );
-
-        /**
-         * @var ISelector $selector
-         */
-        $selector = $this->getMock('umi\orm\selector\Selector', [], [], '', false);
-
-        $this->assertInstanceOf(
-            'umi\orm\objectset\IObjectSet',
-            $this->objectsSet->setSelector($selector),
-            'Ожидается, что IObjectSet::setSelector() вернет себя'
-        );
-
-        $this->assertTrue(
-            $selector === $this->objectsSet->getSelector(),
-            'Ожидается, что у набора объектов можно получить установленный селектор'
-        );
-
-        $e = null;
-        try {
-            $this->objectsSet->setSelector($selector);
-        } catch (\Exception $e) {
-        }
-        $this->assertInstanceOf(
-            'umi\orm\exception\RuntimeException',
-            $e,
-            'Ожидается исключение при попытке повторно выставить селектор набору объектов'
-        );
-
     }
 
     public function testFetchOne()
