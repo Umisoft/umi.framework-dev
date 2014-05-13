@@ -9,6 +9,7 @@
 
 namespace utest\orm\func\object\property;
 
+use umi\i18n\ILocalesService;
 use umi\orm\collection\ICollectionFactory;
 use umi\orm\object\IHierarchicObject;
 use umi\orm\object\IObject;
@@ -69,7 +70,7 @@ class ObjectPropertiesTest extends ORMDbTestCase
         $blog = $this->getCollectionManager()->getCollection(self::BLOGS_BLOG)
             ->select()
             ->fields(['title'])
-            ->withLocalization(true)
+            ->localization(ILocalesService::LOCALE_ALL)
             ->where('guid')->equals($this->blogGuid)
             ->result()
             ->fetch();

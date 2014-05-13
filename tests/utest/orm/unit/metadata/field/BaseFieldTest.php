@@ -46,6 +46,14 @@ class BaseFieldTest extends FieldTestCase
         $this->assertNull($field->getMutator(), 'Ожидается, что по умолчанию метод изменения значения не установлен');
         $this->assertEmpty($field->getValidatorsConfig(), 'Ожидается, что по умолчанию валидаторы для поля не установлены');
         $this->assertEmpty($field->getFiltersConfig(), 'Ожидается, что по умолчанию фильтры для поля не установлены');
+        $this->assertFalse(
+            $field->getIsLocalized(),
+            'Ожидается, что поле не локализовано, если у него не указаны локали'
+        );
+        $this->assertEmpty(
+            $field->getLocalizations(),
+            'Если в конфиге локали не указаны, ожидается, что никакие локали не будут возвращены'
+        );
 
     }
 
@@ -94,9 +102,84 @@ class BaseFieldTest extends FieldTestCase
         );
     }
 
-    public function testWrongConfig()
+    public function testLocalesConfig()
     {
+        $localizations = [
+            'ru' => [
+                'columnName'   => 'field_ru',
+                'defaultValue' => 'default_ru'
+            ],
+            'en' => [
+                'columnName'   => 'field_en',
+                'defaultValue' => 'default_en'
+            ]
+        ];
 
+        $field = new MockField(
+            'mock',
+            IField::TYPE_STRING,
+            [
+                'columnName'    => 'field_ru',
+                'defaultValue'  => 'default_ru',
+                'localizations' => $localizations
+            ]
+        );
+        $this->assertTrue(
+            $field->getIsLocalized(),
+            'Ожидается, что локализуемое поле локализовано, когда у него есть список локалей'
+        );
+        $this->assertEquals($localizations, $field->getLocalizations(), 'Неверно прочитан конфиг локализаций');
+        $this->assertTrue($field->hasLocale('ru'), 'Ожидается, что локаль ru есть у поля');
+        $this->assertFalse($field->hasLocale('de'), 'Ожидается, что локаль de отсутствует у поля');
+
+        $this->assertEquals(
+            'field_ru',
+            $field->getColumnName(),
+            'Ожидается, что при запросе локализованного столбца без указания локали вернется столбец по умолчанию'
+        );
+        $this->assertEquals(
+            'default_ru',
+            $field->getDefaultValue(),
+            'Ожидается, что при запросе локализованного дефолтного значения без указания локали '
+            . 'вернется значение по умолчанию'
+        );
+
+        $this->assertEquals(
+            'field_en',
+            $field->getColumnName('en'),
+            'Ожидается, что при запросе локализованного столбца вернется столбец для указанной локали'
+        );
+        $this->assertEquals(
+            'default_en',
+            $field->getDefaultValue('en'),
+            'Ожидается, что при запросе локализованного дефолтного значения вернется значениедля указанной локали'
+        );
+
+        $e = null;
+        try {
+            $field->getColumnName('it');
+        } catch (\Exception $e) {
+        }
+        $this->assertInstanceOf(
+            'umi\orm\exception\NonexistentEntityException',
+            $e,
+            'Ожидается исключение при попытке получить имя колонки для несуществующей локали'
+        );
+
+        $e = null;
+        try {
+            $field->getDefaultValue('it');
+        } catch (\Exception $e) {
+        }
+        $this->assertInstanceOf(
+            'umi\orm\exception\NonexistentEntityException',
+            $e,
+            'Ожидается исключение при попытке получить значение по умолчанию для несуществующей локали'
+        );
+    }
+
+    public function testWrongValidatorsConfig()
+    {
         $e = null;
         try {
             new MockField('mock', IField::TYPE_STRING, ['validators' => 'WrongValidatorsConfig']);
@@ -107,7 +190,10 @@ class BaseFieldTest extends FieldTestCase
             $e,
             'Ожидается исключение при попытке выставить неверную конфигурацию валидаторов'
         );
+    }
 
+    public function testWrongFiltersConfig()
+    {
         $e = null;
         try {
             new MockField('mock', IField::TYPE_STRING, ['filters' => 'WrongFiltersConfig']);
@@ -117,6 +203,20 @@ class BaseFieldTest extends FieldTestCase
             'umi\orm\exception\UnexpectedValueException',
             $e,
             'Ожидается исключение при попытке выставить неверную конфигурацию фильтров'
+        );
+    }
+
+    public function testWrongLocalesConfig()
+    {
+        $e = null;
+        try {
+            new MockField('mock', IField::TYPE_STRING, ['localizations' => 'wrongLocalizationsConfig']);
+        } catch (\Exception $e) {
+        }
+        $this->assertInstanceOf(
+            'umi\orm\exception\UnexpectedValueException',
+            $e,
+            'Ожидается исключение при попытке создать поле с неверной конфигурацией локалей'
         );
     }
 }

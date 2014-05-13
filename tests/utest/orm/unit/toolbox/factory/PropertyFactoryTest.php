@@ -15,7 +15,6 @@ use umi\orm\metadata\field\special\CounterField;
 use umi\orm\metadata\field\special\MaterializedPathField;
 use umi\orm\metadata\field\string\StringField;
 use umi\orm\object\IObject;
-use umi\orm\object\property\localized\ILocalizedProperty;
 use umi\orm\toolbox\factory\PropertyFactory;
 use utest\orm\ORMTestCase;
 
@@ -59,15 +58,7 @@ class PropertyFactoryTest extends ORMTestCase
             'Неверный интерфейс у обычного свойства'
         );
 
-        /**
-         * @var ILocalizedProperty $localizedProperty
-         */
         $localizedProperty = $propertyFactory->createProperty($object, $localizedField, 'ru');
-        $this->assertInstanceOf(
-            'umi\orm\object\property\localized\ILocalizedProperty',
-            $localizedProperty,
-            'Ожидается, что для локализованного поля будет создано локализованное свойство'
-        );
         $this->assertEquals('ru', $localizedProperty->getLocaleId());
 
         $calculableProperty = $propertyFactory->createProperty($object, $calculableField);

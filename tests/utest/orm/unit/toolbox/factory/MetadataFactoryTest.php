@@ -71,10 +71,6 @@ class MetadataFactoryTest extends ORMTestCase
             $this->metadataFactory->createField('id', $this->config['fields']['id'])
         );
         $this->assertInstanceOf(
-            'umi\orm\metadata\field\ILocalizableField',
-            $this->metadataFactory->createField('name', $this->config['fields']['name'])
-        );
-        $this->assertInstanceOf(
             'umi\orm\metadata\field\relation\BelongsToRelationField',
             $this->metadataFactory->createField('parent', $this->config['fields']['parent'])
         );

@@ -13,7 +13,6 @@ use umi\orm\collection\ICollectionFactory;
 use umi\orm\object\HierarchicObject;
 use umi\orm\object\IHierarchicObject;
 use umi\orm\object\IObject;
-use umi\orm\object\property\localized\ILocalizedProperty;
 use umi\orm\toolbox\factory\PropertyFactory;
 use utest\orm\mock\collections\User;
 use utest\orm\ORMDbTestCase;
@@ -200,9 +199,6 @@ class ObjectTest extends ORMDbTestCase
             'Ожидается, что IObject::getProperty() вернет IProperty, если свойство существует'
         );
 
-        /**
-         * @var ILocalizedProperty $titleProperty
-         */
         $titleProperty = $this->blog->getProperty('title');
         $this->assertEquals(
             'ru-RU',
