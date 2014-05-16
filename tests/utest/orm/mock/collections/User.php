@@ -82,7 +82,7 @@ class User extends Object
 
         if (strlen($login) < 3) {
             $result = false;
-            $this->addValidationError('login', ['Login is shorter than 3 symbols']);
+            $this->getProperty('login')->addValidationErrors(['Login is shorter than 3 symbols']);
         }
 
         $users = $this->getCollection()
@@ -94,7 +94,7 @@ class User extends Object
 
         if (count($users->fetchAll())) {
             $result = false;
-            $this->addValidationError('login', ['Login is not unique']);
+            $this->getProperty('login')->addValidationErrors(['Login is not unique']);
         }
 
         return $result;
