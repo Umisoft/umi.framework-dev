@@ -46,15 +46,15 @@ class ValidatorsTest extends ORMDbTestCase
             ->setValue('height', 153)
             ->setValue('email', 'test@umisoft.ru');
 
-        $user->validate();
+        $user->isValid();
 
-        $this->assertTrue($user->validate(), 'Ожидается, что объект должен пройти валидацию');
+        $this->assertTrue($user->isValid(), 'Ожидается, что объект должен пройти валидацию');
         $this->assertCount(0, $user->getValidationErrors(), 'Ожидается, что нет ошибок валидации');
 
         $user->setValue('login', '12');
 
         $this->assertFalse(
-            $user->validate(),
+            $user->isValid(),
             'Ожидается, что пользователь с логином меньше 3 знаков не пройдет валидацию'
         );
         $this->assertEquals(
@@ -68,7 +68,7 @@ class ValidatorsTest extends ORMDbTestCase
             ->setValue('height', 1);
 
         $this->assertFalse(
-            $user->validate(),
+            $user->isValid(),
             'Ожидается, что пользователь с ростом меньше 2х чисел не пройдет валидацию'
         );
         $this->assertEquals(
@@ -94,7 +94,7 @@ class ValidatorsTest extends ORMDbTestCase
             'Ожидается, что метод для валидации рейтинга существует'
         );
         $this->assertTrue(
-            $user->validate(),
+            $user->isValid(),
             'Ожидается, что объект должен пройти валидацию, если валидатор ничего не отдает'
         );
     }
@@ -109,7 +109,7 @@ class ValidatorsTest extends ORMDbTestCase
             ->setValue('email', 'test@umisoft.ru');
 
         $this->getObjectPersister()->commit();
-        $this->assertTrue($user->validate(), 'Ожидается, что объект должен пройти валидацию, если он не модифицирован');
+        $this->assertTrue($user->isValid(), 'Ожидается, что объект должен пройти валидацию, если он не модифицирован');
 
         $user->setValue('login', '12');
 
