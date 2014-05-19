@@ -71,14 +71,14 @@ class ConfigCacheTest extends ConfigTestCase
     public function testCacheSeparateFiles()
     {
         $config = $this->ioService->read('~/test2.php');
-        $this->assertEquals('value', $config->get('part/key'));
+        $this->assertEquals('value', $config->get('part.key'));
 
         $this->cacheEngine->save($config);
 
         $this->assertTrue($this->cacheEngine->isActual('~/test2.php', time() - 3600));
 
         $saved = $this->cacheEngine->load('~/test2.php');
-        $this->assertEquals('value', $saved->get('part/key'));
+        $this->assertEquals('value', $saved->get('part.key'));
 
         $this->assertEquals($config, $saved);
     }

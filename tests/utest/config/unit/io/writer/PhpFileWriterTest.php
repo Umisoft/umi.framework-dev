@@ -89,7 +89,7 @@ class PhpFileWriterTest extends ConfigTestCase
     {
         $cfg = $this->getConfig('~/test/basic.php');
 
-        $cfg['key/key1'] = 'first';
+        $cfg['key.key1'] = 'first';
         $cfg['key1'] = 'local';
         $this->writer->write($cfg);
 
@@ -104,7 +104,7 @@ class PhpFileWriterTest extends ConfigTestCase
             require $this->fsLocalDir . '/basic.php'
         );
 
-        $cfg->del('key/key1');
+        $cfg->del('key.key1');
         $this->writer->write($cfg);
 
         /** @noinspection PhpIncludeInspection */
@@ -132,7 +132,7 @@ class PhpFileWriterTest extends ConfigTestCase
         $cfg = $this->getConfig('~/test/partMain.php');
 
         $cfg['key'] = 'localMain';
-        $cfg['part/key'] = 'localPart';
+        $cfg['part.key'] = 'localPart';
         $this->writer->write($cfg);
 
         /** @noinspection PhpIncludeInspection */

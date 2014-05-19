@@ -150,7 +150,7 @@ class PhpFileReaderTest extends ConfigTestCase
         $source = $config->getSource();
         $this->assertInstanceOf('umi\config\entity\IConfigSource', $source['partial']);
 
-        $this->assertEquals('Local partial value', $config->get('partial/part-inner'));
+        $this->assertEquals('Local partial value', $config->get('partial.part-inner'));
     }
 
     public function testLazy()
@@ -160,7 +160,7 @@ class PhpFileReaderTest extends ConfigTestCase
         $source = $config->getSource();
         $this->assertInstanceOf('umi\config\entity\IConfigSource', $source['partial']);
 
-        $this->assertEquals('Local partial value', $config->get('partial/part-inner'));
+        $this->assertEquals('Local partial value', $config->get('partial.part-inner'));
     }
 
     /**

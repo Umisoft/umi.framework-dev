@@ -59,11 +59,11 @@ class ConfigTest extends ConfigTestCase
 
     public function testEmptyKey()
     {
-        $this->assertFalse($this->config->has('key3/empty'));
-        $this->assertNull($this->config->get('key3/empty'));
+        $this->assertFalse($this->config->has('key3.empty'));
+        $this->assertNull($this->config->get('key3.empty'));
 
-        $this->assertSame($this->config, $this->config->del('key3/empty'));
-        $this->assertSame($this->config, $this->config->reset('key3/empty'));
+        $this->assertSame($this->config, $this->config->del('key3.empty'));
+        $this->assertSame($this->config, $this->config->reset('key3.empty'));
     }
 
     public function testBasic()
@@ -102,30 +102,30 @@ class ConfigTest extends ConfigTestCase
     {
         $this->assertEquals(
             'local',
-            $this->config->get('key3/inner'),
+            $this->config->get('key3.inner'),
             'Ожидается, что будет получено локальное значение.'
         );
 
-        $this->assertTrue($this->config->has('key3/inner'));
+        $this->assertTrue($this->config->has('key3.inner'));
 
-        $this->config->set('key3/inner', 'session');
+        $this->config->set('key3.inner', 'session');
         $this->assertEquals(
             'session',
-            $this->config->get('key3/inner'),
+            $this->config->get('key3.inner'),
             'Ожидается, что будет получено сессионное значение.'
         );
 
-        $this->config->reset('key3/inner');
+        $this->config->reset('key3.inner');
         $this->assertEquals(
             'local',
-            $this->config->get('key3/inner'),
+            $this->config->get('key3.inner'),
             'Ожидается, что будет получено локальное значение.'
         );
 
-        $this->config->del('key3/inner');
+        $this->config->del('key3.inner');
         $this->assertEquals(
             'master',
-            $this->config->get('key3/inner'),
+            $this->config->get('key3.inner'),
             'Ожидается, что будет получено локальное значение.'
         );
     }
@@ -154,7 +154,7 @@ class ConfigTest extends ConfigTestCase
      */
     public function setInvalidKey()
     {
-        $this->config->set('key1/inner', 'scalar');
+        $this->config->set('key1.inner', 'scalar');
     }
 
     /**
@@ -163,7 +163,7 @@ class ConfigTest extends ConfigTestCase
      */
     public function getInvalidKey()
     {
-        $this->config->get('key1/inner');
+        $this->config->get('key1.inner');
     }
 
     /**
@@ -172,7 +172,7 @@ class ConfigTest extends ConfigTestCase
      */
     public function delInvalidKey()
     {
-        $this->config->del('key1/inner');
+        $this->config->del('key1.inner');
     }
 
     /**
@@ -181,7 +181,7 @@ class ConfigTest extends ConfigTestCase
      */
     public function resetInvalidKey()
     {
-        $this->config->reset('key1/inner');
+        $this->config->reset('key1.inner');
     }
 
     public function testIterator()
@@ -205,7 +205,7 @@ class ConfigTest extends ConfigTestCase
         $this->config->set('key5', 'Test string');
         $this->assertEquals('Test string', $this->config->get('key5'));
 
-        $this->config->set('key6/inner', 'Test string');
+        $this->config->set('key6.inner', 'Test string');
         $this->assertEquals(
             'Test string',
             $this->config->get('key6')
@@ -254,7 +254,7 @@ class ConfigTest extends ConfigTestCase
             ]
         );
 
-        $this->assertEquals('done', $this->config->get('key4/innerKey2'));
+        $this->assertEquals('done', $this->config->get('key4.innerKey2'));
     }
 
     public function testSetArrayToArray()
@@ -266,13 +266,13 @@ class ConfigTest extends ConfigTestCase
             ]
         );
 
-        $this->assertEquals('done', $this->config->get('key3/inner2'));
+        $this->assertEquals('done', $this->config->get('key3.inner2'));
     }
 
     public function testSetValueToChildConfig()
     {
-        $this->config->set('key4/into/inner', 'test');
-        $this->assertEquals('test', $this->config->get('key4/into/inner'));
+        $this->config->set('key4.into.inner', 'test');
+        $this->assertEquals('test', $this->config->get('key4.into.inner'));
     }
 
     public function testGetValues()
@@ -284,12 +284,12 @@ class ConfigTest extends ConfigTestCase
     public function testHasValue()
     {
         $this->assertTrue($this->config->has('key1'));
-        $this->assertFalse($this->config->has('key1/inner'));
+        $this->assertFalse($this->config->has('key1.inner'));
 
         $this->assertTrue($this->config->has('key3'));
 
-        $this->config->set('key4/into/inner', 'test');
-        $this->assertTrue($this->config->has('key4/into/inner'));
+        $this->config->set('key4.into.inner', 'test');
+        $this->assertTrue($this->config->has('key4.into.inner'));
     }
 
     public function testResetValue()
@@ -300,26 +300,26 @@ class ConfigTest extends ConfigTestCase
         $this->assertEquals('local', $this->config->get('key1'));
         $this->assertEquals('newValue', $this->config->get('key2'));
 
-        $this->config->set('key3/inner', 'newValue');
+        $this->config->set('key3.inner', 'newValue');
         $this->config->reset('key3');
-        $this->assertEquals('local', $this->config->get('key3/inner'));
+        $this->assertEquals('local', $this->config->get('key3.inner'));
 
-        $this->config->set('key4/inner', 'newValue');
+        $this->config->set('key4.inner', 'newValue');
         $this->config->reset('key4');
-        $this->assertEquals('local', $this->config->get('key3/inner'));
+        $this->assertEquals('local', $this->config->get('key3.inner'));
 
         $this->config->set('key1', 'newValue');
-        $this->config->set('key3/inner', 'newValue');
-        $this->config->set('key4/innerKey1', 'newValue');
+        $this->config->set('key3.inner', 'newValue');
+        $this->config->set('key4.innerKey1', 'newValue');
         $this->config->reset();
 
         $this->assertEquals('local', $this->config->get('key1'));
-        $this->assertEquals('local', $this->config->get('key3/inner'));
-        $this->assertEquals('local', $this->config->get('key4/innerKey1'));
+        $this->assertEquals('local', $this->config->get('key3.inner'));
+        $this->assertEquals('local', $this->config->get('key4.innerKey1'));
 
-        $this->config->set('key4/innerKey1', 'newValue');
-        $this->config->reset('key4/innerKey1');
-        $this->assertEquals('local', $this->config->get('key4/innerKey1'));
+        $this->config->set('key4.innerKey1', 'newValue');
+        $this->config->reset('key4.innerKey1');
+        $this->assertEquals('local', $this->config->get('key4.innerKey1'));
     }
 
     public function testDeleteValue()
@@ -330,9 +330,9 @@ class ConfigTest extends ConfigTestCase
         $this->assertEquals('master', $this->config->get('key1'));
         $this->assertEquals('newValue', $this->config->get('key2'));
 
-        $this->config->set('key4/innerKey1', 'newValue');
-        $this->config->del('key4/innerKey1');
-        $this->assertEquals('master', $this->config->get('key4/innerKey1'));
+        $this->config->set('key4.innerKey1', 'newValue');
+        $this->config->del('key4.innerKey1');
+        $this->assertEquals('master', $this->config->get('key4.innerKey1'));
     }
 
     public function testMerge()
@@ -347,7 +347,7 @@ class ConfigTest extends ConfigTestCase
             ]
         );
 
-        $this->assertEquals('value', $this->config->get('key5/inner/into'));
+        $this->assertEquals('value', $this->config->get('key5.inner.into'));
     }
 
     public function testClone()
