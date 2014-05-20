@@ -22,6 +22,10 @@ class ValidatorFixture implements IValidator
      */
     protected $options;
     /**
+     * @var string $type тип валидатора
+     */
+    protected $type;
+    /**
      * @var array $message сообщение об ошибках
      */
     protected $message;
@@ -31,11 +35,30 @@ class ValidatorFixture implements IValidator
     protected $isValid;
 
     /**
+     * Конструктор.
+     * @param string $type тип валидатора
+     * @param array $options опции валидатора
+     */
+    public function __construct($type, array $options)
+    {
+        $this->type = $type;
+        $this->options = $options;
+    }
+
+    /**
      * {@inheritdoc}
      */
-    public function __construct(array $options)
+    public function getType()
     {
-        $this->options = $options;
+        return $this->type;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOptions()
+    {
+        return $this->options;
     }
 
     /**

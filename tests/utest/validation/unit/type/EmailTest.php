@@ -10,6 +10,7 @@
 namespace utest\validation\unit\type;
 
 use umi\validation\IValidator;
+use umi\validation\IValidatorFactory;
 use umi\validation\type\Email;
 use utest\validation\ValidationTestCase;
 
@@ -26,7 +27,7 @@ class EmailValidatorTests extends ValidationTestCase
 
     public function setUpFixtures()
     {
-        $this->validator = new Email();
+        $this->validator = new Email(IValidatorFactory::TYPE_EMAIL);
     }
 
     public function testValidate()

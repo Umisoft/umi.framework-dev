@@ -15,7 +15,7 @@ use umi\validation\IValidatorCollection;
 /**
  * Мок-класс коллкции валидаторов
  */
-class ValidatorCollectionFixture implements IValidatorCollection
+class ValidatorCollectionFixture implements \IteratorAggregate, IValidatorCollection
 {
 
     protected $collection;
@@ -63,5 +63,13 @@ class ValidatorCollectionFixture implements IValidatorCollection
         array_unshift($this->collection, $validator);
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->collection);
     }
 }

@@ -10,6 +10,7 @@
 namespace utest\validation\unit\type;
 
 use umi\validation\IValidator;
+use umi\validation\IValidatorFactory;
 use umi\validation\type\Required;
 use utest\validation\ValidationTestCase;
 
@@ -26,7 +27,7 @@ class RequiredValidatorTests extends ValidationTestCase
 
     public function setUpFixtures()
     {
-        $this->validator = new Required();
+        $this->validator = new Required(IValidatorFactory::TYPE_REQUIRED);
     }
 
     public function testValidate()

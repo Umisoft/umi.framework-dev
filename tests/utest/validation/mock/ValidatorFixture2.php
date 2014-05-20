@@ -16,7 +16,6 @@ use umi\validation\IValidator;
  */
 class ValidatorFixture2 implements IValidator
 {
-
     /**
      * {@inheritdoc}
      */
@@ -39,5 +38,21 @@ class ValidatorFixture2 implements IValidator
     public function isValid($var)
     {
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOptions()
+    {
+        return [];
     }
 }

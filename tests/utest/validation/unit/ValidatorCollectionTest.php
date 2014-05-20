@@ -32,9 +32,9 @@ class ValidatorCollectionTests extends ValidationTestCase
 
     public function setUpFixtures()
     {
-        $mockValid = new ValidatorFixture(['is_valid' => true]);
+        $mockValid = new ValidatorFixture('test', ['is_valid' => true]);
 
-        $mockInvalid = new ValidatorFixture(['is_valid' => false]);
+        $mockInvalid = new ValidatorFixture('test', ['is_valid' => false]);
 
         $this->validCollection = new ValidatorCollection([
             'mock1' => $mockValid,

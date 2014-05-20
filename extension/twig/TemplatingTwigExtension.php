@@ -11,7 +11,6 @@ namespace umi\extension\twig;
 
 use Twig_Extension;
 use Twig_SimpleFunction;
-use umi\templating\helper\form\FormHelper;
 use umi\templating\helper\pagination\PaginationHelper;
 
 /**
@@ -24,10 +23,6 @@ class TemplatingTwigExtension extends Twig_Extension
      * @var string $paginationFunctionName имя функции для генерации постраничной навигации
      */
     public $paginationFunctionName = 'pagination';
-    /**
-     * @var string $formFunctionName имя функции для вывода форм
-     */
-    public $formFunctionName = 'form';
     /**
      * @var string $translateFunctionName имя функции для перевода
      */
@@ -50,10 +45,6 @@ class TemplatingTwigExtension extends Twig_Extension
             new Twig_SimpleFunction(
                 $this->paginationFunctionName,
                 $this->getPaginationHelper()
-            ),
-            new Twig_SimpleFunction(
-                $this->formFunctionName,
-                $this->getFormHelper()
             )
         ];
     }
@@ -69,23 +60,6 @@ class TemplatingTwigExtension extends Twig_Extension
 
             if (!$helper) {
                 $helper = new PaginationHelper();
-            }
-
-            return $helper;
-        };
-    }
-
-    /**
-     * Возвращает помощник шаблонов для форм.
-     * @return callable
-     */
-    protected function getFormHelper()
-    {
-        return function() {
-            static $helper;
-
-            if (!$helper) {
-                $helper = new FormHelper();
             }
 
             return $helper;

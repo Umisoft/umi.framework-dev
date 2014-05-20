@@ -10,6 +10,7 @@
 namespace utest\validation\unit\type;
 
 use umi\validation\exception\RuntimeException;
+use umi\validation\IValidatorFactory;
 use umi\validation\type\Regexp;
 use utest\validation\ValidationTestCase;
 
@@ -25,13 +26,13 @@ class RegexpValidatorTests extends ValidationTestCase
      */
     public function wrongValidatorPattern()
     {
-        $validator = new Regexp();
+        $validator = new Regexp(IValidatorFactory::TYPE_REGEXP);
         $validator->isValid('1234');
     }
 
     public function testValidate()
     {
-        $validator = new Regexp(['pattern' => '/[0-9]+/']);
+        $validator = new Regexp(IValidatorFactory::TYPE_REGEXP, ['pattern' => '/[0-9]+/']);
         $this->assertTrue($validator->isValid("1234"), "Ожидается, что число пройдет валидацию");
         $this->assertNull($validator->getMessage(), "Ожидается, что сообщений об ошибках не будет");
 
