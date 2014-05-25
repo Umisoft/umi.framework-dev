@@ -1,5 +1,5 @@
 {
-    "name": "umi/framework-dev",
+    "name": "Umisoft/umi.framework-dev",
     "description": "UMI.Framework Development Package",
     "keywords": ["umi", "framework", "development"],
     "type": "library",
