@@ -101,6 +101,16 @@ class User extends Object
     }
 
     /**
+     * Вычисляет полное имя пользователя.
+     * @param string|null $localeId
+     * @return string
+     */
+    public function calculateFullName($localeId = null)
+    {
+        return $this->getValue('firstName') . ' ' . $this->getValue('lastName');
+    }
+
+    /**
      * Метод используется для тестирования, когда валидатор ничего не возвращает
      */
     public function validateRating()

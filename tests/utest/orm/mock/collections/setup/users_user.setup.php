@@ -54,6 +54,16 @@ return function (ICollectionDataSource $dataSource) {
         ->setDefault(1);
 
     $tableScheme
+        ->addColumn('first_name', Type::STRING)
+        ->setNotnull(false);
+    $tableScheme
+        ->addColumn('last_name', Type::STRING)
+        ->setNotnull(false);
+    $tableScheme
+        ->addColumn('full_name', Type::STRING)
+        ->setNotnull(false);
+
+    $tableScheme
         ->addColumn(
             'rating',
             Type::FLOAT

@@ -20,6 +20,10 @@ return [
         'rating' => ['type' => IField::TYPE_REAL, 'dataType' => 'float', 'columnName' => 'rating', 'defaultValue' => 0],
         'height' => ['type' => IField::TYPE_INTEGER, 'columnName' => 'height', 'validators' => ['required' => [], 'regexp' => ['pattern' => '/[0-9]{2,3}/']]],
 
+        'firstName' => ['type' => IField::TYPE_STRING, 'columnName' => 'first_name'],
+        'lastName' => ['type' => IField::TYPE_STRING, 'columnName' => 'last_name'],
+        'fullName' => ['type' => IField::TYPE_FORMULA, 'columnName' => 'full_name', 'formula' => 'calculateFullName', 'dataType' => 'string'],
+
         'group' => ['type' => IField::TYPE_BELONGS_TO, 'columnName' => 'group_id', 'target' => 'users_group'],
         'profile' => ['type' => IField::TYPE_HAS_ONE, 'target' => 'users_profile', 'targetField' => 'user'],
         'blogs' => ['type' => IField::TYPE_HAS_MANY, 'target' => 'blogs_blog', 'targetField' => 'owner'],
@@ -56,7 +60,7 @@ return [
                 IObject::FIELD_GUID,
                 IObject::FIELD_TYPE,
                 IObject::FIELD_VERSION,
-                'login', 'email', 'password', 'isActive', 'rating', 'height', 'group', 'profile', 'blogs', 'subscription', 'supervisorField'
+                'login', 'email', 'password', 'isActive', 'rating', 'height', 'group', 'profile', 'blogs', 'subscription', 'supervisorField', 'firstName', 'lastName', 'fullName'
             ]
         ]
     ]
