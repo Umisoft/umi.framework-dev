@@ -107,11 +107,13 @@ class BaseFieldTest extends FieldTestCase
         $localizations = [
             'ru' => [
                 'columnName'   => 'field_ru',
-                'defaultValue' => 'default_ru'
+                'defaultValue' => 'default_ru',
+                'validators' => ['ruFieldValidator' => []]
             ],
             'en' => [
                 'columnName'   => 'field_en',
-                'defaultValue' => 'default_en'
+                'defaultValue' => 'default_en',
+                'validators' => ['enFieldValidator' => []]
             ]
         ];
 
@@ -121,6 +123,7 @@ class BaseFieldTest extends FieldTestCase
             [
                 'columnName'    => 'field_ru',
                 'defaultValue'  => 'default_ru',
+                'validators' => ['ruFieldValidator' => []],
                 'localizations' => $localizations
             ]
         );
@@ -143,6 +146,12 @@ class BaseFieldTest extends FieldTestCase
             'Ожидается, что при запросе локализованного дефолтного значения без указания локали '
             . 'вернется значение по умолчанию'
         );
+        $this->assertEquals(
+            ['ruFieldValidator' => []],
+            $field->getValidatorsConfig(),
+            'Ожидается, что при запросе локализованного конфига валидаторов без указания локали '
+            . 'вернется значение по умолчанию'
+        );
 
         $this->assertEquals(
             'field_en',
@@ -152,7 +161,12 @@ class BaseFieldTest extends FieldTestCase
         $this->assertEquals(
             'default_en',
             $field->getDefaultValue('en'),
-            'Ожидается, что при запросе локализованного дефолтного значения вернется значениедля указанной локали'
+            'Ожидается, что при запросе локализованного дефолтного значения вернется значение для указанной локали'
+        );
+        $this->assertEquals(
+            ['enFieldValidator' => []],
+            $field->getValidatorsConfig('en'),
+            'Ожидается, что при запросе локализованного конфига валидаторов вернется конфиг для указанной локали'
         );
 
         $e = null;
@@ -175,6 +189,17 @@ class BaseFieldTest extends FieldTestCase
             'umi\orm\exception\NonexistentEntityException',
             $e,
             'Ожидается исключение при попытке получить значение по умолчанию для несуществующей локали'
+        );
+
+        $e = null;
+        try {
+            $field->getValidatorsConfig('it');
+        } catch (\Exception $e) {
+        }
+        $this->assertInstanceOf(
+            'umi\orm\exception\NonexistentEntityException',
+            $e,
+            'Ожидается исключение при попытке получить конфиг валидаторов для несуществующей локали'
         );
     }
 
