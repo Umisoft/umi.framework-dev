@@ -108,12 +108,14 @@ class BaseFieldTest extends FieldTestCase
             'ru' => [
                 'columnName'   => 'field_ru',
                 'defaultValue' => 'default_ru',
-                'validators' => ['ruFieldValidator' => []]
+                'validators' => ['ruFieldValidator' => []],
+                'filters' => ['ruFieldFilter' => []],
             ],
             'en' => [
                 'columnName'   => 'field_en',
                 'defaultValue' => 'default_en',
-                'validators' => ['enFieldValidator' => []]
+                'validators' => ['enFieldValidator' => []],
+                'filters' => ['enFieldFilter' => []],
             ]
         ];
 
@@ -124,6 +126,7 @@ class BaseFieldTest extends FieldTestCase
                 'columnName'    => 'field_ru',
                 'defaultValue'  => 'default_ru',
                 'validators' => ['ruFieldValidator' => []],
+                'filters' => ['ruFieldFilter' => []],
                 'localizations' => $localizations
             ]
         );
@@ -152,6 +155,12 @@ class BaseFieldTest extends FieldTestCase
             'Ожидается, что при запросе локализованного конфига валидаторов без указания локали '
             . 'вернется значение по умолчанию'
         );
+        $this->assertEquals(
+            ['ruFieldFilter' => []],
+            $field->getFiltersConfig(),
+            'Ожидается, что при запросе локализованного конфига фильтров без указания локали '
+            . 'вернется значение по умолчанию'
+        );
 
         $this->assertEquals(
             'field_en',
@@ -167,6 +176,11 @@ class BaseFieldTest extends FieldTestCase
             ['enFieldValidator' => []],
             $field->getValidatorsConfig('en'),
             'Ожидается, что при запросе локализованного конфига валидаторов вернется конфиг для указанной локали'
+        );
+        $this->assertEquals(
+            ['enFieldFilter' => []],
+            $field->getFiltersConfig('en'),
+            'Ожидается, что при запросе локализованного конфига фильтров вернется конфиг для указанной локали'
         );
 
         $e = null;
@@ -200,6 +214,17 @@ class BaseFieldTest extends FieldTestCase
             'umi\orm\exception\NonexistentEntityException',
             $e,
             'Ожидается исключение при попытке получить конфиг валидаторов для несуществующей локали'
+        );
+
+        $e = null;
+        try {
+            $field->getFiltersConfig('it');
+        } catch (\Exception $e) {
+        }
+        $this->assertInstanceOf(
+            'umi\orm\exception\NonexistentEntityException',
+            $e,
+            'Ожидается исключение при попытке получить конфиг фильтров для несуществующей локали'
         );
     }
 
