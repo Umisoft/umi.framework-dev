@@ -68,7 +68,6 @@ class ObjectSerializeTest extends ORMDbTestCase
 
     public function testSerializeObject()
     {
-
         $e = null;
         try {
             serialize($this->blog);
@@ -79,8 +78,7 @@ class ObjectSerializeTest extends ORMDbTestCase
         $this->getObjectPersister()->commit();
         $this->getObjectManager()->unloadObjects();
 
-        $blog = $this->getCollectionManager()->getCollection(self::BLOGS_BLOG)
-            ->get($this->guid);
+        $blog = $this->getCollectionManager()->getCollection(self::BLOGS_BLOG)->get($this->guid);
         $this->resetQueries();
 
         $serialized = serialize($blog);
@@ -103,6 +101,18 @@ WHERE (("blogs_blog"."id" = :value0))'
         );
 
         $this->assertEquals($this->serialized, $serialized, 'Неверный результат сериализации объекта');
+
+    }
+
+    public function testSerializeModifiedObject()
+    {
+        $this->getObjectPersister()->commit();
+        $this->getObjectManager()->unloadObjects();
+
+        $blog = $this->getCollectionManager()->getCollection(self::BLOGS_BLOG)->get($this->guid);
+        $blog->setValue('title', 'new title');
+
+        $this->assertEquals($this->serialized, serialize($blog), 'Неверный результат сериализации модифицированного объекта');
 
     }
 
