@@ -94,11 +94,11 @@ class PropertyTest extends ORMTestCase
             'Ожидается, что свойство без значения по умолчанию не имеет никаких значений'
         );
         $this->assertNull(
-            $this->commonProperty->getPreviousValue(),
+            $this->commonProperty->getPersistedValue(),
             'Ожидается, что свойство без значения по умолчанию не имеет никаких значений'
         );
         $this->assertNull(
-            $this->commonProperty->getPreviousDbValue(),
+            $this->commonProperty->getPersistedDbValue(),
             'Ожидается, что свойство без значения по умолчанию не имеет никаких значений'
         );
     }
@@ -121,7 +121,7 @@ class PropertyTest extends ORMTestCase
 
         $this->assertEquals(
             'test_login',
-            $this->commonProperty->getPreviousValue(),
+            $this->commonProperty->getPersistedValue(),
             'Ожидается, что после выставления начального значения свойства test_login '
             . 'это значение также становится старым значением'
         );
@@ -137,7 +137,7 @@ class PropertyTest extends ORMTestCase
         );
         $this->assertEquals(
             'test_login',
-            $this->commonProperty->getPreviousDbValue(),
+            $this->commonProperty->getPersistedDbValue(),
             'Ожидается, что после выставления начального значения свойства test_login '
             . 'выставляется соответсвующее внутреннее старое значение'
         );
@@ -174,24 +174,24 @@ class PropertyTest extends ORMTestCase
         );
         $this->assertEquals(
             'test_login',
-            $this->commonProperty->getPreviousValue(),
+            $this->commonProperty->getPersistedValue(),
             'Ожидается, что после выставления значения свойства new_login старое значение равно test_login'
         );
         $this->assertEquals(
             'test_login',
-            $this->commonProperty->getPreviousDbValue(),
+            $this->commonProperty->getPersistedDbValue(),
             'Ожидается, что после выставления значения свойства new_login внутренне старое значение равно test_login'
         );
 
         $this->commonProperty->setIsConsistent();
         $this->assertEquals(
             'new_login',
-            $this->commonProperty->getPreviousValue(),
+            $this->commonProperty->getPersistedValue(),
             'Ожидается, что после сброса флага модифицированности старое значение свойства принимает текущее значение'
         );
         $this->assertEquals(
             'new_login',
-            $this->commonProperty->getPreviousDbValue(),
+            $this->commonProperty->getPersistedDbValue(),
             'Ожидается, что после сброса флага модифицированности старое значение свойства принимает текущее значение'
         );
 
@@ -201,11 +201,11 @@ class PropertyTest extends ORMTestCase
     {
         $this->commonProperty->setValue('new_login');
         $this->assertNull(
-            $this->commonProperty->getPreviousValue(),
+            $this->commonProperty->getPersistedValue(),
             'Ожидается, что старое значение null, так как не было задано изначальное значение'
         );
         $this->assertNull(
-            $this->commonProperty->getPreviousDbValue(),
+            $this->commonProperty->getPersistedDbValue(),
             'Ожидается, что старое значение null, так как не было задано изначальное значение'
         );
     }
@@ -234,12 +234,12 @@ class PropertyTest extends ORMTestCase
 
         $this->assertEquals(
             'test_login',
-            $this->commonProperty->getPreviousValue(),
+            $this->commonProperty->getPersistedValue(),
             'Ожидается, что при повторном изменении значения свойства старое значение равно начальному значению'
         );
         $this->assertEquals(
             'test_login',
-            $this->commonProperty->getPreviousDbValue(),
+            $this->commonProperty->getPersistedDbValue(),
             'Ожидается, что при повторном изменении значения свойства '
             . 'старое внутреннее значение равно начальному значению'
         );
@@ -271,13 +271,13 @@ class PropertyTest extends ORMTestCase
         );
         $this->assertEquals(
             'test_login1',
-            $this->commonProperty->getPreviousValue(),
+            $this->commonProperty->getPersistedValue(),
             'Ожидается, что после выставления начального значения свойства test_login1 '
             . 'это значение также становится старым значением'
         );
         $this->assertEquals(
             'test_login1',
-            $this->commonProperty->getPreviousDbValue(),
+            $this->commonProperty->getPersistedDbValue(),
             'Ожидается, что после выставления начального значения свойства test_login1 '
             . 'выставляется соответсвующее внутреннее старое значение'
         );
