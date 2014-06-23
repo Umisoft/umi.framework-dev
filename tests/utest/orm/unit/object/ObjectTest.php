@@ -149,6 +149,24 @@ class ObjectTest extends ORMDbTestCase
         $this->assertEquals('users_user.base', $this->user->getTypePath(), 'Неверный путь к типу объекта');
     }
 
+    public function testInitialValues()
+    {
+        $this->user->setInitialValues(['email' => 'user@example.com', 'wrongField' => 1, 'login#ru-Ru' => 'test']);
+        $this->assertEquals(
+            [
+                'password'             => 'test_password',
+                'height'               => 182,
+                'rating'               => 7.2,
+                IObject::FIELD_GUID    => null,
+                IObject::FIELD_VERSION => 1,
+                'email' => 'user@example.com'
+            ],
+            $this->user->getInitialValues(),
+            'Ожидается, что значения полей, которых нет у объекта, будут проигнорированы'
+        );
+
+    }
+
     public function testHasProperty()
     {
 
