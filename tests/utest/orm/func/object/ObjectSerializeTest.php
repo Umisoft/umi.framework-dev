@@ -41,6 +41,9 @@ class ObjectSerializeTest extends ORMDbTestCase
                     'class'     => 'utest\orm\mock\collections\BlogsCollection',
                     'hierarchy' => self::SYSTEM_HIERARCHY
                 ],
+                self::BLOGS_SUBSCRIBER => [
+                    'type' => ICollectionFactory::TYPE_SIMPLE
+                ],
                 self::USERS_USER             => [
                     'type' => ICollectionFactory::TYPE_SIMPLE
                 ],
