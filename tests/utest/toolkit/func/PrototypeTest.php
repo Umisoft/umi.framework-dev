@@ -186,7 +186,7 @@ class PrototypeTest extends TestCase implements IFactory
             'Ожидается исключение при попытке установить в опцию, заданную массивом, не массив'
         );
         $this->assertEquals(
-            'Cannot resolve option "options". Option value should be of type array.',
+            'Cannot resolve option "options". Option value should an array.',
             $e->getMessage(),
             'Неверный текст исключения'
         );
@@ -202,26 +202,11 @@ class PrototypeTest extends TestCase implements IFactory
             'Ожидается исключение при попытке установить в опцию, заданную скаляром, не скаляр'
         );
         $this->assertEquals(
-            'Cannot resolve option "name". Option value should be of type string.',
+            'Cannot resolve option "name". Option value should scalar.',
             $e->getMessage(),
             'Неверный текст исключения'
         );
 
-        $e = null;
-        try {
-            $prototype->setOptions($instance, ['options' => ['a3' => []]]);
-        } catch (\Exception $e) { }
-
-        $this->assertInstanceOf(
-            '\UnexpectedValueException',
-            $e,
-            'Ожидается исключение при попытке установить в опцию, заданную скаляром, не скаляр'
-        );
-        $this->assertEquals(
-            'Cannot resolve option "a3". Option value should be of type integer.',
-            $e->getMessage(),
-            'Неверный текст исключения'
-        );
     }
 
     public function testInjectOptions()
