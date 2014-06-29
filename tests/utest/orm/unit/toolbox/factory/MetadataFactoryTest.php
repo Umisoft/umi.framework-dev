@@ -97,4 +97,23 @@ class MetadataFactoryTest extends ORMTestCase
             'Ожидается исключение, если фабрика не знает заданного типа поля'
         );
     }
+
+    public function testCreateDataSource()
+    {
+        $dataSource = $this->metadataFactory->createDataSource($this->config['dataSource']);
+        $this->assertInstanceOf(
+            'umi\orm\metadata\ICollectionDataSource',
+            $dataSource
+        );
+        $this->assertEquals('source', $dataSource->getSourceName());
+
+        $this->metadataFactory->dataSourceNamePrefix = 'test_';
+
+        $dataSource = $this->metadataFactory->createDataSource($this->config['dataSource']);
+        $this->assertEquals('test_source', $dataSource->getSourceName());
+
+        $dataSource = $this->metadataFactory->createDataSource(array_merge($this->config['dataSource'], ['sourceNamePrefix' => 'umi_']));
+        $this->assertEquals('umi_source', $dataSource->getSourceName());
+
+    }
 }
