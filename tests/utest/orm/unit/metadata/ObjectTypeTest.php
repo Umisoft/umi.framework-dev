@@ -53,14 +53,8 @@ class ObjectTypeTest extends ORMTestCase
                 'id'         => ['type' => IField::TYPE_IDENTIFY],
                 'guid'       => ['type' => IField::TYPE_GUID],
                 'type'       => ['type' => IField::TYPE_STRING],
-                'parent'     => ['type' => IField::TYPE_BELONGS_TO, 'target' => 'system_hierarchy'],
-                'mpath'      => ['type' => IField::TYPE_STRING],
-                'level'      => ['type' => IField::TYPE_INTEGER],
-                'order'      => ['type' => IField::TYPE_INTEGER],
                 'version'    => ['type' => IField::TYPE_INTEGER],
-                'childCount' => ['type' => IField::TYPE_INTEGER],
-                'slug'       => ['type' => IField::TYPE_SLUG],
-                'uri'        => ['type' => IField::TYPE_URI],
+                'test'       => ['type' => IField::TYPE_INTEGER],
                 'test1'      => [
                     'type'          => IField::TYPE_STRING,
                     'localizations' => ['ru' => ['columnName' => 'test1'], 'en' => ['columnName' => 'test1_en']]
@@ -72,38 +66,29 @@ class ObjectTypeTest extends ORMTestCase
             ],
             'types'      => [
                 'base'     => [
-                    'locked' => 1
-                ],
-                'subtype1' => [
-                    'locked'      => 0,
-                    'objectClass' => 'User',
+                    'locked' => 1,
                     'fields'      => [
                         'id',
                         'guid',
                         'type',
-                        'parent',
-                        'mpath',
-                        'level',
-                        'order',
-                        'version',
-                        'childCount',
-                        'slug',
-                        'uri'
+                        'version'
                     ]
                 ],
+                'subtype1' => [
+                    'locked'      => 0,
+                    'objectClass' => 'User'
+                ],
                 'subtype2' => [
-                    'fields' => ['id', 'guid', 'test1', 'test2']
+                    'fields' => ['test1', 'test2']
                 ],
                 'subtype3' => [
                     'objectClass' => 'Subtype3Class',
-                    'fields' => ['id']
+                    'fields' => [
+                        'test'
+                    ],
                 ],
-                'subtype3.subtype4' => [
-                    'fields' => ['id']
-                ],
-                'subtype3.subtype4.subtype5' => [
-                    'fields' => ['id']
-                ],
+                'subtype3.subtype4' => [],
+                'subtype3.subtype4.subtype5' => [],
                 'wrongType' => []
             ]
         ];
@@ -173,7 +158,7 @@ class ObjectTypeTest extends ORMTestCase
             'Ожидается, что поле id присутствует у типа subtype1'
         );
         $this->assertFalse(
-            $this->baseType->getFieldExists('guid'),
+            $this->baseType->getFieldExists('test'),
             'Ожидается, что поле guid отсутствует у базового типа'
         );
         $this->assertFalse(
@@ -188,7 +173,7 @@ class ObjectTypeTest extends ORMTestCase
         );
         $e = null;
         try {
-            $this->baseType->getField('guid');
+            $this->baseType->getField('test');
         } catch (\Exception $e) {
         }
         $this->assertInstanceOf(
@@ -198,8 +183,8 @@ class ObjectTypeTest extends ORMTestCase
         );
 
         $this->assertEquals(
-            ['id', 'guid', 'type', 'parent', 'mpath', 'level', 'order', 'version', 'childCount', 'slug', 'uri'],
-            array_keys($this->subtype1->getFields()),
+            ['id', 'guid', 'type', 'version', 'test'],
+            array_keys($this->subtype5->getFields()),
             'Ожидается, что у типа subtype1 11 полей'
         );
 

@@ -46,21 +46,13 @@ return [
         'guest' => [
             'objectClass' => 'utest\orm\mock\collections\User',
             'fields' => [
-                IObject::FIELD_IDENTIFY,
-                IObject::FIELD_GUID,
-                IObject::FIELD_TYPE,
-                IObject::FIELD_VERSION,
-                'login', 'email', 'password', 'isActive', 'rating', 'height', 'group', 'profile', 'blogs', 'subscription', 'guestField'
+                'guestField'
             ]
         ],
         'supervisor' => [
             'objectClass' => 'utest\orm\mock\collections\Supervisor',
             'fields' => [
-                IObject::FIELD_IDENTIFY,
-                IObject::FIELD_GUID,
-                IObject::FIELD_TYPE,
-                IObject::FIELD_VERSION,
-                'login', 'email', 'password', 'isActive', 'rating', 'height', 'group', 'profile', 'blogs', 'subscription', 'supervisorField', 'firstName', 'lastName', 'fullName'
+                'supervisorField', 'firstName', 'lastName', 'fullName'
             ]
         ]
     ]
