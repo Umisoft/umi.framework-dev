@@ -33,10 +33,9 @@ return [
             'defaultValue' => 1
         ],
         IHierarchicObject::FIELD_PARENT          => [
-            'type'       => IField::TYPE_BELONGS_TO,
+            'type'       => IField::TYPE_BELONGS_TO_SELF,
             'columnName' => 'pid',
             'accessor'   => 'getParent',
-            'target'     => 'system_menu',
             'readOnly'   => true
         ],
         IHierarchicObject::FIELD_MPATH           => [
