@@ -6,6 +6,7 @@
  * @copyright Copyright (c) 2007-2013 Umisoft ltd. (http://umisoft.ru/)
  * @license   http://umi-framework.ru/license/bsd-3 BSD-3 License
  */
+
 namespace utest\messages\mock;
 
 use Swift_Events_EventListener;
@@ -17,20 +18,16 @@ use Swift_Mime_Message;
 class TestTransport implements \Swift_Transport
 {
     private $isStarted = false;
-    /**
-     * @var string $dumpPath
-     */
-    private $dumpPath;
+
+    private $sentContent = '';
 
     /**
-     * @param string $dumpPath Where to save dumped messages
+     * Возвращает содержимое последнего отправленного письма
+     * @return string
      */
-    public function __construct($dumpPath)
+    public function getSentContent()
     {
-        if (!is_dir($dumpPath)) {
-            mkdir($dumpPath, 0777, true);
-        }
-        $this->dumpPath = $dumpPath;
+        return $this->sentContent;
     }
 
     /**
@@ -66,8 +63,8 @@ class TestTransport implements \Swift_Transport
      */
     public function send(Swift_Mime_Message $message, &$failedRecipients = null)
     {
-        $filename = $this->escape($message->getSubject()) . '.txt';
-        file_put_contents($this->dumpPath . '/' . $filename, $message->toString());
+        $this->sentContent = $message->toString();
+
         return;
     }
 
@@ -79,18 +76,4 @@ class TestTransport implements \Swift_Transport
         return $this;
     }
 
-    /**
-     * Экранирование строки для использования в качестве пути к файлу
-     * @param string $string
-     * @return string
-     */
-    protected function escape($string)
-    {
-        $string = transliterator_transliterate(
-            "Any-Latin; NFD; [:Nonspacing Mark:] Remove; NFC; [:Punctuation:] Remove; Lower();",
-            $string
-        );
-        $string = preg_replace('/[-\s]+/', '-', $string);
-        return trim($string, '-');
-    }
 }

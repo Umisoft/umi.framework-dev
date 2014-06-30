@@ -6,10 +6,12 @@
  * @copyright Copyright (c) 2007-2013 Umisoft ltd. (http://umisoft.ru/)
  * @license   http://umi-framework.ru/license/bsd-3 BSD-3 License
  */
+
 namespace utest\messages\unit;
 
 use umi\messages\exception\InvalidArgumentException;
 use utest\messages\mock\SwiftMailerAware;
+use utest\messages\mock\TestTransport;
 
 /**
  * Тесты на работоспособность конфигурации инструментов службы сообщений
@@ -48,7 +50,7 @@ class MessagesConfigTest extends MessageTestCase
      */
     public function provideValidConfigs()
     {
-        $base = ['sender_address' => ['foo@bar.com'], 'delivery_address' => ['sir@foo.com']];
+        $base = ['sender_address' => [], 'delivery_address' => []];
         return [
             [
                 array_merge($base, ['transport' => 'mail']),
@@ -72,7 +74,7 @@ class MessagesConfigTest extends MessageTestCase
      */
     public function provideInvalidConfigs()
     {
-        $base = ['sender_address' => ['foo@bar.com'], 'delivery_address' => ['sir@foo.com']];
+        $base = ['sender_address' => [], 'delivery_address' => []];
         return [
             [
                 array_merge($base, ['transport' => 'foo']),[]
@@ -88,11 +90,13 @@ class MessagesConfigTest extends MessageTestCase
 
     public function testMailerAware()
     {
-        $aw = new SwiftMailerAware();
-        $this->resolveOptionalDependencies($aw);
+        $swiftMailerAware = new SwiftMailerAware();
+        $transport = new TestTransport();
+        $this->messagesTools->setTransport($transport);
+        $swiftMailerAware->setSwiftMailer($this->messagesTools->getService('umi\messages\SwiftMailer', null));
 
         try {
-            $aw->testSend('foo', 'bodyfoo', 'text/html');
+            $swiftMailerAware->testSend('foo', 'bodyfoo', 'text/html');
         } catch (\Exception $e) {
             $this->assertInstanceOf(
                 'umi\messages\exception\FailedRecipientsException',
