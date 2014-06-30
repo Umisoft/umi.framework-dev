@@ -335,6 +335,20 @@ class ConfigTest extends ConfigTestCase
         $this->assertEquals('master', $this->config->get('key4.innerKey1'));
     }
 
+    public function testDeleteSubConfig()
+    {
+        $this->assertEquals('local', $this->config->get('key4.innerKey1'));
+        $this->config->del('key4');
+        $this->assertEquals('master', $this->config->get('key4.innerKey1'));
+    }
+
+    public function testDeleteArrayValue()
+    {
+        $this->assertEquals('local', $this->config->get('key3.inner'));
+        $this->config->del('key3');
+        $this->assertEquals('master', $this->config->get('key3.inner'));
+    }
+
     public function testMerge()
     {
         $this->config->merge(
@@ -356,24 +370,6 @@ class ConfigTest extends ConfigTestCase
 
         $config2->set('key1', 'copied');
         $this->assertNotEquals('copied', $this->config->get('key1'));
-    }
-
-    /**
-     * @test удаления дочернего конфига
-     * @expectedException UnexpectedValueException
-     */
-    public function deleteSubConfig()
-    {
-        $this->config->del('key4');
-    }
-
-    /**
-     * @test удаления массива
-     * @expectedException UnexpectedValueException
-     */
-    public function deleteArrayValue()
-    {
-        $this->config->del('key3');
     }
 
     /**
