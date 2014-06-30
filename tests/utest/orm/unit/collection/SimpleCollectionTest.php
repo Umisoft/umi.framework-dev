@@ -79,20 +79,13 @@ class SimpleCollectionTest extends ORMTestCase
                 'types'      => [
                     'base'  => [
                         'fields' => [
-                            IObject::FIELD_IDENTIFY,
-                            IObject::FIELD_GUID,
-                            IObject::FIELD_TYPE,
-                            IObject::FIELD_VERSION
+                            IObject::FIELD_IDENTIFY => [],
+                            IObject::FIELD_GUID => [],
+                            IObject::FIELD_TYPE => [],
+                            IObject::FIELD_VERSION => []
                         ]
                     ],
-                    'type1' => [
-                        'fields' => [
-                            IObject::FIELD_IDENTIFY,
-                            IObject::FIELD_GUID,
-                            IObject::FIELD_TYPE,
-                            IObject::FIELD_VERSION
-                        ]
-                    ]
+                    'type1' => []
                 ]
             ]
         );

@@ -90,20 +90,20 @@ return [
     'types'      => [
         'base' => [
             'fields' => [
-                IObject::FIELD_IDENTIFY,
-                IObject::FIELD_GUID,
-                IObject::FIELD_TYPE,
-                IObject::FIELD_VERSION,
-                IHierarchicObject::FIELD_PARENT,
-                IHierarchicObject::FIELD_MPATH,
-                IHierarchicObject::FIELD_SLUG,
-                IHierarchicObject::FIELD_URI,
-                IHierarchicObject::FIELD_CHILD_COUNT,
-                IHierarchicObject::FIELD_ORDER,
-                IHierarchicObject::FIELD_HIERARCHY_LEVEL,
-                'title',
-                'publishTime',
-                'content'
+                IObject::FIELD_IDENTIFY => [],
+                IObject::FIELD_GUID => [],
+                IObject::FIELD_TYPE => [],
+                IObject::FIELD_VERSION => [],
+                IHierarchicObject::FIELD_PARENT => [],
+                IHierarchicObject::FIELD_MPATH => [],
+                IHierarchicObject::FIELD_SLUG => [],
+                IHierarchicObject::FIELD_URI => [],
+                IHierarchicObject::FIELD_CHILD_COUNT => [],
+                IHierarchicObject::FIELD_ORDER => [],
+                IHierarchicObject::FIELD_HIERARCHY_LEVEL => [],
+                'title' => [],
+                'publishTime' => [],
+                'content' => []
             ]
         ]
     ]

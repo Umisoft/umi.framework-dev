@@ -39,35 +39,23 @@ return [
     'types'      => [
         'base'           => [
             'fields' => [
-                IObject::FIELD_IDENTIFY,
-                IObject::FIELD_GUID,
-                IObject::FIELD_TYPE,
-                IObject::FIELD_VERSION,
-                'city',
-                'user'
+                IObject::FIELD_IDENTIFY => [],
+                IObject::FIELD_GUID => [],
+                IObject::FIELD_TYPE => [],
+                IObject::FIELD_VERSION => [],
+                'city' => [],
+                'user' => []
             ]
         ],
         'natural_person' => [
             'fields' => [
-                IObject::FIELD_IDENTIFY,
-                IObject::FIELD_GUID,
-                IObject::FIELD_TYPE,
-                IObject::FIELD_VERSION,
-                'city',
-                'user',
-                'name',
-                'image'
+                'name' => [],
+                'image' => []
             ],
         ],
         'legal_person'   => [
             'fields' => [
-                IObject::FIELD_IDENTIFY,
-                IObject::FIELD_GUID,
-                IObject::FIELD_TYPE,
-                IObject::FIELD_VERSION,
-                'city',
-                'user',
-                'organizationName'
+                'organizationName' => []
             ]
         ]
     ]

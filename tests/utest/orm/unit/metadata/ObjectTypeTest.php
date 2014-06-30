@@ -68,10 +68,10 @@ class ObjectTypeTest extends ORMTestCase
                 'base'     => [
                     'locked' => 1,
                     'fields'      => [
-                        'id',
-                        'guid',
-                        'type',
-                        'version'
+                        'id' => [],
+                        'guid' => [],
+                        'type' => [],
+                        'version' => []
                     ]
                 ],
                 'subtype1' => [
@@ -79,12 +79,12 @@ class ObjectTypeTest extends ORMTestCase
                     'objectClass' => 'User'
                 ],
                 'subtype2' => [
-                    'fields' => ['test1', 'test2']
+                    'fields' => ['test1' => [], 'test2' => []]
                 ],
                 'subtype3' => [
                     'objectClass' => 'Subtype3Class',
                     'fields' => [
-                        'test'
+                        'test' => []
                     ],
                 ],
                 'subtype3.subtype4' => [],
