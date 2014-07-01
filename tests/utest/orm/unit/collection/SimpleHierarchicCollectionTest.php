@@ -61,7 +61,7 @@ class SimpleHierarchicCollectionTest extends ORMTestCase
                         'defaultValue' => 1
                     ],
                     IHierarchicObject::FIELD_PARENT          => [
-                        'type'       => IField::TYPE_BELONGS_TO_SELF,
+                        'type'       => IField::TYPE_BELONGS_TO,
                         'columnName' => 'pid',
                         'accessor'   => 'getParent',
                         'readOnly'   => true
