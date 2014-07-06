@@ -1,5 +1,5 @@
 {
-    "name": "umi/extension-twig",
+    "name": "umisoft/extension-twig",
     "description": "Twig extension for UMI.Framework",
     "type": "library",
     "license": "BSD-3-Clause",
