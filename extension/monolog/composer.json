@@ -3,7 +3,6 @@
     "description": "UMI.Framework Monolog Extension",
     "type": "library",
     "license": "BSD-3-Clause",
-    "minimum-stability": "stable",
     "homepage": "http://umi-framework.ru/",
     "autoload": {
         "psr-4": {
@@ -12,7 +11,7 @@
     },
     "require": {
         "php": ">=5.4.0",
-        "umisoft/umi.framework": "1.*",
+        /* "umisoft/umi.framework": "*", */
         "monolog/monolog": "1.7.*",
         "firephp/firephp-core": "dev-master",
         "swiftmailer/swiftmailer": "5.0.*"

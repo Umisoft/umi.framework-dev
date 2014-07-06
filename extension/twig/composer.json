@@ -1,5 +1,5 @@
 {
-    "name": "umisoft/extension-twig",
+    "name": "umi/extension-twig",
     "description": "Twig extension for UMI.Framework",
     "type": "library",
     "license": "BSD-3-Clause",
@@ -11,7 +11,7 @@
     },
     "require": {
         "php": ">=5.4.0",
-        "twig/twig": "1.*",
-        "umisoft/umi.framework": "1.*"
+        "twig/twig": "1.*"
+        /* "umisoft/umi.framework": "1.*" */
     }
 }
