@@ -1,20 +1,20 @@
 {
-	"name": "umi/monolog",
-    "description": "UMI.Framework Logging package",
-	"type": "library",
+    "name": "umisoft/extension-monolog",
+    "description": "UMI.Framework Monolog Extension",
+    "type": "library",
     "license": "BSD-3-Clause",
-	"minimum-stability": "stable",
-	"homepage": "http://umi-framework.ru/",
-	"autoload": {
-		"psr-4": {
-			"umi\\monolog\\": "."
-		}
-	},
-	"require": {
-		"php": ">=5.4.0",
-		"umi/toolkit": "dev-master",
-        "monolog/monolog" : "1.7.*",
+    "minimum-stability": "stable",
+    "homepage": "http://umi-framework.ru/",
+    "autoload": {
+        "psr-4": {
+            "umi\\extension\\monolog\\": "."
+        }
+    },
+    "require": {
+        "php": ">=5.4.0",
+        "umisoft/umi.framework": "1.*",
+        "monolog/monolog": "1.7.*",
         "firephp/firephp-core": "dev-master",
         "swiftmailer/swiftmailer": "5.0.*"
-	},
+    }
 }
