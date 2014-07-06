@@ -21,8 +21,8 @@
 
     "replace" : {
         "umisoft/umi.framework": "self.version",
-        "umi/extension-twig" : "self.version",
-        "umi/extension-monolog" : "self.version"
+        "umisoft/extension-twig" : "self.version",
+        "umisoft/extension-monolog" : "self.version"
     },
 
     "require-dev" : {
