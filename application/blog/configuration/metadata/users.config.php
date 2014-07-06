@@ -70,16 +70,16 @@ return [
     'types'      => [
         'base' => [
             'fields' => [
-                IObject::FIELD_IDENTIFY,
-                IObject::FIELD_GUID,
-                IObject::FIELD_TYPE,
-                IObject::FIELD_VERSION,
-                'name',
-                'login',
-                'email',
-                'password',
-                'isActive',
-                'posts'
+                IObject::FIELD_IDENTIFY => [],
+                IObject::FIELD_GUID => [],
+                IObject::FIELD_TYPE => [],
+                IObject::FIELD_VERSION => [],
+                'name' => [],
+                'login' => [],
+                'email' => [],
+                'password' => [],
+                'isActive' => [],
+                'posts' => []
             ]
         ]
     ]

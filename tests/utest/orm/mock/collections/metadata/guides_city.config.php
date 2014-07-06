@@ -33,12 +33,12 @@ return [
     'types'      => [
         'base' => [
             'fields' => [
-                IObject::FIELD_IDENTIFY,
-                IObject::FIELD_GUID,
-                IObject::FIELD_TYPE,
-                IObject::FIELD_VERSION,
-                'name',
-                'country'
+                IObject::FIELD_IDENTIFY => [],
+                IObject::FIELD_GUID => [],
+                IObject::FIELD_TYPE => [],
+                IObject::FIELD_VERSION => [],
+                'name' => [],
+                'country' => []
             ]
         ]
     ]

@@ -48,19 +48,17 @@ class MetadataTest extends ORMTestCase
             ],
             'types'      => [
                 'base'        => [
-                    'fields' => ['field1']
+                    'fields' => ['field1' => []]
                 ],
-                'type1'       => [
-                    'fields' => ['field1']
-                ],
+                'type1'       => [],
                 'type1.type2' => [
-                    'fields' => ['field1', 'field3']
+                    'fields' => ['field3' => []]
                 ],
                 'type1.type3' => [
-                    'fields' => ['field1', 'field3']
+                    'fields' => ['field3' => []]
                 ],
                 'type4'       => [
-                    'fields' => ['field1', 'field2']
+                    'fields' => ['field2' => []]
                 ]
             ]
         ];

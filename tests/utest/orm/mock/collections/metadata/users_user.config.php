@@ -36,23 +36,35 @@ return [
         'base' => [
             'objectClass' => 'utest\orm\mock\collections\User',
             'fields' => [
-                IObject::FIELD_IDENTIFY,
-                IObject::FIELD_GUID,
-                IObject::FIELD_TYPE,
-                IObject::FIELD_VERSION,
-                'login', 'email', 'password', 'isActive', 'rating', 'height', 'group', 'profile', 'blogs', 'subscription'
+                IObject::FIELD_IDENTIFY => [],
+                IObject::FIELD_GUID => [],
+                IObject::FIELD_TYPE => [],
+                IObject::FIELD_VERSION => [],
+                'login' => [],
+                'email' => [],
+                'password' => [],
+                'isActive' => [],
+                'rating' => [],
+                'height' => [],
+                'group' => [],
+                'profile' => [],
+                'blogs' => [],
+                'subscription' => []
             ]
         ],
         'guest' => [
             'objectClass' => 'utest\orm\mock\collections\User',
             'fields' => [
-                'guestField'
+                'guestField' => []
             ]
         ],
         'supervisor' => [
             'objectClass' => 'utest\orm\mock\collections\Supervisor',
             'fields' => [
-                'supervisorField', 'firstName', 'lastName', 'fullName'
+                'supervisorField' => [],
+                'firstName' => [],
+                'lastName' => [],
+                'fullName' => []
             ]
         ]
     ]

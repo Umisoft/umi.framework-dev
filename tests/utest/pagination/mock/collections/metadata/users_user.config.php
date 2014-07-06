@@ -43,11 +43,11 @@ return [
     'types'      => [
         'base' => [
             'fields' => [
-                IObject::FIELD_IDENTIFY,
-                IObject::FIELD_GUID,
-                IObject::FIELD_TYPE,
-                IObject::FIELD_VERSION,
-                'login'
+                IObject::FIELD_IDENTIFY  => [],
+                IObject::FIELD_GUID => [],
+                IObject::FIELD_TYPE => [],
+                IObject::FIELD_VERSION => [],
+                'login' => []
             ]
         ]
     ]

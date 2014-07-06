@@ -66,15 +66,15 @@ return [
     'types'      => [
         'base' => [
             'fields' => [
-                IObject::FIELD_IDENTIFY,
-                IObject::FIELD_GUID,
-                IObject::FIELD_TYPE,
-                IObject::FIELD_VERSION,
-                'title',
-                'publishTime',
-                'content',
-                'owner',
-                'tags'
+                IObject::FIELD_IDENTIFY => [],
+                IObject::FIELD_GUID => [],
+                IObject::FIELD_TYPE => [],
+                IObject::FIELD_VERSION => [],
+                'title' => [],
+                'publishTime' => [],
+                'content' => [],
+                'owner' => [],
+                'tags' => []
             ]
         ]
     ]

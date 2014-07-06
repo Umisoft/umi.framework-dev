@@ -64,4 +64,12 @@ class BelongsToRelationFieldTest extends FieldTestCase
             'Ожидается, что тип данных у поля хранителя связи - integer'
         );
     }
+
+    public function testSelfRelation()
+    {
+        $config = ['collectionName' => 'targetCollection'];
+        $field1 = new BelongsToRelationField('mock', IField::TYPE_BELONGS_TO, $config);
+
+        $this->assertEquals('targetCollection', $field1->getTargetCollectionName(), 'Неверно прочитан конфиг');
+    }
 }

@@ -36,7 +36,6 @@ return [
             'type'       => IField::TYPE_BELONGS_TO,
             'columnName' => 'pid',
             'accessor'   => 'getParent',
-            'target'     => 'system_menu',
             'readOnly'   => true
         ],
         IHierarchicObject::FIELD_MPATH           => [
@@ -90,19 +89,19 @@ return [
     'types'      => [
         'base' => [
             'fields' => [
-                IObject::FIELD_IDENTIFY,
-                IObject::FIELD_GUID,
-                IObject::FIELD_TYPE,
-                IObject::FIELD_VERSION,
-                IHierarchicObject::FIELD_PARENT,
-                IHierarchicObject::FIELD_MPATH,
-                IHierarchicObject::FIELD_SLUG,
-                IHierarchicObject::FIELD_URI,
-                IHierarchicObject::FIELD_CHILD_COUNT,
-                IHierarchicObject::FIELD_ORDER,
-                IHierarchicObject::FIELD_HIERARCHY_LEVEL,
-                'title',
-                'link'
+                IObject::FIELD_IDENTIFY => [],
+                IObject::FIELD_GUID => [],
+                IObject::FIELD_TYPE => [],
+                IObject::FIELD_VERSION => [],
+                IHierarchicObject::FIELD_PARENT => [],
+                IHierarchicObject::FIELD_MPATH => [],
+                IHierarchicObject::FIELD_SLUG => [],
+                IHierarchicObject::FIELD_URI => [],
+                IHierarchicObject::FIELD_CHILD_COUNT => [],
+                IHierarchicObject::FIELD_ORDER => [],
+                IHierarchicObject::FIELD_HIERARCHY_LEVEL => [],
+                'title' => [],
+                'link' => []
             ]
         ]
     ]

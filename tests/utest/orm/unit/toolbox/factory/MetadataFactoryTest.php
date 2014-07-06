@@ -45,7 +45,7 @@ class MetadataFactoryTest extends ORMTestCase
                 'base' => [
                     'locked'      => 0,
                     'objectClass' => 'User',
-                    'fields'      => ['id'],
+                    'fields'      => ['id' => []],
                 ]
             ]
         ];
