@@ -30,11 +30,6 @@
         "phpunit/phpunit": "4.1.*"
     },
 
-    "suggest": {
-        "umisoft/extension-twig": "templating with Twig extension.",
-        "umisoft/extension-monolog": "logging with Monolog extension."
-    },
-
     "autoload": {
         "psr-4": {
             "umi\\": "library/",
