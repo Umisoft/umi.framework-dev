@@ -11,7 +11,6 @@ namespace utest\authentication;
 use utest\dbal\TDbalSupport;
 use utest\event\TEventSupport;
 use utest\http\THttpSupport;
-use utest\session\TSessionSupport;
 use utest\TestCase;
 
 /**
@@ -23,7 +22,6 @@ abstract class AuthenticationTestCase extends TestCase
     use TEventSupport;
     use THttpSupport;
     use TDbalSupport;
-    use TSessionSupport;
     /**
      * {@inheritdoc}
      */
