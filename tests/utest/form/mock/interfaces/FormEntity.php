@@ -9,12 +9,13 @@
 
 namespace utest\form\mock\interfaces;
 
-use umi\form\BaseFormEntity as BaseFormEntity;
+use umi\form\adapter\DefaultFormAdapter;
+use umi\form\BaseFormEntity as FrameworkBaseFormEntity;
 
 /**
  * Мок-класс элемента формы.
  */
-class BaseFormEntity extends BaseFormEntity
+class FormEntity extends FrameworkBaseFormEntity
 {
 
     /**
@@ -31,5 +32,21 @@ class BaseFormEntity extends BaseFormEntity
     public function getMessages()
     {
         return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDataAdapter()
+    {
+        return new DefaultFormAdapter();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIsSubmitted()
+    {
+        return false;
     }
 }

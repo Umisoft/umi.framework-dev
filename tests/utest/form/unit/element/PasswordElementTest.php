@@ -19,7 +19,7 @@ class PasswordElementTest extends BaseElementTest
     /**
      * {@inheritdoc}
      */
-    public function getElement($name, array $attributes = [], array $options = [])
+    public function getFormElement($name, array $attributes = [], array $options = [])
     {
         $password = new Password($name, $attributes, $options);
 

@@ -19,7 +19,7 @@ class RadioElementTest extends BaseMultiElementTest
     /**
      * {@inheritdoc}
      */
-    public function getElement($name, array $attributes = [], array $options = [])
+    public function getFormElement($name, array $attributes = [], array $options = [])
     {
         $e = new Radio($name, $attributes, $options);
 

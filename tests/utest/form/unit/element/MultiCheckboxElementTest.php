@@ -20,7 +20,7 @@ class MultiCheckboxElementTest extends BaseMultiElementTest
     /**
      * {@inheritdoc}
      */
-    public function getElement($name, array $attributes = [], array $options = [])
+    public function getFormElement($name, array $attributes = [], array $options = [])
     {
         $e = new CheckboxGroup($name, $attributes, $options);
 

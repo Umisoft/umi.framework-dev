@@ -19,7 +19,7 @@ class TextElementTest extends BaseElementTest
     /**
      * {@inheritdoc}
      */
-    public function getElement($name, array $attributes = [], array $options = [])
+    public function getFormElement($name, array $attributes = [], array $options = [])
     {
         $e = new Text($name, $attributes, $options);
 

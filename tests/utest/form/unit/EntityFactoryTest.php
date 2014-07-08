@@ -9,7 +9,6 @@
 
 namespace utest\form\unit;
 
-use umi\form\element\IFormElement;
 use umi\form\exception\OutOfBoundsException;
 use umi\form\toolbox\factory\EntityFactory;
 use umi\toolkit\factory\TFactory;
@@ -38,19 +37,13 @@ class EntityFactoryTest extends FormTestCase
     {
         $this->assertInstanceOf(
             $this->factory->elementTypes['text'],
-            $this->factory->createEntity('test', ['type' => 'text']),
-            'Ожидается, что будет создан текстовый элемент.'
-        );
-
-        $this->assertInstanceOf(
-            $this->factory->elementTypes['text'],
-            $this->factory->createEntity('test', []),
+            $this->factory->createFormEntity('test', ['type' => 'text']),
             'Ожидается, что будет создан текстовый элемент.'
         );
 
         $this->assertInstanceOf(
             $this->factory->fieldSetTypes['fieldset'],
-            $this->factory->createEntity('test', ['elements' => ['test' => ['type' => 'text']]]),
+            $this->factory->createFormEntity('test', ['type' => 'fieldset', 'elements' => ['test' => ['type' => 'text']]]),
             'Ожидается, что будет создана группа полей.'
         );
     }
@@ -61,33 +54,9 @@ class EntityFactoryTest extends FormTestCase
      */
     public function invalidElementType()
     {
-        $this->factory->createEntity('test', ['type' => 'NaN']);
+        $this->factory->createFormEntity('test', ['type' => 'NaN']);
     }
 
-    /**
-     * Тест создания элементов формы.
-     */
-    public function testCreateEntities()
-    {
-        $elements = $this->factory->createEntities(
-            [
-                'test1' => [],
-                'test2' => []
-            ]
-        );
-
-        $this->assertCount(2, $elements, 'Ожидается, что будет создано 2 элемента.');
-        /**
-         * @var IFormElement $element
-         */
-        $element = $elements['test1'];
-        $this->assertInstanceOf(
-            $this->factory->elementTypes['text'],
-            $element,
-            'Ожидается, что будут созданы текстовые элементы.'
-        );
-        $this->assertEquals('test1', $element->getName(), 'Ожидается, что имя элемента будет установлено.');
-    }
 
     /**
      * Тест создания формы.
@@ -99,7 +68,7 @@ class EntityFactoryTest extends FormTestCase
                 [
                     'action' => '/',
                     'elements' => [
-                        'test' => []
+                        'test' => ['type' => 'text']
                     ]
                 ]
             );
@@ -107,7 +76,7 @@ class EntityFactoryTest extends FormTestCase
         $this->assertInstanceOf('umi\form\Form', $form, 'Ожидается, что форма будет создана.');
         $this->assertInstanceOf(
             'umi\form\element\Text',
-            $form->getElement('test'),
+            $form->get('test'),
             'Ожидается, что форма будет содержать элемент.'
         );
     }

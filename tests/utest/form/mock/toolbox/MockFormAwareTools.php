@@ -14,7 +14,5 @@ use umi\form\TFormAware;
 
 class MockFormAwareTools implements IFormAware
 {
-
     use TFormAware;
-
 }
