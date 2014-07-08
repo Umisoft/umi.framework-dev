@@ -7,6 +7,8 @@
  * @license   http://umi-framework.ru/license/bsd-3 BSD-3 License
  */
 
+use Symfony\Component\HttpFoundation\Session\Session;
+
 date_default_timezone_set('Europe/Moscow');
 
 $vendorDir = dirname(__DIR__) . '/vendor';
@@ -32,3 +34,8 @@ if (!defined('EXTENSIONS_PATH')) {
 
 $loader = require_once($vendorDir . '/autoload.php');
 $loader->add('utest', __DIR__);
+
+$session = new Session();
+if (!$session->isStarted()) {
+    $session->start();
+}

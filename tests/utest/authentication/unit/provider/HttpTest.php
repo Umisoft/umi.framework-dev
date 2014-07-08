@@ -22,13 +22,15 @@ class HttpTest extends AuthenticationTestCase
      * @var HttpProvider $provider провайдер
      */
     private $provider;
+    /**
+     * @var Request $request
+     */
+    private $request;
 
     public function setUpFixtures()
     {
-        $request = new Request();
-        $this->resolveOptionalDependencies($request);
-
-        $this->provider = new HttpProvider($request);
+        $this->request = new Request();
+        $this->provider = new HttpProvider($this->request);
         $this->resolveOptionalDependencies($this->provider);
     }
 
@@ -40,8 +42,8 @@ class HttpTest extends AuthenticationTestCase
     {
         $this->assertFalse($this->provider->getCredentials(), 'Ожидается, что данные не установлены');
 
-        $_SERVER['PHP_AUTH_USER'] = 'username';
-        $_SERVER['PHP_AUTH_PW'] = 'password';
+        $this->request->headers->set('PHP_AUTH_USER', 'username');
+        $this->request->headers->set('PHP_AUTH_PW', 'password');
 
         $this->assertEquals(
             ['username', 'password'],

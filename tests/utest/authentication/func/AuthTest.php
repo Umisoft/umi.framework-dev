@@ -42,17 +42,14 @@ class AuthTest extends AuthenticationTestCase
 
         $storage = $authenticationFactory->createStorage(IAuthenticationFactory::STORAGE_SIMPLE);
 
-        $this->auth = $authenticationFactory->createAuthManager([], $adapter, $storage);
+        $this->auth = $authenticationFactory->createAuthManager($adapter, $storage);
     }
 
     public function testFailureAuth()
     {
         $this->assertFalse($this->auth->isAuthenticated(), 'Ожидается, что мы не авторизованы');
 
-        $provider = new SimpleProvider([
-            SimpleProvider::OPTION_USERNAME => 'wrong',
-            SimpleProvider::OPTION_PASSWORD => 'wrong',
-        ]);
+        $provider = new SimpleProvider('wrong', 'wrong');
 
         $result = $this->auth->authenticate($provider);
         $this->assertFalse($result->isSuccessful(), 'Ожидается, что авторизация не пройдет');
@@ -63,10 +60,7 @@ class AuthTest extends AuthenticationTestCase
     {
         $this->assertFalse($this->auth->isAuthenticated(), 'Ожидается, что мы не авторизованы');
 
-        $provider = new SimpleProvider([
-            SimpleProvider::OPTION_USERNAME => 'user',
-            SimpleProvider::OPTION_PASSWORD => 'password',
-        ]);
+        $provider = new SimpleProvider('user', 'password');
 
         $result = $this->auth->authenticate($provider);
 
@@ -79,17 +73,11 @@ class AuthTest extends AuthenticationTestCase
     {
         $this->assertFalse($this->auth->isAuthenticated(), 'Ожидается, что мы не авторизованы');
 
-        $provider = new SimpleProvider([
-            SimpleProvider::OPTION_USERNAME => 'user',
-            SimpleProvider::OPTION_PASSWORD => 'password',
-        ]);
+        $provider = new SimpleProvider('user','password');
 
         $this->auth->authenticate($provider);
 
-        $provider = new SimpleProvider([
-            SimpleProvider::OPTION_USERNAME => 'wrong',
-            SimpleProvider::OPTION_PASSWORD => 'wrong',
-        ]);
+        $provider = new SimpleProvider('wrong', 'wrong');
 
         $result = $this->auth->authenticate($provider);
 

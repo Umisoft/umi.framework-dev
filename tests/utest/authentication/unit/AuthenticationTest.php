@@ -45,12 +45,7 @@ class AuthenticationTest extends AuthenticationTestCase
      */
     public function testBasic()
     {
-        $provider = new SimpleProvider([
-            SimpleProvider::OPTION_USERNAME => 'root',
-            SimpleProvider::OPTION_PASSWORD => 'root',
-        ]);
-
-        $providerEmpty = new SimpleProvider();
+        $provider = new SimpleProvider('root','root');
 
         $this->assertFalse($this->auth->isAuthenticated(), 'Ожидается, что мы не авторизованны.');
 
@@ -85,6 +80,8 @@ class AuthenticationTest extends AuthenticationTestCase
         );
         $this->assertFalse($this->auth->isAuthenticated(), 'Ожидается, что мы не авторизованны');
 
+
+        $providerEmpty = new SimpleProvider(null, null);
         $result = $this->auth->authenticate($providerEmpty);
 
         $this->assertFalse(
@@ -92,10 +89,11 @@ class AuthenticationTest extends AuthenticationTestCase
             'Ожидается, что авторизация не будет успешной'
         );
         $this->assertEquals(
-            IAuthResult::WRONG_NO_CREDENTIALS,
+            IAuthResult::WRONG_USERNAME,
             $result->getStatus(),
-            'Ожидается, что будет получен статус "нет авторизационных данных".'
+            'Ожидается, что будет получен статус "неверный логин".'
         );
+
         $this->assertEquals(
             null,
             $result->getIdentity(),
@@ -131,10 +129,7 @@ class AuthenticationTest extends AuthenticationTestCase
         $this->resolveOptionalDependencies($auth);
 
         $result = $auth->authenticate(
-            new SimpleProvider([
-                SimpleProvider::OPTION_USERNAME => 'root',
-                SimpleProvider::OPTION_PASSWORD => 'root',
-            ])
+            new SimpleProvider('root', 'root')
         );
 
         $this->assertTrue($result->isSuccessful());
@@ -156,10 +151,7 @@ class AuthenticationTest extends AuthenticationTestCase
         $this->resolveOptionalDependencies($auth);
 
         $auth->authenticate(
-            new SimpleProvider([
-                SimpleProvider::OPTION_USERNAME => 'root',
-                SimpleProvider::OPTION_PASSWORD => 'root',
-            ])
+            new SimpleProvider('root', 'root')
         );
     }
 }
