@@ -35,12 +35,6 @@ class AuthFactoryTest extends AuthenticationTestCase
      */
     public function testBasic()
     {
-        $this->assertInstanceOf(
-            'umi\authentication\Authentication',
-            $this->auth->createAuthManager(),
-            'Ожидается, что менеджер будет получен.'
-        );
-
         $storage = $this->auth->createStorage(IAuthenticationFactory::STORAGE_SIMPLE);
 
         $this->assertInstanceOf(
@@ -54,6 +48,12 @@ class AuthFactoryTest extends AuthenticationTestCase
             'umi\authentication\adapter\IAuthAdapter',
             $adapter,
             'Ожидается, что будет возвращен адаптер'
+        );
+
+        $this->assertInstanceOf(
+            'umi\authentication\IAuthManager',
+            $this->auth->createAuthManager($adapter, $storage),
+            'Ожидается, что менеджер будет получен.'
         );
 
         $provider = $this->auth->createProvider(IAuthenticationFactory::PROVIDER_SIMPLE);

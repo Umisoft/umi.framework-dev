@@ -20,7 +20,7 @@ class ButtonElementTest extends BaseElementTest
     /**
      * {@inheritdoc}
      */
-    public function getElement($name, array $attributes = [], array $options = [])
+    public function getFormElement($name, array $attributes = [], array $options = [])
     {
         $button = new Button($name, $attributes, $options);
         $button->setLabel('My element');
@@ -32,13 +32,12 @@ class ButtonElementTest extends BaseElementTest
 
     public function testBasic()
     {
-        $element = $this->getElement('testElement', ['data-id' => 'id'], ['value' => 'test value']);
+        $element = $this->getFormElement('testElement', ['data-id' => 'id'], ['value' => 'test value']);
         $element->setLabel('My element');
 
         $this->assertArrayHasKey(
             'data-id',
-            $element->getAttributes()
-                ->getArrayCopy(),
+            $element->getAttributes(),
             'Ожидается, что аттрибуты будут установлены.'
         );
 
@@ -55,6 +54,10 @@ class ButtonElementTest extends BaseElementTest
     }
 
     public function testFilters()
+    {
+    }
+
+    public function testValidators()
     {
     }
 }

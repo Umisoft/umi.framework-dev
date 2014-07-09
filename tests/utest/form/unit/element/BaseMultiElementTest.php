@@ -10,7 +10,9 @@
 namespace utest\form\unit\element;
 
 use umi\filter\IFilterFactory;
+use umi\form\adapter\DefaultFormAdapter;
 use umi\form\exception\InvalidArgumentException;
+use umi\form\Form;
 use umi\validation\IValidatorFactory;
 
 /**
@@ -24,16 +26,11 @@ abstract class BaseMultiElementTest extends BaseElementTest
      */
     public function testBasic()
     {
-        $element = $this->getElement('testElement', ['data-id' => 'id'], ['choices' => []]);
+        $element = $this->getFormElement('testElement', ['data-id' => 'id'], ['choices' => []]);
         $element->setLabel('My element');
 
         $this->assertEquals('My element', $element->getLabel(), 'Ожидается, что лейбл будет установлен.');
         $this->assertArrayHasKey('data-id', $element->getAttributes(), 'Ожидается, что аттрибуты будут установлены.');
-        $this->assertArrayHasKey(
-            'name',
-            $element->getAttributes(),
-            'Ожидается, что имя будет установлено как аттрибут.'
-        );
 
         $this->assertEquals('testElement', $element->getName(), 'Ожидается, что имя элемента будет установлено.');
     }
@@ -43,7 +40,7 @@ abstract class BaseMultiElementTest extends BaseElementTest
      */
     public function testValues()
     {
-        $element = $this->getElement(
+        $element = $this->getFormElement(
             'testElement',
             [],
             [
@@ -61,7 +58,7 @@ abstract class BaseMultiElementTest extends BaseElementTest
      */
     public function setWrongValue()
     {
-        $element = $this->getElement(
+        $element = $this->getFormElement(
             'testElement',
             [],
             [
@@ -74,7 +71,9 @@ abstract class BaseMultiElementTest extends BaseElementTest
 
     public function testValidators()
     {
-        $e = $this->getElement(
+        $form = new Form('testForm');
+        $form->setDataAdapter(new DefaultFormAdapter());
+        $e = $this->getFormElement(
             'test',
             [],
             [
@@ -83,6 +82,8 @@ abstract class BaseMultiElementTest extends BaseElementTest
                 ]
             ]
         );
+        $form->add($e);
+
 
         $this->assertInstanceOf(
             'umi\validation\IValidatorCollection',
@@ -90,20 +91,17 @@ abstract class BaseMultiElementTest extends BaseElementTest
             'Ожидается, что цепочку валидаторов можно получить у любого элемента.'
         );
 
-        $this->assertSame(
-            $e,
-            $e->setValidators($this->getValidatorCollection([IValidatorFactory::TYPE_REQUIRED => []])),
-            'Ожидается, что будет получен $this'
-        );
+        $e->getValidators()->appendValidator($this->getValidator(IValidatorFactory::TYPE_REQUIRED));
 
         $this->assertTrue($e->isValid());
-        $e->setValue('');
+        $form->setData(['test' => '']);
         $this->assertFalse($e->isValid());
     }
 
     public function testFilters()
     {
-        $e = $this->getElement(
+        $form = new Form('testForm');
+        $e = $this->getFormElement(
             'test',
             [],
             [
@@ -112,6 +110,7 @@ abstract class BaseMultiElementTest extends BaseElementTest
                 ]
             ]
         );
+        $form->add($e);
 
         $this->assertInstanceOf(
             'umi\filter\IFilterCollection',
@@ -119,14 +118,8 @@ abstract class BaseMultiElementTest extends BaseElementTest
             'Ожидается, что цепочку фильтров можно получить у любого элемента.'
         );
 
-        $this->assertSame(
-            $e,
-            $e->setFilters($this->getFilterCollection([IFilterFactory::TYPE_INT => []])),
-            'Ожидается, что будет получен $this'
-        );
-
-        $e->setValue('1aa');
-
+        $e->getFilters()->appendFilter($this->getFilter(IFilterFactory::TYPE_INT));
+        $form->setData(['test' => '1aa']);
         $this->assertEquals(1, $e->getValue());
     }
 }

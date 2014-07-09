@@ -13,7 +13,6 @@ use umi\form\element\Text;
 use umi\form\exception\OutOfBoundsException;
 use umi\form\Form;
 use utest\form\FormTestCase;
-use utest\form\mock\binding\BindObject;
 
 /**
  * Тесты формы.
@@ -27,11 +26,11 @@ class FormTest extends FormTestCase
 
     public function setUpFixtures()
     {
-        $this->form = new Form('testForm', ['action' => '/'], [], [
-            'element1' => new Text('element1'),
-            'element2' => new Text('element2'),
-            'element3' => new Text('element3'),
-        ]);
+        $this->form = new Form('testForm', ['action' => '/', 'method' => 'GET']);
+        $this->form->add(new Text('element1'));
+        $this->form->add(new Text('element2'));
+        $this->form->add(new Text('element3'));
+
         $this->resolveOptionalDependencies($this->form);
     }
 
@@ -40,7 +39,7 @@ class FormTest extends FormTestCase
      */
     public function testGetElement()
     {
-        $el = $this->form->getElement('element1');
+        $el = $this->form->get('element1');
         $this->assertInstanceOf('umi\form\element\Text', $el, 'Ожидается, что будет получен элемент.');
         $this->assertEquals('element1', $el->getName(), 'Ожидается, что будет получен элемент с заданным имененем.');
     }
@@ -51,7 +50,7 @@ class FormTest extends FormTestCase
      */
     public function notExistingElement()
     {
-        $this->form->getElement('element10');
+        $this->form->get('element10');
     }
 
     /**
@@ -60,29 +59,7 @@ class FormTest extends FormTestCase
     public function testForm()
     {
         $this->assertEquals('/', $this->form->getAction(), 'Ожидается, что action установлен.');
-        $this->assertEquals('get', $this->form->getMethod(), 'Ожидается, что метод установлен по умолчанию в GET.');
-    }
-
-    /**
-     * Тест биндинга объектов с формой.
-     */
-    public function testBinding()
-    {
-        $bindObject = new BindObject();
-        $this->resolveOptionalDependencies($bindObject);
-        $bindObject->setData(['element1' => 'value 1', 'element2' => 'value2']);
-
-        $this->assertSame($this->form, $this->form->bindObject($bindObject));
-
-        $this->assertEquals(
-            'value 1',
-            $this->form->getElement('element1')
-                ->getValue(),
-            'Ожидается, что в результате bind значение были установлены.'
-        );
-
-        $this->form->setData(['element1' => 'datavalue 1', 'element2' => 'datavalue 2']);
-        $this->assertEquals($bindObject->element2, 'datavalue 2', 'Ожидается, что значение установлено в bind объект.');
+        $this->assertEquals('GET', $this->form->getMethod(), 'Ожидается, что метод установлен в GET.');
     }
 
     /**

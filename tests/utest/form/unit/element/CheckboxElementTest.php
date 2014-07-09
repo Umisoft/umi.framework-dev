@@ -10,6 +10,7 @@
 namespace utest\form\unit\element;
 
 use umi\form\element\Checkbox;
+use umi\form\Form;
 
 /**
  * Тесты элемента формы - Флаг
@@ -22,19 +23,12 @@ class CheckboxElementTest extends BaseElementTest
      */
     public function testBasic()
     {
-        $element = $this->getElement('testElement', ['data-id' => 'id', 'value' => 1], ['value' => 1]);
+        $element = $this->getFormElement('testElement', ['data-id' => 'id', 'value' => 1], ['value' => 1]);
 
         $this->assertArrayHasKey(
             'data-id',
-            $element->getAttributes()
-                ->getArrayCopy(),
+            $element->getAttributes(),
             'Ожидается, что аттрибуты будут установлены.'
-        );
-        $this->assertArrayHasKey(
-            'name',
-            $element->getAttributes()
-                ->getArrayCopy(),
-            'Ожидается, что имя будет установлено как аттрибут.'
         );
 
         $this->assertEquals('testElement', $element->getName(), 'Ожидается, что имя элемента будет установлено.');
@@ -43,10 +37,9 @@ class CheckboxElementTest extends BaseElementTest
     /**
      * {@inheritdoc}
      */
-    public function getElement($name, array $attributes = [], array $options = [])
+    public function getFormElement($name, array $attributes = [], array $options = [])
     {
         $e = new Checkbox($name, $attributes, $options);
-
         $this->resolveOptionalDependencies($e);
 
         return $e;
@@ -54,14 +47,11 @@ class CheckboxElementTest extends BaseElementTest
 
     public function testValues()
     {
-        $element = $this->getElement(
+        $element = $this->getFormElement(
             'testElement',
             ['data-id' => 'id', 'value' => 'My Value'],
             ['label' => 'My element']
         );
-
-        $element->setValue(true);
-        $this->assertEquals('My Value', $element->getValue(), 'Ожидается, что значение будет установлено.');
 
         $element->setValue(false);
         $this->assertEquals(false, $element->getValue(), 'Ожидается, что значение будет установлено.');

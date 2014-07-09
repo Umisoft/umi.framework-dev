@@ -7,15 +7,19 @@
  * @license   http://umi-framework.ru/license/bsd-3 BSD-3 License
  */
 
-namespace utest\hmvc\mock\model;
+namespace umi\orm\selector;
 
 /**
- * Mock модель
+ * Селектор с пустым результатом.
  */
-class MockModel
+class EmptySelector extends Selector
 {
-    public function getVariable()
+    /**
+     * {@inheritdoc}
+     */
+    public function getTotal()
     {
-        return 'model';
+        return 0;
     }
 }
+ 

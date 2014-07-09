@@ -72,10 +72,7 @@ class SessionTest extends AuthenticationTestCase
          * @var ISession $session
          */
         $session = $this->getTestToolkit()->getService('umi\session\ISession');
-        $ns = $session
-            ->getNamespace('auth')
-            ->toArray();
 
-        $this->assertNotEmpty($ns, 'Ожидается, что пространство имен не пустое.');
+        $this->assertEquals(1, $session->get('auth/identity'), 'Ожидается, что пространство имен не пустое.');
     }
 }

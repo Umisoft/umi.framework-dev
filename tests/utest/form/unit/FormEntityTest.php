@@ -11,12 +11,12 @@ namespace utest\form\unit\interfaces;
 
 use umi\form\IFormEntity;
 use utest\form\FormTestCase;
-use utest\form\mock\interfaces\BaseFormEntity;
+use utest\form\mock\interfaces\FormEntity;
 
 /**
  * Тесты трейта "Элемент формы".
  */
-class TFormEntityTest extends FormTestCase
+class FormEntityTest extends FormTestCase
 {
     /**
      * @var IFormEntity $entity элемент
@@ -25,7 +25,7 @@ class TFormEntityTest extends FormTestCase
 
     public function setUpFixtures()
     {
-        $this->entity = new BaseFormEntity('test');
+        $this->entity = new FormEntity('test');
     }
 
     /**
@@ -33,23 +33,11 @@ class TFormEntityTest extends FormTestCase
      */
     public function testAttributes()
     {
-        $this->assertInstanceOf(
-            '\ArrayObject',
+        $this->assertTrue(is_array($this->entity->getAttributes()));
+        $this->entity->setAttribute('testAttr', 'val');
+        $this->assertEquals(
+            ['testAttr' => 'val'],
             $this->entity->getAttributes(),
-            'Ожидается, что будет возвращен ArrayObject.'
-        );
-        $this->assertEquals(
-            ['name' => 'test'],
-            $this->entity->getAttributes()
-                ->getArrayCopy(),
-            'Ожидается, что устанволен аттрибут с именем.'
-        );
-
-        $this->entity->getAttributes()['testAttr'] = 'val';
-        $this->assertEquals(
-            ['name' => 'test', 'testAttr' => 'val'],
-            $this->entity->getAttributes()
-                ->getArrayCopy(),
             'Ожидается, что аттрибуты будут установлены.'
         );
     }

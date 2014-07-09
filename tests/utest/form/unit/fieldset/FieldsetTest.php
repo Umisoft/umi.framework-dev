@@ -11,12 +11,13 @@ namespace utest\form\unit\fieldset;
 
 use umi\form\element\Text;
 use umi\form\fieldset\FieldSet;
-use utest\TestCase;
+use umi\form\Form;
+use utest\form\FormTestCase;
 
 /**
  * Тесты группы полей формы.
  */
-class FieldsetTest extends TestCase
+class FieldsetTest extends FormTestCase
 {
     /**
      * @var FieldSet $fieldset группа полей
@@ -25,13 +26,22 @@ class FieldsetTest extends TestCase
 
     public function setUpFixtures()
     {
-        $elements = [
-            'element1' => new Text('element1'),
-            'element2' => new Text('element2'),
-            'element3' => new Text('element3'),
-        ];
+        $form = new Form('testForm', ['action' => '/', 'method' => 'GET']);
 
-        $this->fieldset = new FieldSet('test', [], [], $elements);
+        $text1 = new Text('element1');
+        $this->resolveOptionalDependencies($text1);
+        $text2 = new Text('element2');
+        $this->resolveOptionalDependencies($text2);
+        $text3 = new Text('element3');
+        $this->resolveOptionalDependencies($text3);
+
+        $this->fieldset = new FieldSet('test');
+        $this->fieldset->add($text1);
+        $this->fieldset->add($text2);
+        $this->fieldset->add($text3);
+
+        $form->add($this->fieldset);
+
     }
 
     /**
@@ -39,7 +49,7 @@ class FieldsetTest extends TestCase
      */
     public function testGetElement()
     {
-        $el = $this->fieldset->getElement('element1');
+        $el = $this->fieldset->get('element1');
         $this->assertInstanceOf('umi\form\element\Text', $el, 'Ожидается, что будет получен элемент.');
         $this->assertEquals('element1', $el->getName(), 'Ожидается, что будет получен элемент с заданным имененем.');
     }
@@ -50,7 +60,7 @@ class FieldsetTest extends TestCase
      */
     public function notExistingElement()
     {
-        $this->fieldset->getElement('element10');
+        $this->fieldset->get('element10');
     }
 
     /**
@@ -110,36 +120,25 @@ class FieldsetTest extends TestCase
     }
 
     /**
-     * @test исключения, при попытке использовать элемент без интерфейса IElement или IFieldset.
-     * @expectedException \umi\form\exception\RuntimeException
-     */
-    public function wrongTypeElement()
-    {
-        new FieldSet('', [], [], [
-            'element' => 'Not An Element'
-        ]);
-    }
-
-    /**
      * Тест группы полей с группой полей. (вложенные группы полей)
      */
     public function testFieldsetOfFieldset()
     {
-        $this->fieldset = new FieldSet('test', [], [], [
-            'element1' => new Text('element1'),
-            'element2' => new Text('element2'),
-            'element3' => new Text('element3'),
-            'fieldset' => new FieldSet('test', [], [], [
-                    'element4' => new Text('element4')
-                ])
-        ]);
+        $fieldset = new FieldSet('test');
+        $text4 = new Text('element4');
+        $this->resolveOptionalDependencies($text4);
+
+        $fieldset->add($text4);
+        $this->fieldset->add($fieldset);
 
         $this->fieldset->setData(
             [
                 'element1' => 'test value 1',
                 'element2' => 'test value 2',
                 'element3' => 'test value 3',
-                'element4' => 'test value 4'
+                'test' => [
+                    'element4' => 'test value 4'
+                ]
             ]
         );
 
@@ -150,7 +149,9 @@ class FieldsetTest extends TestCase
                 'element1' => 'test value 1',
                 'element2' => 'test value 2',
                 'element3' => 'test value 3',
-                'element4' => 'test value 4'
+                'test' => [
+                    'element4' => 'test value 4'
+                ]
             ],
             $this->fieldset->getData(),
             'Ожидается, что данные будут установлены и получены.'

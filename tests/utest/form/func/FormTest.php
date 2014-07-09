@@ -12,7 +12,6 @@ namespace utest\form\func;
 use umi\event\TEventObservant;
 use umi\form\IForm;
 use utest\form\FormTestCase;
-use utest\form\mock\binding\BindObject;
 
 /**
  * Тестирование форм.
@@ -43,31 +42,28 @@ class FormTest extends FormTestCase
         );
 
         $this->assertInstanceOf(
-            'umi\form\element\IElement',
-            $this->form->getElement('email'),
+            'umi\form\element\IFormElement',
+            $this->form->get('email'),
             'Ожидается, что будет получен элемент формы.'
         );
         $this->assertInstanceOf(
             'umi\form\fieldset\IFieldset',
-            $this->form->getElement('passport'),
+            $this->form->get('passport'),
             'Ожидается, что будет получена группа полей.'
         );
 
-        $city = $this->form->getElement('passport')
-            ->getElement('birthday_city');
+        $city = $this->form->get('passport')
+            ->get('birthday_city');
         $this->assertInstanceOf(
-            'umi\form\element\IElement',
+            'umi\form\element\IFormElement',
             $city,
             'Ожидается, что будет получен элемент формы.'
         );
 
-        //$this->assertEquals('Санкт-Петербург', $city->getValue(),
-        //	'Ожидается, что установлено значение по умолчанию.');
-
-        $submit = $this->form->getElement('submit');
+        $submit = $this->form->get('submit');
         $this->assertEquals(
             $submit->getLabel(),
-            $this->form->getElement('submit')
+            $this->form->get('submit')
                 ->getValue(),
             'Ожидается, что значение кнопки совпадает с ее названием.'
         );
@@ -76,17 +72,8 @@ class FormTest extends FormTestCase
     /**
      * Тестирует поведение подформ на форме.
      */
-    public function testSubForms()
+    public function testFieldSet()
     {
-        $city = $this->form->getElement('passport')
-            ->getElement('birthday_city');
-
-        $this->assertEquals(
-            'passport[birthday_city]',
-            $city->getAttributes()['name'],
-            'Ожидается, что аттрибут "name" не совпадает с именем.'
-        );
-
         $this->form->setData(
             [
                 'passport' => [
@@ -133,34 +120,28 @@ class FormTest extends FormTestCase
                 'password'        => 'password',
                 'passport'        => [
                     'number'        => null,
-                    'birthday_city' => '', //'Санкт-Петербург'
+                    'birthday_city' => null
                 ],
-                'fieldInFieldset' => '',
-                'scans'           => [],
+                'fieldset' => [
+                    'fieldInFieldset' => null
+                ],
+                'submit'          => 'Зарегистрироваться'
             ],
             $this->form->getData(),
-            'Ожидается, что будут получены полные данные от формы.'
+            'Ожидается, что будут получены установленные данные от формы.'
         );
-
-        /*$this->assertEquals(
-            'Санкт-Петербург',
-            $this->form->getElement('passport')->getElement('birthday_city')->getValue(),
-            'Ожидается, что значение по умолчанию не будет изменено.'
-        );*/
 
         $rawData = [
             'email'           => 'username@example.com',
             'password'        => 'password',
             'passport'        => [
                 'number'        => '00123456',
-                'birthday_city' => 'Мск', //'Санкт-Петербург'
+                'birthday_city' => 'Мск'
             ],
-            'fieldInFieldset' => 'test',
-            'scans'           => [
-                'file1',
-                'file2',
-                'file3'
-            ]
+            'fieldset' => [
+                'fieldInFieldset' => null
+            ],
+            'scans'           => 'file1'
         ];
         $this->form->setData($rawData);
 
@@ -173,12 +154,10 @@ class FormTest extends FormTestCase
                     'number'        => '00123456',
                     'birthday_city' => 'Мск'
                 ],
-                'fieldInFieldset' => 'test',
-                'scans'           => [
-                    'file1',
-                    'file2',
-                    'file3'
+                'fieldset' => [
+                    'fieldInFieldset' => null
                 ],
+                'submit'          => 'Зарегистрироваться'
             ],
             $this->form->getData(),
             'Ожидается, что будут получены установленные данные'
@@ -201,10 +180,12 @@ class FormTest extends FormTestCase
                 'password'        => 'password',
                 'passport'        => [
                     'number'        => null,
-                    'birthday_city' => '', //'Санкт-Петербург'
+                    'birthday_city' => '',
                 ],
-                'fieldInFieldset' => '',
-                'scans'           => [],
+                'fieldset' => [
+                    'fieldInFieldset' => null
+                ],
+                'submit'          => 'Зарегистрироваться'
             ],
             $this->form->getData(),
             'Ожидается, что будут получены данные прошедшие валидацию.'
@@ -224,53 +205,15 @@ class FormTest extends FormTestCase
                 'password'        => 'password',
                 'passport'        => [
                     'number'        => null,
-                    'birthday_city' => '', //'Санкт-Петербург'
+                    'birthday_city' => '',
                 ],
-                'fieldInFieldset' => '',
-                'scans'           => [],
+                'fieldset' => [
+                    'fieldInFieldset' => null
+                ],
+                'submit'          => 'Зарегистрироваться'
             ],
             $this->form->getData(),
             'Ожидается, что будут получены данные прошедшие фильтрацию.'
-        );
-    }
-
-    /**
-     * Тестирование биндинга.
-     */
-    public function testBinding()
-    {
-        $bindObject = new BindObject();
-        $this->resolveOptionalDependencies($bindObject);
-
-        $bindObject->email = 'test@email.ru';
-
-        $this->form->bindObject($bindObject);
-        $this->assertEquals(
-            $bindObject->email,
-            $this->form->getElement('email')
-                ->getValue(),
-            'Ожидается, что данные из объекта будут установлены в форму.'
-        );
-
-        $this->form->setData(
-            [
-                'email'    => 'name@example.com',
-                'password' => 'password'
-            ]
-        );
-
-        $this->assertEquals(
-            'name@example.com',
-            $bindObject->email,
-            'Ожидается, что данные из формы будут установлены в объект.'
-        );
-
-        $bindObject->email = 'test2';
-        $this->assertEquals(
-            $bindObject->email,
-            $this->form->getElement('email')
-                ->getValue(),
-            'Ожидается, что данные из объекта будут установлены в форму.'
         );
     }
 }

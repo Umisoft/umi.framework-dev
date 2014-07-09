@@ -19,7 +19,7 @@ class SubmitElementTest extends ButtonElementTest
     /**
      * {@inheritdoc}
      */
-    public function getElement($name, array $attributes = [], array $options = [])
+    public function getFormElement($name, array $attributes = [], array $options = [])
     {
         $e = new Submit($name, $attributes, $options);
 

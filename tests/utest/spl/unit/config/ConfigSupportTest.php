@@ -62,7 +62,8 @@ class ConfigSupportTest extends TestCase
                 'key10' => [
                     'key11' => 'value11'
                 ]
-            ]
+            ],
+            'defaultKey1' => 'defaultValue1'
         ];
         $this->assertEquals($expectedResult, $actualResult, 'Не верный merge конфигураций');
     }

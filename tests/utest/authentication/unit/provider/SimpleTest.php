@@ -24,10 +24,7 @@ class SimpleTest extends AuthenticationTestCase
 
     public function setUpFixtures()
     {
-        $this->provider = new SimpleProvider([
-            SimpleProvider::OPTION_USERNAME => 'username',
-            SimpleProvider::OPTION_PASSWORD => 'password',
-        ]);
+        $this->provider = new SimpleProvider('username', 'password');
     }
 
     /**

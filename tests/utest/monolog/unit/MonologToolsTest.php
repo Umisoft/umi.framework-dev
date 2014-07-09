@@ -98,31 +98,4 @@ class MonologToolsTests extends MonologTestCase
             "Config must produce FirePHPHandler handler"
         );
     }
-
-    public function testSwiftMailerHandler()
-    {
-        $this->monologTools->default = [
-            'handlers' => [
-                [
-                    'type'       => 'swift_mailer',
-                    'level'      => Logger::ERROR,
-                    'from_email' => 'foo@bar',
-                    'to_email'   => 'bar@foo',
-                    'subject'    => 'Test',
-                    'transport_params'    => '',
-                ]
-            ]
-        ];
-        /** @var $logger Logger */
-        $logger = $this->monologTools->getService('Psr\Log\LoggerInterface', null);
-        $logger->log(Logger::ERROR, 'fire!');
-
-        /** @var $handler SwiftMailerHandler */
-        $handler = $logger->popHandler();
-        $this->assertInstanceOf(
-            'Monolog\Handler\SwiftMailerHandler',
-            $handler,
-            "Config must produce FirePHPHandler handler"
-        );
-    }
 }

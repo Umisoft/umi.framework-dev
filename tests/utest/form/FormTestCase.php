@@ -6,12 +6,12 @@
  * @copyright Copyright (c) 2007-2013 Umisoft ltd. (http://umisoft.ru/)
  * @license   http://umi-framework.ru/license/bsd-3 BSD-3 License
  */
+
 namespace utest\form;
 
 use utest\event\TEventSupport;
 use utest\filter\TFilterSupport;
 use utest\http\THttpSupport;
-use utest\session\TSessionSupport;
 use utest\TestCase;
 use utest\validation\TValidationSupport;
 
@@ -24,7 +24,6 @@ abstract class FormTestCase extends TestCase
     use TEventSupport;
     use TFilterSupport;
     use THttpSupport;
-    use TSessionSupport;
     use TValidationSupport;
 
     /**
@@ -35,7 +34,6 @@ abstract class FormTestCase extends TestCase
         $this->registerEventTools();
         $this->registerFilterTools();
         $this->registerHttpTools();
-        $this->registerSessionTools();
         $this->registerValidationTools();
         $this->registerFormTools();
 

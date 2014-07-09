@@ -3,24 +3,28 @@
 use umi\filter\IFilterFactory;
 use umi\form\element\Password;
 use umi\form\element\Text;
-use umi\form\fieldset\Collection;
-use umi\form\Form;
+use umi\form\fieldset\FieldSet;
 use umi\validation\IValidatorFactory;
 
 return [
     'name'     => 'register',
-    'action'   => '/user/register',
-    'method'   => 'post',
+    'attributes' => [
+        'action'   => '/user/register',
+        'method'   => 'post',
+    ],
+
     'elements' => [
         'email'    => [
             'type'       => Text::TYPE_NAME,
             'label'      => 'E-mail',
-            'filters'    => [
-                IFilterFactory::TYPE_STRING_TRIM => []
-            ],
-            'validators' => [
-                IValidatorFactory::TYPE_REQUIRED => [],
-                IValidatorFactory::TYPE_EMAIL    => []
+            'options' => [
+                'filters'    => [
+                    IFilterFactory::TYPE_STRING_TRIM => []
+                ],
+                'validators' => [
+                    IValidatorFactory::TYPE_REQUIRED => [],
+                    IValidatorFactory::TYPE_EMAIL    => []
+                ]
             ]
         ],
         'password' => [
@@ -28,7 +32,7 @@ return [
             'label' => 'Пароль'
         ],
         'passport' => [
-            'type'     => Form::TYPE_NAME,
+            'type' => FieldSet::TYPE_NAME,
             'label'    => 'Место жительства',
             'elements' => [
                 'number'        => [
@@ -45,17 +49,10 @@ return [
             ]
         ],
         'fieldset' => [
+            'type' => FieldSet::TYPE_NAME,
             'elements' => [
                 'fieldInFieldset' => [
                     'type' => Text::TYPE_NAME
-                ]
-            ]
-        ],
-        'scans'    => [
-            'type'     => Collection::TYPE_NAME,
-            'elements' => [
-                [
-                    'type' => Text::TYPE_NAME,
                 ]
             ]
         ],

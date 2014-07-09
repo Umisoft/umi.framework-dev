@@ -9,11 +9,11 @@
 
 namespace utest\form\unit\element;
 
-use umi\filter\IFilterCollection;
 use umi\filter\IFilterFactory;
 use umi\filter\toolbox\factory\FilterFactory;
+use umi\form\adapter\DefaultFormAdapter;
 use umi\form\element\IFormElement;
-use umi\validation\IValidatorCollection;
+use umi\form\Form;
 use umi\validation\IValidatorFactory;
 use umi\validation\toolbox\factory\ValidatorFactory;
 use utest\form\FormTestCase;
@@ -30,31 +30,26 @@ abstract class BaseElementTest extends FormTestCase
      * @param array $options опции
      * @return IFormElement элемент
      */
-    abstract public function getElement($name, array $attributes = [], array $options = []);
+    abstract public function getFormElement($name, array $attributes = [], array $options = []);
 
     /**
      * Базовые тесты.
      */
     public function testBasic()
     {
-        $element = $this->getElement('testElement', ['data-id' => 'id']);
+        $form = new Form('testForm');
+        $element = $this->getFormElement('testElement', ['data-id' => 'id']);
+        $element->setParent($form);
 
         $this->assertArrayHasKey(
             'data-id',
-            $element->getAttributes()
-                ->getArrayCopy(),
+            $element->getAttributes(),
             'Ожидается, что аттрибуты будут установлены.'
-        );
-        $this->assertArrayHasKey(
-            'name',
-            $element->getAttributes()
-                ->getArrayCopy(),
-            'Ожидается, что имя будет установлено как аттрибут.'
         );
 
         $this->assertEquals('testElement', $element->getName(), 'Ожидается, что имя элемента будет установлено.');
 
-        $this->assertEquals($element->getName(), $element->getAttributes()['name']);
+        $this->assertEquals('testElement', $element->getName());
     }
 
     /**
@@ -62,23 +57,16 @@ abstract class BaseElementTest extends FormTestCase
      */
     public function testValues()
     {
-        $element = $this->getElement(
+        $form = new Form('testForm');
+        $element = $this->getFormElement(
             'testElement',
             ['data-id' => 'id'],
             ['default' => 'test value', 'label' => 'My element']
         );
+        $element->setParent($form);
 
         $this->assertSame($element, $element->setValue('New value'));
         $this->assertEquals('New value', $element->getValue(), 'Ожидается, что значение будет установлено.');
-    }
-
-    /**
-     * @test исключения, при попытке создать элемент без имени.
-     * @expectedException \umi\form\exception\InvalidArgumentException
-     */
-    public function elementWithoutName()
-    {
-        $this->getElement(null);
     }
 
     /**
@@ -86,7 +74,11 @@ abstract class BaseElementTest extends FormTestCase
      */
     public function testValidators()
     {
-        $e = $this->getElement('test');
+        $form = new Form('testForm');
+        $form->setDataAdapter(new DefaultFormAdapter());
+
+        $e = $this->getFormElement('test');
+        $form->add($e);
 
         $this->assertInstanceOf(
             'umi\validation\IValidatorCollection',
@@ -94,14 +86,10 @@ abstract class BaseElementTest extends FormTestCase
             'Ожидается, что цепочку валидаторов можно получить у любого элемента.'
         );
 
-        $this->assertSame(
-            $e,
-            $e->setValidators($this->getValidatorCollection([IValidatorFactory::TYPE_REQUIRED => []])),
-            'Ожидается, что будет получен $this'
-        );
+        $e->getValidators()->appendValidator($this->getValidator(IValidatorFactory::TYPE_REQUIRED));
 
         $this->assertTrue($e->isValid());
-        $e->setValue('');
+        $form->setData(['test' => '']);
         $this->assertFalse($e->isValid());
     }
 
@@ -110,7 +98,9 @@ abstract class BaseElementTest extends FormTestCase
      */
     public function testFilters()
     {
-        $e = $this->getElement('test');
+        $form = new Form('testForm');
+        $e = $this->getFormElement('test');
+        $form->add($e);
 
         $this->assertInstanceOf(
             'umi\filter\IFilterCollection',
@@ -118,36 +108,29 @@ abstract class BaseElementTest extends FormTestCase
             'Ожидается, что цепочку фильтров можно получить у любого элемента.'
         );
 
-        $this->assertSame(
-            $e,
-            $e->setFilters($this->getFilterCollection([IFilterFactory::TYPE_INT => []])),
-            'Ожидается, что будет получен $this'
-        );
+        $e->getFilters()->appendFilter($this->getFilter(IFilterFactory::TYPE_INT));
 
-        $e->setValue('1aa');
+        $form->setData(['test' => '1aa']);
 
         $this->assertEquals(1, $e->getValue());
     }
 
-    /**
-     * @param array $conf
-     * @return IValidatorCollection
-     */
-    protected function getValidatorCollection(array $conf)
+
+    protected function getValidator($type, array $options = [])
     {
         $validatorFactory = new ValidatorFactory();
         $this->resolveOptionalDependencies($validatorFactory);
-        return $validatorFactory->createValidatorCollection($conf);
+
+        return $validatorFactory->createValidator($type, $options);
     }
 
-    /**
-     * @param array $conf
-     * @return IFilterCollection
-     */
-    protected function getFilterCollection(array $conf)
+
+    protected function getFilter($type, array $options = [])
     {
         $filterFactory = new FilterFactory();
         $this->resolveOptionalDependencies($filterFactory);
-        return $filterFactory->createFilterCollection($conf);
+
+        return $filterFactory->createFilter($type, $options);
     }
+
 }
