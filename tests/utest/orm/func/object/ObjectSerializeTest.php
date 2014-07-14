@@ -10,6 +10,7 @@
 namespace utest\orm\func\object;
 
 use umi\orm\collection\ICollectionFactory;
+use umi\orm\metadata\IObjectType;
 use umi\orm\object\IObject;
 use utest\orm\ORMDbTestCase;
 
@@ -60,13 +61,12 @@ class ObjectSerializeTest extends ORMDbTestCase
         $userCollection = $this->getCollectionManager()->getCollection(self::USERS_USER);
         $blogCollection = $this->getCollectionManager()->getCollection(self::BLOGS_BLOG);
 
-        $this->blog = $blogCollection->add('blog');
+        $this->blog = $blogCollection->add('blog', IObjectType::BASE, null, $this->guid);
         $user = $userCollection->add();
         $this->blog->setValue('title', 'russian title');
         $this->blog->setValue('title', 'american title', 'en-US');
         $this->blog->setValue('title', 'british title', 'en-GB');
         $this->blog->setValue('owner', $user);
-        $this->blog->setGUID($this->guid);
     }
 
     public function testSerializeObject()

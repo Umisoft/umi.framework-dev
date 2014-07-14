@@ -422,34 +422,6 @@ class ObjectTest extends ORMDbTestCase
         );
     }
 
-    public function testObjectGUID()
-    {
-        $this->user->setIsNew(true);
-        $this->assertInstanceOf(
-            'umi\orm\object\IObject',
-            $this->user->setGUID('9ee6745f-f40d-46d8-8043-d959594628ce'),
-            'Ожидается, что IObject::setGUID() вернет себя'
-        );
-        $this->assertEquals(
-            '9ee6745f-f40d-46d8-8043-d959594628ce',
-            $this->user->getGUID(),
-            'Ожидается, что объекту можно принудительно задать guid'
-        );
-
-        $this->user->setIsNew(false);
-        $e = null;
-        try {
-            $this->user->setGUID('9ee6745f-f40d-46d8-8043-d959594628ce');
-        } catch (\Exception $e) {
-        }
-        $this->assertInstanceOf(
-            'umi\orm\exception\NotAllowedOperationException',
-            $e,
-            'Ожидается исключение при попытке уставновить значение GUID для ненового объекта'
-        );
-
-    }
-
     public function testObjectVersion()
     {
         $this->assertInstanceOf(

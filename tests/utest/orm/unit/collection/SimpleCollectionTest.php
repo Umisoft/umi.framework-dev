@@ -105,6 +105,21 @@ class SimpleCollectionTest extends ORMTestCase
         $object2 = $collection->add('type1');
         $this->assertEquals('type1', $object2->getTypeName(), 'Ожидается, что создается объект заданного типа');
 
+        $guid = '9ee6745f-f40d-46d8-8043-d959594628ce';
+        $object3 = $collection->add(IObjectType::BASE, $guid);
+        $this->assertEquals($guid, $object3->getGUID());
+
+        $e = null;
+        try {
+            $collection->add(IObjectType::BASE, '9ee6745f-f40d-46d8-8043');
+        } catch (\Exception $e) {
+        }
+        $this->assertInstanceOf(
+            'umi\orm\exception\InvalidArgumentException',
+            $e,
+            'Ожидается, что нельзя добавить объект с неправильным guid'
+        );
+
         $e = null;
         try {
             $collection->add('not_existing_type');
