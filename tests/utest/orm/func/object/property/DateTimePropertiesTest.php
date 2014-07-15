@@ -110,5 +110,22 @@ class DateTimePropertiesTest extends ORMDbTestCase
         $this->assertNull($blog->getValue('publishTime'));
     }
 
+    public function testModifyingObject()
+    {
+        $dateTimeValue = new \DateTime($this->time, new \DateTimeZone('Europe/Moscow'));
+        $this->blog->setValue('publishTime', $dateTimeValue);
+        $this->getObjectPersister()->commit();
+        $this->getObjectManager()->unloadObjects();
+
+        $blog = $this->blogCollection->get($this->blogGuid);
+        $blog->setValue('publishTime', new \DateTime($this->time, new \DateTimeZone('Europe/Moscow')));
+
+        $this->assertFalse($blog->getIsModified());
+
+        $blog->setValue('publishTime', new \DateTime($this->time, new \DateTimeZone('Pacific/Nauru')));
+        $this->assertTrue($blog->getIsModified());
+
+    }
+
 }
  
