@@ -1,6 +1,6 @@
 <?php
 return [
     'partial' => [
-        'master' => 'masterValue'
+        'local' => 'localValue'
     ]
 ];

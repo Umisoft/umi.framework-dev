@@ -163,6 +163,62 @@ class PhpFileReaderTest extends ConfigTestCase
         $this->assertEquals('Local partial value', $config->get('partial.part-inner'));
     }
 
+    public function testLocalLazy()
+    {
+        $config = $this->reader->read('~/test/lazy.php');
+
+        $this->assertEquals(
+            [
+                'partial' => [
+                    'part-inner' => 'Local partial value'
+                ]
+            ],
+            $config->toArray()
+        );
+    }
+
+    public function testPartialMerge()
+    {
+        $config = $this->reader->read('~/test/partialOverwriting.php');
+        $this->assertEquals(
+            [
+                'partial' => [
+                    'master' => 'masterValue',
+                    'part-inner' => 'Local partial value'
+                ]
+            ],
+            $config->toArray()
+        );
+    }
+
+    public function testInstructionWithArrayMerge()
+    {
+        $config = $this->reader->read('~/test/arrayConfig.php');
+        $this->assertEquals(
+            [
+                'partial' => [
+                    'local' => 'localValue',
+                    'part-inner' => 'Local partial value'
+                ]
+            ],
+            $config->toArray()
+        );
+    }
+
+    public function testLocalConfigWithoutMaster()
+    {
+        $config = $this->reader->read('~/test/local.php');
+
+        $this->assertEquals(
+            [
+                'partial' => [
+                    'part-inner' => 'Local partial value'
+                ]
+            ],
+            $config->toArray()
+        );
+    }
+
     /**
      * @test
      * @expectedException RuntimeException
@@ -170,15 +226,6 @@ class PhpFileReaderTest extends ConfigTestCase
     public function wrongPartialFile()
     {
         $this->reader->read('~/test/partialWrong.php');
-    }
-
-    /**
-     * @test
-     * @expectedException UnexpectedValueException
-     */
-    public function entityOverwriting()
-    {
-        $this->reader->read('~/test/partialOverwriting.php');
     }
 
     public function testOnlyMasterConfig()

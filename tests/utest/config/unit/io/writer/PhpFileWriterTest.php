@@ -152,6 +152,26 @@ class PhpFileWriterTest extends ConfigTestCase
         );
     }
 
+    public function testWriteLocalWithoutMaster()
+    {
+        copy(__DIR__ . '/../reader/data/php/local/local.php', $this->fsLocalDir . '/local.php');
+        copy(__DIR__ . '/../reader/data/php/local/localLazy.php', $this->fsLocalDir . '/localLazy.php');
+
+        $config = $this->getConfig('~/test/local.php');
+
+        $config['partial.local'] = 'local';
+        $this->writer->write($config);
+
+        /** @noinspection PhpIncludeInspection */
+        $this->assertEquals(
+            [
+                'part-inner' => 'Local partial value',
+                'local' => 'local'
+            ],
+            require $this->fsLocalDir . '/localLazy.php'
+        );
+    }
+
     /**
      * Возвращает конфигурацию по её символическому имени.
      * @param string $alias символическое имя
