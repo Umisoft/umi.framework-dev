@@ -9,6 +9,7 @@
 
 namespace utest\orm\unit\object;
 
+use umi\i18n\ILocalesService;
 use umi\orm\collection\ICollectionFactory;
 use umi\orm\object\HierarchicObject;
 use umi\orm\object\IHierarchicObject;
@@ -196,6 +197,18 @@ class ObjectTest extends ORMDbTestCase
         $this->assertFalse($this->blog->hasProperty('title', 'nonExistentLocaleId'));
     }
 
+    public function testHasProperty2()
+    {
+        $this->blog->setLoadLocalization(ILocalesService::LOCALE_ALL);
+        $this->assertTrue($this->blog->hasProperty('title'));
+    }
+
+    public function testHasProperty3()
+    {
+        $this->blog->setLoadLocalization('nonExistentLocaleId');
+        $this->assertFalse($this->blog->hasProperty('title'));
+    }
+
     public function testGetProperty()
     {
 
@@ -240,6 +253,33 @@ class ObjectTest extends ORMDbTestCase
             'umi\orm\exception\NonexistentEntityException',
             $e,
             'Ожидается исключение при попытке получить свойство в локали, которой не существует'
+        );
+    }
+
+    public function testGetProperty2()
+    {
+        $this->blog->setLoadLocalization(ILocalesService::LOCALE_ALL);
+        $titleProperty = $this->blog->getProperty('title');
+        $this->assertEquals(
+            'ru-RU',
+            $titleProperty->getLocaleId(),
+            'Ожидается, что, если объект был загружен во всех локалях, при запросе свойства c локализуемым и локализованным полем '
+            . 'будет создано свойство в текущей локали'
+        );
+    }
+
+    public function testGetProperty3()
+    {
+        $this->blog->setLoadLocalization('nonExistentLocaleId');
+        $e = null;
+        try {
+            $this->blog->getProperty('title');
+        } catch (\Exception $e) {
+        }
+        $this->assertInstanceOf(
+            'umi\orm\exception\NonexistentEntityException',
+            $e,
+            'Ожидается исключение при попытке получить свойство, если объект был загружен в конкретной локали, которой нет у поля'
         );
     }
 
