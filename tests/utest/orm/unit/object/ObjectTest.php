@@ -331,7 +331,6 @@ class ObjectTest extends ORMDbTestCase
                 'mpath',
                 'slug',
                 'uri',
-                'childCount',
                 'order',
                 'level',
                 'title#ru-RU',

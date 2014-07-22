@@ -10,7 +10,6 @@
 namespace utest\form\unit\element;
 
 use umi\form\element\Checkbox;
-use umi\form\Form;
 
 /**
  * Тесты элемента формы - Флаг

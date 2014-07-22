@@ -99,11 +99,6 @@ class SimpleHierarchicCollectionTest extends ORMDbTestCase
             $this->object === $this->object2->getParent(),
             'Ожидается, что объект был созданным с заданным родителем'
         );
-        $this->assertEquals(
-            1,
-            $this->object->getChildCount(),
-            'Ожидается, что при добавлении объекта у его родителя возрастет количество детей'
-        );
     }
 
     public function testImpossibleAdd()
@@ -162,11 +157,6 @@ class SimpleHierarchicCollectionTest extends ORMDbTestCase
             'umi\orm\collection\IHierarchicCollection',
             $this->collection->delete($this->object2),
             'Ожидается, что метод ISimpleCollection::delete() вернет ISimpleCollection'
-        );
-        $this->assertEquals(
-            0,
-            $this->object->getChildCount(),
-            'Ожидается, что при удалении объекта у его родителя уменьшится количество детей'
         );
     }
 }

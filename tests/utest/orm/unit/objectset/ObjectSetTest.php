@@ -12,8 +12,6 @@ namespace utest\orm\unit\objectset;
 use umi\orm\collection\ICollectionFactory;
 use umi\orm\object\IObject;
 use umi\orm\objectset\IObjectSet;
-use umi\orm\selector\ISelector;
-use umi\orm\selector\Selector;
 use utest\orm\ORMDbTestCase;
 
 /**

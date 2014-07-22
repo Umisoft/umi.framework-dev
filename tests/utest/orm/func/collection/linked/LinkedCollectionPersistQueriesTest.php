@@ -65,9 +65,9 @@ class LinkedCollectionPersistQueriesTest extends ORMDbTestCase
         $expectedResult = [
             '"START TRANSACTION"',
             'INSERT INTO "umi_mock_hierarchy"
-( "type", "guid", "slug", "child_count", "title" ) VALUES ( :type, :guid, :slug, :child_count, :title )',
+( "type", "guid", "slug", "title" ) VALUES ( :type, :guid, :slug, :title )',
             'INSERT INTO "umi_mock_blogs"
-( "id", "type", "guid", "slug", "child_count", "title" ) VALUES ( :id, :type, :guid, :slug, :child_count, :title )',
+( "id", "type", "guid", "slug", "title" ) VALUES ( :id, :type, :guid, :slug, :title )',
             'INSERT INTO "umi_mock_hierarchy"
 ( "type", "guid", "pid", "slug", "title" ) VALUES ( :type, :guid, :pid, :slug, :title )',
             'INSERT INTO "umi_mock_posts"
@@ -127,12 +127,6 @@ WHERE "id" = :objectId',
 ( "type", "guid", "pid", "slug", "title" ) VALUES ( :type, :guid, :pid, :slug, :title )',
             'INSERT INTO "umi_mock_posts"
 ( "id", "type", "guid", "pid", "slug", "title" ) VALUES ( :id, :type, :guid, :pid, :slug, :title )',
-            'UPDATE "umi_mock_hierarchy"
-SET "child_count" = "child_count" + (1)
-WHERE "id" = :objectId',
-            'UPDATE "umi_mock_blogs"
-SET "child_count" = "child_count" + (1)
-WHERE "id" = :objectId',
             'SELECT MAX("order") AS "order"
 FROM "umi_mock_hierarchy"
 WHERE "pid" = :parent',

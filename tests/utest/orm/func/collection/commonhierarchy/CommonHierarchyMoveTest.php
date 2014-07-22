@@ -139,10 +139,6 @@ class CommonHierarchyMoveTest extends ORMDbTestCase
         $this->assertEquals(2, $this->post2->getVersion());
         $this->assertEquals(2, $this->post3->getVersion());
 
-        $this->assertEquals(3, $this->blog1->getChildCount());
-        $this->assertEquals(1, $this->post2->getChildCount());
-        $this->assertEquals(1, $this->blog3->getChildCount());
-
         $this->assertEquals('//blog1/blog2', $this->blog2->getURI());
         $this->assertEquals('//blog1/blog3/post2', $this->post2->getURI());
         $this->assertEquals('//blog1/blog3/post2/post3', $this->post3->getURI());
@@ -386,19 +382,6 @@ WHERE "id" != 5 AND "pid" = 1 AND "order" >= 1',
                 'UPDATE "umi_mock_hierarchy"
 SET "order" = "order" + 1, "version" = "version" + 1
 WHERE "id" != 5 AND "pid" = 1 AND "order" >= 1',
-                //изменение количества детей у старого родителя и нового
-                'UPDATE "umi_mock_hierarchy"
-SET "child_count" = "child_count" + (-1)
-WHERE "id" = 4',
-                'UPDATE "umi_mock_blogs"
-SET "child_count" = "child_count" + (-1)
-WHERE "id" = 4',
-                'UPDATE "umi_mock_hierarchy"
-SET "child_count" = "child_count" + (1)
-WHERE "id" = 1',
-                'UPDATE "umi_mock_blogs"
-SET "child_count" = "child_count" + (1)
-WHERE "id" = 1',
                 //изменение иерархических свойств перемещаемого объекта
                 'UPDATE "umi_mock_hierarchy"
 SET "uri" = //blog1/post2, "mpath" = #1.5, "pid" = 1, "level" = "level" + (-1), "version" = "version" + 1
@@ -438,9 +421,6 @@ WHERE "mpath" like #1.4.5.%',
 
         $this->assertEquals(4, $this->post2->getVersion());
         $this->assertEquals(3, $this->post3->getVersion());
-
-        $this->assertEquals(4, $this->blog1->getChildCount());
-        $this->assertEquals(0, $this->blog3->getChildCount());
 
         $this->assertEquals('//blog1/post2', $this->post2->getURI());
         $this->assertEquals('//blog1/post2/post3', $this->post3->getURI());
@@ -498,19 +478,6 @@ WHERE "id" != 2 AND "pid" = 5 AND "order" >= 2',
                 'UPDATE "umi_mock_hierarchy"
 SET "order" = "order" + 1, "version" = "version" + 1
 WHERE "id" != 2 AND "pid" = 5 AND "order" >= 2',
-                //изменение количества детей у старого родителя и нового
-                'UPDATE "umi_mock_hierarchy"
-SET "child_count" = "child_count" + (-1)
-WHERE "id" = 1',
-                'UPDATE "umi_mock_blogs"
-SET "child_count" = "child_count" + (-1)
-WHERE "id" = 1',
-                'UPDATE "umi_mock_hierarchy"
-SET "child_count" = "child_count" + (1)
-WHERE "id" = 5',
-                'UPDATE "umi_mock_posts"
-SET "child_count" = "child_count" + (1)
-WHERE "id" = 5',
                 //изменение иерархических свойств перемещаемого объекта
                 'UPDATE "umi_mock_hierarchy"
 SET "uri" = //blog1/blog3/post2/blog2, "mpath" = #1.4.5.2, "pid" = 5, "level" = "level" + (2), "version" = "version" + 1
@@ -535,9 +502,6 @@ WHERE "id" = 2',
         $this->assertEquals(3, $this->blog2->getLevel());
         $this->assertEquals(4, $this->blog2->getVersion());
         $this->assertEquals('//blog1/blog3/post2/blog2', $this->blog2->getURI());
-
-        $this->assertEquals(2, $this->blog1->getChildCount());
-        $this->assertEquals(2, $this->post2->getChildCount());
 
     }
 
@@ -587,13 +551,6 @@ SET "order" = 1, "version" = "version" + 1
 WHERE "id" = 1',
                 //изменение порядка у остальных объектов
 
-                //изменение количества детей у старого родителя и нового
-                'UPDATE "umi_mock_hierarchy"
-SET "child_count" = "child_count" + (1)
-WHERE "id" = 8',
-                'UPDATE "umi_mock_blogs"
-SET "child_count" = "child_count" + (1)
-WHERE "id" = 8',
                 //изменение иерархических свойств перемещаемого объекта
                 'UPDATE "umi_mock_hierarchy"
 SET "uri" = //blog5/blog1, "mpath" = #8.1, "pid" = 8, "level" = "level" + (1), "version" = "version" + 1
@@ -680,13 +637,6 @@ WHERE "id" != 4 AND "pid" IS NULL AND "order" >= 1',
                 'UPDATE "umi_mock_hierarchy"
 SET "order" = "order" + 1, "version" = "version" + 1
 WHERE "id" != 4 AND "pid" IS NULL AND "order" >= 1',
-                //изменение количества детей у старого родителя и нового
-                'UPDATE "umi_mock_hierarchy"
-SET "child_count" = "child_count" + (-1)
-WHERE "id" = 1',
-                'UPDATE "umi_mock_blogs"
-SET "child_count" = "child_count" + (-1)
-WHERE "id" = 1',
                 //изменение иерархических свойств перемещаемого объекта
                 'UPDATE "umi_mock_hierarchy"
 SET "uri" = //blog3, "mpath" = #4, "pid" = NULL, "level" = "level" + (-1), "version" = "version" + 1
@@ -768,13 +718,6 @@ WHERE "id" != 4 AND "pid" IS NULL AND "order" >= 2',
                 'UPDATE "umi_mock_hierarchy"
 SET "order" = "order" + 1, "version" = "version" + 1
 WHERE "id" != 4 AND "pid" IS NULL AND "order" >= 2',
-                //изменение количества детей у старого родителя и нового
-                'UPDATE "umi_mock_hierarchy"
-SET "child_count" = "child_count" + (-1)
-WHERE "id" = 1',
-                'UPDATE "umi_mock_blogs"
-SET "child_count" = "child_count" + (-1)
-WHERE "id" = 1',
                 //изменение иерархических свойств перемещаемого объекта
                 'UPDATE "umi_mock_hierarchy"
 SET "uri" = //blog3, "mpath" = #4, "pid" = NULL, "level" = "level" + (-1), "version" = "version" + 1

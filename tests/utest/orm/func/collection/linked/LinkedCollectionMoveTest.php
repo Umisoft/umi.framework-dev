@@ -130,16 +130,5 @@ class LinkedCollectionMoveTest extends ORMDbTestCase
             $this->blog2->getURI(),
             'Ожидается, что перемещение можно выполнять в связанной иерархической коллекции объекта'
         );
-
-        $this->assertEquals(
-            2,
-            $this->blog1->getChildCount(),
-            'Ожидается, что перемещение можно выполнять в связанной иерархической коллекции объекта'
-        );
-        $this->assertEquals(
-            2,
-            $this->post2->getChildCount(),
-            'Ожидается, что перемещение можно выполнять в связанной иерархической коллекции объекта'
-        );
     }
 }

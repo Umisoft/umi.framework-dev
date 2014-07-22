@@ -123,9 +123,7 @@ class SimpleHierarchicCollectionMoveTest extends ORMDbTestCase
         $this->assertEquals('#2.3.4', $this->menuItem4->getMaterializedPath());
         $this->assertEquals(2, $this->menuItem4->getLevel());
 
-        $this->assertEquals(2, $this->menuItem5->getChildCount());
         $this->assertEquals(3, $this->menuItem5->getOrder());
-        $this->assertEquals(2, $this->menuItem5->getChildCount());
 
         $this->assertEquals(1, $this->menuItem6->getOrder());
         $this->assertEquals('#5.6', $this->menuItem6->getMaterializedPath());
@@ -136,7 +134,6 @@ class SimpleHierarchicCollectionMoveTest extends ORMDbTestCase
             $this->menuItem6->getParent()
                 ->getId()
         );
-        $this->assertEquals(1, $this->menuItem6->getChildCount());
 
         $this->assertEquals('#5.6.7', $this->menuItem7->getMaterializedPath());
         $this->assertEquals('//item5/item6/item7', $this->menuItem7->getURI());
@@ -303,13 +300,6 @@ WHERE "id" = 6',
                 'UPDATE "umi_mock_menu"
 SET "order" = "order" + 1, "version" = "version" + 1
 WHERE "id" != 6 AND "pid" = 2 AND "order" >= 1',
-                //изменение количества детей у старого родителя и нового
-                'UPDATE "umi_mock_menu"
-SET "child_count" = "child_count" + (-1)
-WHERE "id" = 5',
-                'UPDATE "umi_mock_menu"
-SET "child_count" = "child_count" + (1)
-WHERE "id" = 2',
                 //изменение иерархических свойств перемещаемого объекта
                 'UPDATE "umi_mock_menu"
 SET "uri" = //item2/item6, "mpath" = #2.6, "pid" = 2, "version" = "version" + 1
@@ -327,9 +317,6 @@ WHERE "mpath" like #5.6.%',
 
         $this->assertEquals(1, $this->menuItem6->getOrder());
         $this->assertEquals(2, $this->menuItem3->getOrder());
-
-        $this->assertEquals(1, $this->menuItem5->getChildCount());
-        $this->assertEquals(2, $this->menuItem2->getChildCount());
 
         $this->assertEquals(
             2,
@@ -386,13 +373,6 @@ WHERE "id" = 7',
                 'UPDATE "umi_mock_menu"
 SET "order" = "order" + 1, "version" = "version" + 1
 WHERE "id" != 7 AND "pid" = 2 AND "order" >= 2',
-                //изменение количества детей у старого родителя и нового
-                'UPDATE "umi_mock_menu"
-SET "child_count" = "child_count" + (-1)
-WHERE "id" = 6',
-                'UPDATE "umi_mock_menu"
-SET "child_count" = "child_count" + (1)
-WHERE "id" = 2',
                 //изменение иерархических свойств перемещаемого объекта
                 'UPDATE "umi_mock_menu"
 SET "uri" = //item2/item7, "mpath" = #2.7, "pid" = 2, "level" = "level" + (-1), "version" = "version" + 1
@@ -418,9 +398,6 @@ WHERE "mpath" like #5.6.7.%',
         $this->assertEquals(1, $this->menuItem7->getLevel());
         $this->assertEquals(4, $this->menuItem7->getVersion());
         $this->assertEquals('//item2/item7', $this->menuItem7->getURI());
-
-        $this->assertEquals(0, $this->menuItem6->getChildCount());
-        $this->assertEquals(2, $this->menuItem2->getChildCount());
 
     }
 
@@ -459,10 +436,6 @@ WHERE "id" = 2',
                 'UPDATE "umi_mock_menu"
 SET "order" = "order" + 1, "version" = "version" + 1
 WHERE "id" != 2 AND "pid" = 7 AND "order" >= 1',
-                //изменение количества детей у старого родителя и нового
-                'UPDATE "umi_mock_menu"
-SET "child_count" = "child_count" + (1)
-WHERE "id" = 7',
                 //изменение иерархических свойств перемещаемого объекта
                 'UPDATE "umi_mock_menu"
 SET "uri" = //item5/item6/item7/item2, "mpath" = #5.6.7.2, "pid" = 7, "level" = "level" + (3), "version" = "version" + 1
@@ -523,10 +496,6 @@ WHERE "id" = 6',
                 'UPDATE "umi_mock_menu"
 SET "order" = "order" + 1, "version" = "version" + 1
 WHERE "id" != 6 AND "pid" IS NULL AND "order" >= 1',
-                //изменение количества детей у старого родителя и нового
-                'UPDATE "umi_mock_menu"
-SET "child_count" = "child_count" + (-1)
-WHERE "id" = 5',
                 //изменение иерархических свойств перемещаемого объекта
                 'UPDATE "umi_mock_menu"
 SET "uri" = //item6, "mpath" = #6, "pid" = NULL, "level" = "level" + (-1), "version" = "version" + 1
