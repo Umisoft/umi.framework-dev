@@ -76,26 +76,20 @@ class LinkedCollectionPersistQueriesTest extends ORMDbTestCase
 FROM "umi_mock_hierarchy"
 WHERE "pid" IS :parent',
             'UPDATE "umi_mock_hierarchy"
-SET "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
-WHERE "id" = :objectId',
+SET "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level, "version" = "version" + (1)
+WHERE "id" = :objectId AND "version" = :version',
             'UPDATE "umi_mock_blogs"
-SET "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
-WHERE "id" = :objectId',
-            'UPDATE "umi_mock_hierarchy"
-SET "pid" = :pid, "version" = "version" + (1)
+SET "version" = "version" + (1), "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
 WHERE "id" = :objectId AND "version" = :version',
             'SELECT MAX("order") AS "order"
 FROM "umi_mock_hierarchy"
 WHERE "pid" = :parent',
             'UPDATE "umi_mock_hierarchy"
-SET "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
-WHERE "id" = :objectId',
-            'UPDATE "umi_mock_posts"
-SET "version" = "version" + (1), "pid" = :pid
+SET "pid" = :pid, "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level, "version" = "version" + (1)
 WHERE "id" = :objectId AND "version" = :version',
             'UPDATE "umi_mock_posts"
-SET "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
-WHERE "id" = :objectId',
+SET "version" = "version" + (1), "pid" = :pid, "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
+WHERE "id" = :objectId AND "version" = :version',
             '"COMMIT"',
         ];
 
@@ -131,11 +125,11 @@ WHERE "id" = :objectId',
 FROM "umi_mock_hierarchy"
 WHERE "pid" = :parent',
             'UPDATE "umi_mock_hierarchy"
-SET "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
-WHERE "id" = :objectId',
+SET "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level, "version" = "version" + (1)
+WHERE "id" = :objectId AND "version" = :version',
             'UPDATE "umi_mock_posts"
-SET "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
-WHERE "id" = :objectId',
+SET "version" = "version" + (1), "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
+WHERE "id" = :objectId AND "version" = :version',
             '"COMMIT"',
         ];
 

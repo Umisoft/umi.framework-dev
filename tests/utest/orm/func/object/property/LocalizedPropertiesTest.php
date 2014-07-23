@@ -179,11 +179,11 @@ WHERE (("blogs_blog"."guid" = :value0))'
 FROM "umi_mock_hierarchy"
 WHERE "pid" IS :parent',
             'UPDATE "umi_mock_hierarchy"
-SET "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
-WHERE "id" = :objectId',
+SET "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level, "version" = "version" + (1)
+WHERE "id" = :objectId AND "version" = :version',
             'UPDATE "umi_mock_blogs"
-SET "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
-WHERE "id" = :objectId',
+SET "version" = "version" + (1), "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
+WHERE "id" = :objectId AND "version" = :version',
             '"COMMIT"',
         ];
 
@@ -247,11 +247,11 @@ WHERE (("blogs_blog"."guid" = :value0))'
 FROM "umi_mock_hierarchy"
 WHERE "pid" IS :parent',
             'UPDATE "umi_mock_hierarchy"
-SET "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
-WHERE "id" = :objectId',
+SET "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level, "version" = "version" + (1)
+WHERE "id" = :objectId AND "version" = :version',
             'UPDATE "umi_mock_blogs"
-SET "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
-WHERE "id" = :objectId',
+SET "version" = "version" + (1), "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
+WHERE "id" = :objectId AND "version" = :version',
             '"COMMIT"',
         ];
 
@@ -296,11 +296,11 @@ WHERE "id" = :objectId',
 FROM "umi_mock_hierarchy"
 WHERE "pid" IS :parent',
             'UPDATE "umi_mock_hierarchy"
-SET "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
-WHERE "id" = :objectId',
+SET "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level, "version" = "version" + (1)
+WHERE "id" = :objectId AND "version" = :version',
             'UPDATE "umi_mock_blogs"
-SET "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
-WHERE "id" = :objectId',
+SET "version" = "version" + (1), "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
+WHERE "id" = :objectId AND "version" = :version',
             '"COMMIT"',
         ];
 

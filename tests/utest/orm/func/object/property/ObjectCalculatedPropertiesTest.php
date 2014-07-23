@@ -146,7 +146,7 @@ class ObjectCalculatedPropertiesTest extends ORMDbTestCase
         $this->assertEquals(0, $blog1->getLevel());
         $this->assertEquals(1, $blog2->getLevel());
 
-        $this->assertEquals(1, $blog1->getVersion());
+        $this->assertEquals(2, $blog1->getVersion());
         $this->assertEquals(2, $blog2->getVersion());
 
     }

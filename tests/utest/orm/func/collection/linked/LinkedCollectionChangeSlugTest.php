@@ -85,6 +85,7 @@ class LinkedCollectionChangeSlugTest extends ORMDbTestCase
 
         $blog = $this->blogsCollection->get($this->blogGuid);
         $this->blogsCollection->changeSlug($blog, 'new_slug');
+        $this->getObjectPersister()->commit();
 
         $blog = $this->blogsCollection->get($this->blogGuid);
         $post = $this->postsCollection->get($this->postGuid);

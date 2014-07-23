@@ -98,6 +98,7 @@ class LinkedCollectionMoveTest extends ORMDbTestCase
 
         $this->getCollectionManager()->getCollection(self::BLOGS_BLOG)
             ->move($this->blog2, $this->post2, $this->post3);
+        $this->getObjectPersister()->commit();
 
         $this->assertEquals(
             2,
@@ -118,11 +119,6 @@ class LinkedCollectionMoveTest extends ORMDbTestCase
         $this->assertEquals(
             3,
             $this->blog2->getLevel(),
-            'Ожидается, что перемещение можно выполнять в связанной иерархической коллекции объекта'
-        );
-        $this->assertEquals(
-            4,
-            $this->blog2->getVersion(),
             'Ожидается, что перемещение можно выполнять в связанной иерархической коллекции объекта'
         );
         $this->assertEquals(

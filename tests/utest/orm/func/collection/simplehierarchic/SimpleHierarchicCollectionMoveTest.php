@@ -128,7 +128,6 @@ class SimpleHierarchicCollectionMoveTest extends ORMDbTestCase
         $this->assertEquals(1, $this->menuItem6->getOrder());
         $this->assertEquals('#5.6', $this->menuItem6->getMaterializedPath());
         $this->assertEquals(1, $this->menuItem6->getLevel());
-        $this->assertEquals(2, $this->menuItem6->getVersion());
         $this->assertEquals(
             5,
             $this->menuItem6->getParent()
@@ -148,7 +147,6 @@ class SimpleHierarchicCollectionMoveTest extends ORMDbTestCase
 
     public function testImpossibleMove()
     {
-
         $blog = $this->getCollectionManager()->getCollection(self::BLOGS_BLOG)
             ->add('blog');
         $this->getObjectPersister()->commit();
@@ -192,128 +190,27 @@ class SimpleHierarchicCollectionMoveTest extends ORMDbTestCase
 
     public function testMoveFirstWithoutSwitchingTheBranch()
     {
-
         $this->menu->move($this->menuItem5);
-
-        $this->assertEquals(
-            [
-                '"START TRANSACTION"',
-                //проверка возможности перемещения
-                'SELECT "id"
-FROM "umi_mock_menu"
-WHERE "id" = 5 AND "version" = 1',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_menu"
-WHERE "id" = 5 AND "version" = 1)',
-                //изменение порядка у перемещаемого объекта
-                'UPDATE "umi_mock_menu"
-SET "order" = 1, "version" = "version" + 1
-WHERE "id" = 5',
-                //изменение порядка у остальных объектов
-                'UPDATE "umi_mock_menu"
-SET "order" = "order" + 1, "version" = "version" + 1
-WHERE "id" != 5 AND "pid" IS NULL AND "order" >= 1',
-                '"COMMIT"',
-            ],
-            $this->getQueries(true),
-            'Неверные запросы на перемещение'
-        );
+        $this->getObjectPersister()->commit();
 
         $this->assertEquals(1, $this->menuItem5->getOrder());
         $this->assertEquals(2, $this->menuItem1->getOrder());
         $this->assertEquals(3, $this->menuItem2->getOrder());
-
     }
 
     public function testMoveAfterWithoutSwitchingTheBranch()
     {
-
         $this->menu->move($this->menuItem6, $this->menuItem5, $this->menuItem8);
-
-        $this->assertEquals(
-            [
-                '"START TRANSACTION"',
-                //проверка возможности перемещения
-                'SELECT "id"
-FROM "umi_mock_menu"
-WHERE "id" = 6 AND "version" = 2',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_menu"
-WHERE "id" = 6 AND "version" = 2)',
-                'SELECT "id"
-FROM "umi_mock_menu"
-WHERE "id" = 5 AND "version" = 1',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_menu"
-WHERE "id" = 5 AND "version" = 1)',
-                //изменение порядка у перемещаемого объекта
-                'UPDATE "umi_mock_menu"
-SET "order" = 3, "version" = "version" + 1
-WHERE "id" = 6',
-                //изменение порядка у остальных объектов
-                'UPDATE "umi_mock_menu"
-SET "order" = "order" + 1, "version" = "version" + 1
-WHERE "id" != 6 AND "pid" = 5 AND "order" >= 3',
-                '"COMMIT"',
-            ],
-            $this->getQueries(true),
-            'Неверные запросы на перемещение'
-        );
+        $this->getObjectPersister()->commit();
 
         $this->assertEquals(2, $this->menuItem8->getOrder());
         $this->assertEquals(3, $this->menuItem6->getOrder());
-
     }
 
     public function testMoveFirstWithSwitchingBranch()
     {
-
         $this->menu->move($this->menuItem6, $this->menuItem2);
-
-        $this->assertEquals(
-            [
-                '"START TRANSACTION"',
-                //проверка возможности перемещения
-                'SELECT "id"
-FROM "umi_mock_menu"
-WHERE "id" = 6 AND "version" = 2',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_menu"
-WHERE "id" = 6 AND "version" = 2)',
-                'SELECT "id"
-FROM "umi_mock_menu"
-WHERE "id" = 2 AND "version" = 1',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_menu"
-WHERE "id" = 2 AND "version" = 1)',
-                'SELECT "id"
-FROM "umi_mock_menu"
-WHERE "uri" = //item2/item6',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_menu"
-WHERE "uri" = //item2/item6)',
-                //изменение порядка у перемещаемого объекта
-                'UPDATE "umi_mock_menu"
-SET "order" = 1, "version" = "version" + 1
-WHERE "id" = 6',
-                //изменение порядка у остальных объектов
-                'UPDATE "umi_mock_menu"
-SET "order" = "order" + 1, "version" = "version" + 1
-WHERE "id" != 6 AND "pid" = 2 AND "order" >= 1',
-                //изменение иерархических свойств перемещаемого объекта
-                'UPDATE "umi_mock_menu"
-SET "uri" = //item2/item6, "mpath" = #2.6, "pid" = 2, "version" = "version" + 1
-WHERE "id" = 6',
-                //изменения иерархических свойств детей перемещаемого объекта
-                'UPDATE "umi_mock_menu"
-SET "version" = "version" + 1, "mpath" = '
-                .'REPLACE("mpath", \'#5.\', \'#2.\'), "uri" = REPLACE("uri", \'//item5/\', \'//item2/\')
-WHERE "mpath" like #5.6.%',
-                '"COMMIT"',
-            ],
-            $this->getQueries(true),
-            'Неверные запросы на перемещение'
-        );
+        $this->getObjectPersister()->commit();
 
         $this->assertEquals(1, $this->menuItem6->getOrder());
         $this->assertEquals(2, $this->menuItem3->getOrder());
@@ -332,61 +229,12 @@ WHERE "mpath" like #5.6.%',
 
         $this->assertEquals(1, $this->menuItem6->getLevel());
         $this->assertEquals(2, $this->menuItem7->getLevel());
-
-        $this->assertEquals(4, $this->menuItem6->getVersion());
-        $this->assertEquals(3, $this->menuItem7->getVersion());
-
     }
 
     public function testMoveAfterWithSwitchingBranch()
     {
-
         $this->menu->move($this->menuItem7, $this->menuItem2, $this->menuItem3);
-
-        $this->assertEquals(
-            [
-                '"START TRANSACTION"',
-                //проверка возможности перемещения
-                'SELECT "id"
-FROM "umi_mock_menu"
-WHERE "id" = 7 AND "version" = 2',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_menu"
-WHERE "id" = 7 AND "version" = 2)',
-                'SELECT "id"
-FROM "umi_mock_menu"
-WHERE "id" = 2 AND "version" = 1',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_menu"
-WHERE "id" = 2 AND "version" = 1)',
-                'SELECT "id"
-FROM "umi_mock_menu"
-WHERE "uri" = //item2/item7',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_menu"
-WHERE "uri" = //item2/item7)',
-                //изменение порядка у перемещаемого объекта
-                'UPDATE "umi_mock_menu"
-SET "order" = 2, "version" = "version" + 1
-WHERE "id" = 7',
-                //изменение порядка у остальных объектов
-                'UPDATE "umi_mock_menu"
-SET "order" = "order" + 1, "version" = "version" + 1
-WHERE "id" != 7 AND "pid" = 2 AND "order" >= 2',
-                //изменение иерархических свойств перемещаемого объекта
-                'UPDATE "umi_mock_menu"
-SET "uri" = //item2/item7, "mpath" = #2.7, "pid" = 2, "level" = "level" + (-1), "version" = "version" + 1
-WHERE "id" = 7',
-                //изменения иерархических свойств детей перемещаемого объекта
-                'UPDATE "umi_mock_menu"
-SET "level" = "level" + (-1), "version" = "version" + 1, "mpath" = REPLACE("mpath", \'#5.6.\', \'#2.\'),'
-                . ' "uri" = REPLACE("uri", \'//item5/item6/\', \'//item2/\')
-WHERE "mpath" like #5.6.7.%',
-                '"COMMIT"',
-            ],
-            $this->getQueries(true),
-            'Неверные запросы на перемещение'
-        );
+        $this->getObjectPersister()->commit();
 
         $this->assertEquals(2, $this->menuItem7->getOrder());
         $this->assertEquals(
@@ -396,60 +244,14 @@ WHERE "mpath" like #5.6.7.%',
         );
         $this->assertEquals('#2.7', $this->menuItem7->getMaterializedPath());
         $this->assertEquals(1, $this->menuItem7->getLevel());
-        $this->assertEquals(4, $this->menuItem7->getVersion());
         $this->assertEquals('//item2/item7', $this->menuItem7->getURI());
 
     }
 
     public function testMoveFromRoot()
     {
-
         $this->menu->move($this->menuItem2, $this->menuItem7);
-
-        $this->assertEquals(
-            [
-                '"START TRANSACTION"',
-                //проверка возможности перемещения
-                'SELECT "id"
-FROM "umi_mock_menu"
-WHERE "id" = 2 AND "version" = 1',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_menu"
-WHERE "id" = 2 AND "version" = 1)',
-                'SELECT "id"
-FROM "umi_mock_menu"
-WHERE "id" = 7 AND "version" = 2',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_menu"
-WHERE "id" = 7 AND "version" = 2)',
-                'SELECT "id"
-FROM "umi_mock_menu"
-WHERE "uri" = //item5/item6/item7/item2',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_menu"
-WHERE "uri" = //item5/item6/item7/item2)',
-                //изменение порядка у перемещаемого объекта
-                'UPDATE "umi_mock_menu"
-SET "order" = 1, "version" = "version" + 1
-WHERE "id" = 2',
-                //изменение порядка у остальных объектов
-                'UPDATE "umi_mock_menu"
-SET "order" = "order" + 1, "version" = "version" + 1
-WHERE "id" != 2 AND "pid" = 7 AND "order" >= 1',
-                //изменение иерархических свойств перемещаемого объекта
-                'UPDATE "umi_mock_menu"
-SET "uri" = //item5/item6/item7/item2, "mpath" = #5.6.7.2, "pid" = 7, "level" = "level" + (3), "version" = "version" + 1
-WHERE "id" = 2',
-                //изменения иерархических свойств детей перемещаемого объекта
-                'UPDATE "umi_mock_menu"
-SET "level" = "level" + (3), "version" = "version" + 1, "mpath" = REPLACE("mpath", \'#\', \'#5.6.7.\'),'
-                . ' "uri" = REPLACE("uri", \'//\', \'//item5/item6/item7/\')
-WHERE "mpath" like #2.%',
-                '"COMMIT"',
-            ],
-            $this->getQueries(true),
-            'Неверные запросы на перемещение'
-        );
+        $this->getObjectPersister()->commit();
 
         $this->assertEquals(1, $this->menuItem2->getOrder());
         $this->assertEquals(3, $this->menuItem2->getLevel());
@@ -469,47 +271,8 @@ WHERE "mpath" like #2.%',
 
     public function testMoveToRoot()
     {
-
         $this->menu->move($this->menuItem6, null);
-
-        $this->assertEquals(
-            [
-                '"START TRANSACTION"',
-                //проверка возможности перемещения
-                'SELECT "id"
-FROM "umi_mock_menu"
-WHERE "id" = 6 AND "version" = 2',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_menu"
-WHERE "id" = 6 AND "version" = 2)',
-                'SELECT "id"
-FROM "umi_mock_menu"
-WHERE "uri" = //item6',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_menu"
-WHERE "uri" = //item6)',
-                //изменение порядка у перемещаемого объекта
-                'UPDATE "umi_mock_menu"
-SET "order" = 1, "version" = "version" + 1
-WHERE "id" = 6',
-                //изменение порядка у остальных объектов
-                'UPDATE "umi_mock_menu"
-SET "order" = "order" + 1, "version" = "version" + 1
-WHERE "id" != 6 AND "pid" IS NULL AND "order" >= 1',
-                //изменение иерархических свойств перемещаемого объекта
-                'UPDATE "umi_mock_menu"
-SET "uri" = //item6, "mpath" = #6, "pid" = NULL, "level" = "level" + (-1), "version" = "version" + 1
-WHERE "id" = 6',
-                //изменения иерархических свойств детей перемещаемого объекта
-                'UPDATE "umi_mock_menu"
-SET "level" = "level" + (-1), "version" = "version" + 1, "mpath" = REPLACE("mpath", \'#5.\', \'#\'),'
-                . ' "uri" = REPLACE("uri", \'//item5/\', \'//\')
-WHERE "mpath" like #5.6.%',
-                '"COMMIT"',
-            ],
-            $this->getQueries(true),
-            'Неверные запросы на перемещение'
-        );
+        $this->getObjectPersister()->commit();
 
         $this->assertEquals(1, $this->menuItem6->getOrder());
         $this->assertEquals(0, $this->menuItem6->getLevel());

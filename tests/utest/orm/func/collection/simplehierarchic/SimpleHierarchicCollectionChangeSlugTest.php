@@ -75,29 +75,7 @@ class SimpleHierarchicCollectionChangeSlugTest extends ORMDbTestCase
         $item1 = $this->menu->get($this->guid1);
         $this->resetQueries();
         $this->menu->changeSlug($item1, 'new_slug');
-        $this->assertEquals(
-            [
-                '"START TRANSACTION"',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_menu"
-WHERE "id" = 1 AND "version" = 1)',
-                //проверка актуальности изменяемого объекта
-                'SELECT "id"
-FROM "umi_mock_menu"
-WHERE "uri" = //new_slug AND "id" != 1',
-                //проверка уникальности нового slug
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_menu"
-WHERE "uri" = //new_slug AND "id" != 1)',
-                //обновление всей slug у всей ветки изменяемого объекта
-                'UPDATE "umi_mock_menu"
-SET "version" = "version" + 1, "uri" = REPLACE("uri", \'//item1\', \'//new_slug\')
-WHERE "uri" like //item1/% OR "uri" = //item1',
-                '"COMMIT"',
-            ],
-            $this->getQueries(true),
-            'Неверные запросы на изменение slug в простой иерархической коллекции'
-        );
+        $this->getObjectPersister()->commit();
 
         $item3 = $this->menu->get($this->guid3);
         $item4 = $this->menu->get($this->guid4);
