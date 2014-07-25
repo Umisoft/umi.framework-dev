@@ -117,6 +117,22 @@ class CommonHierarchyChangeSlugTest extends ORMDbTestCase
             'Ожидается, что невозможно изменить uri объекта, если итоговый uri не уникальный'
         );
 
+        $post2->setValue('title', '1');
+        $e = null;
+        try {
+            $this->hierarchy->changeSlug($post2, 'new_slug');
+        } catch (\Exception $e) {
+        }
+        $this->assertInstanceOf(
+            'umi\orm\exception\RuntimeException',
+            $e,
+            'Ожидается, что невозможно изменить uri объекта, если есть модифицированные объекты'
+        );
+    }
+
+    public function testOutOfDateChangeSlug()
+    {
+        $post2 = $this->postsCollection->get($this->guid2);
         $post2->setVersion(10);
         $e = null;
         try {

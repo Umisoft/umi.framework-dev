@@ -193,6 +193,18 @@ class CommonHierarchyMoveTest extends ORMDbTestCase
             $e,
             'Ожидается, что невозможно переместить объект, если его новый итоговый урл совпадает с уже существующим'
         );
+
+        $this->blog4->setValue('title', 'new_title');
+        $e = null;
+        try {
+            $this->hierarchy->move($this->blog4, $this->blog1);
+        } catch (\Exception $e) {
+        }
+        $this->assertInstanceOf(
+            'umi\orm\exception\RuntimeException',
+            $e,
+            'Ожидается, что невозможно переместить объект и изменить объекты за одну транзакцию'
+        );
     }
 
     public function testMoveFirstWithoutSwitchingTheBranch()
