@@ -60,13 +60,6 @@ return function (ICollectionDataSource $dataSource) {
         ->addColumn('order', Type::INTEGER)
         ->setUnsigned(true)
         ->setNotnull(false);
-    $tableScheme
-        ->addColumn(
-            'child_count',
-            Type::INTEGER
-        )
-        ->setUnsigned(true)
-        ->setDefault(0);
 
     $tableScheme
         ->addColumn('title', Type::STRING)

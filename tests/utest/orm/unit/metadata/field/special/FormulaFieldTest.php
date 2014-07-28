@@ -10,7 +10,6 @@
 namespace utest\orm\unit\metadata\field\special;
 
 use umi\orm\metadata\field\IField;
-use umi\orm\metadata\field\relation\BelongsToRelationField;
 use umi\orm\metadata\field\special\FormulaField;
 use utest\orm\unit\metadata\field\FieldTestCase;
 

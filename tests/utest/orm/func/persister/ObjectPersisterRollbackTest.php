@@ -348,7 +348,6 @@ class ObjectPersisterRollbackTest extends ORMDbTestCase
         $user2 = $usersCollection->add();
         $user2->setValue('login', 'next_user');
 
-
         $e = null;
         try {
             $this->getObjectPersister()->commit();
@@ -373,67 +372,5 @@ class ObjectPersisterRollbackTest extends ORMDbTestCase
             'Произошло неожидаемое исключение'
         );
 
-    }
-
-    public function testHierarchyUpdateRollback()
-    {
-        $sm = $this->connection->getSchemaManager();
-
-        /** @var IDialect|AbstractPlatform $dialect */
-        $dialect = $this->connection->getDatabasePlatform();
-        $this->connection->exec($dialect->getDisableForeignKeysSQL());
-
-        $hierTbl = $sm->listTableDetails('umi_mock_hierarchy');
-        $hierTbl->dropPrimaryKey();
-        $hierTbl->dropIndex('hierarchy_mpath');
-        $hierTbl->dropIndex('hierarchy_uri');
-        $hierTbl->changeColumn(
-            'id',
-            ['type' => Type::getType('bigint'), 'unsigned' => true,
-             'default' => null, 'notnull'=>false, 'autoincrement'=>false]
-        );
-
-        $comparator = new Comparator();
-        $tableDiff = $comparator->diffTable($sm->listTableDetails('umi_mock_hierarchy'), $hierTbl);
-        $sm->alterTable($tableDiff);
-
-        $this
-            ->getDbCluster()
-            ->insert('umi_mock_hierarchy')
-            ->set('id', ':id')
-            ->bindInt(':id', 3)
-            ->execute();
-
-        $blogsCollection = $this->getCollectionManager()->getCollection(self::BLOGS_BLOG);
-
-        $blog3 = $blogsCollection->add('blog5');
-        $blog3->getProperty(IObject::FIELD_IDENTIFY)
-            ->setValue(3);
-        $blog3->setValue('title', 'new_blog_title');
-
-        $e = null;
-        $this->connection->exec($dialect->getDisableForeignKeysSQL());
-        try {
-            $this->getObjectPersister()->commit();
-        } catch (\Exception $e) {
-        }
-
-        $this->assertInstanceOf(
-            'umi\orm\exception\RuntimeException',
-            $e,
-            'Ожидается исключение, когда не удается выполнить запросы на установку иерархических свойств'
-        );
-        $parentE = $e->getPrevious();
-        $this->assertInstanceOf(
-            'umi\orm\exception\RuntimeException',
-            $parentE,
-            'Ожидается родительское исключение, когда не удается выполнить запросы на изменения объектов'
-        );
-        $this->assertEquals(
-            'Cannot set calculable properties for object with id "3" and type "blogs_blog.base".'
-            . ' Database row is not modified.',
-            $parentE->getMessage(),
-            'Произошло неожидаемое исключение'
-        );
     }
 }

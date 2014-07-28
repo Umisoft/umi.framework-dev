@@ -64,30 +64,6 @@ class LoadObjectTest extends ORMDbTestCase
         $this->userId = $this->user->getId();
     }
 
-    public function testGettingObjectWithChangedGuid()
-    {
-        $user = $this->userCollection->add();
-        $userGuid = $user->getGUID();
-        $newUserGuid = '9ee6745f-f40d-46d8-8043-d959594628ce';
-
-        $this->assertTrue($user === $this->userCollection->get($userGuid));
-
-        $user->setGUID($newUserGuid);
-
-        $e = null;
-        try {
-            $this->userCollection->get($userGuid);
-        } catch (\Exception $e) {
-        }
-        $this->assertInstanceOf(
-            'umi\orm\exception\NonexistentEntityException',
-            $e,
-            'Ожидается, что после смены GUID объекта его нельзя получить по старому GUID'
-        );
-
-        $this->assertTrue($user === $this->userCollection->get($newUserGuid));
-    }
-
     public function testGettingStoredObjectById()
     {
         $this->userCollection->getById($this->userId);

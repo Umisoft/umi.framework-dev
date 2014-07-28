@@ -84,13 +84,6 @@ class SimpleHierarchicCollectionTest extends ORMTestCase
                         'accessor'   => 'getURI',
                         'readOnly'   => true
                     ],
-                    IHierarchicObject::FIELD_CHILD_COUNT     => [
-                        'type'         => IField::TYPE_COUNTER,
-                        'columnName'   => 'child_count',
-                        'accessor'     => 'getChildCount',
-                        'readOnly'     => true,
-                        'defaultValue' => 0
-                    ],
                     IHierarchicObject::FIELD_ORDER           => [
                         'type'       => IField::TYPE_ORDER,
                         'columnName' => 'order',
@@ -115,7 +108,6 @@ class SimpleHierarchicCollectionTest extends ORMTestCase
                             IHierarchicObject::FIELD_MPATH => [],
                             IHierarchicObject::FIELD_SLUG => [],
                             IHierarchicObject::FIELD_URI => [],
-                            IHierarchicObject::FIELD_CHILD_COUNT => [],
                             IHierarchicObject::FIELD_ORDER => [],
                             IHierarchicObject::FIELD_HIERARCHY_LEVEL => []
                         ]
@@ -148,24 +140,6 @@ class SimpleHierarchicCollectionTest extends ORMTestCase
                 'groups'     => [],
                 'types'      => ['base' => []]
             ]
-        );
-
-        $field1 = $collection1->getHierarchyChildCountField();
-        $this->assertInstanceOf(
-            'umi\orm\metadata\field\IField',
-            $field1,
-            'Ожидается, что у коллекции 1 есть поле для хранения количества детей'
-        );
-        $this->assertEquals('childCount', $field1->getName(), 'Неверное имя поля количества детей');
-        $e = null;
-        try {
-            $collection2->getHierarchyChildCountField();
-        } catch (\Exception $e) {
-        }
-        $this->assertInstanceOf(
-            'umi\orm\exception\NonexistentEntityException',
-            $e,
-            'Ожидается исключение при попытке получить у коллекции поле для хранения количества детей, когда такого нет'
         );
 
         $field2 = $collection1->getSlugField();

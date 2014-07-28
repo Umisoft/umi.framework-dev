@@ -10,7 +10,6 @@ namespace utest\monolog\unit;
 
 use Monolog\Handler\FirePHPHandler;
 use Monolog\Handler\StreamHandler;
-use Monolog\Handler\SwiftMailerHandler;
 use Monolog\Logger;
 use umi\extension\monolog\exception\RuntimeException;
 use umi\extension\monolog\toolbox\MonologTools;

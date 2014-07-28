@@ -56,10 +56,6 @@ return function (ICollectionDataSource $dataSource) {
         ->addColumn('order', Type::INTEGER)
         ->setUnsigned(true)
         ->setNotnull(false);
-    $table
-        ->addColumn('child_count', Type::INTEGER)
-        ->setUnsigned(true)
-        ->setDefault(0);
 
     $table
         ->addColumn('publish_time', Type::DATE)

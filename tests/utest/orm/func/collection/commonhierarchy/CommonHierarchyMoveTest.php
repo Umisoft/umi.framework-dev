@@ -11,6 +11,7 @@ use umi\orm\collection\ICollectionFactory;
 use umi\orm\collection\ICommonHierarchy;
 use umi\orm\metadata\IObjectType;
 use umi\orm\object\IHierarchicObject;
+use umi\orm\object\IObject;
 use utest\orm\ORMDbTestCase;
 
 /**
@@ -136,22 +137,30 @@ class CommonHierarchyMoveTest extends ORMDbTestCase
         $this->assertEquals(3, $this->post3->getLevel());
         $this->assertEquals(0, $this->blog1->getLevel());
 
-        $this->assertEquals(2, $this->post2->getVersion());
-        $this->assertEquals(2, $this->post3->getVersion());
-
-        $this->assertEquals(3, $this->blog1->getChildCount());
-        $this->assertEquals(1, $this->post2->getChildCount());
-        $this->assertEquals(1, $this->blog3->getChildCount());
-
         $this->assertEquals('//blog1/blog2', $this->blog2->getURI());
         $this->assertEquals('//blog1/blog3/post2', $this->post2->getURI());
         $this->assertEquals('//blog1/blog3/post2/post3', $this->post3->getURI());
 
     }
 
+    public function testOutOfDateMove()
+    {
+        $this->blog3->setVersion(10);
+        $e = null;
+        try {
+            $this->hierarchy->move($this->blog3, $this->post1);
+            $this->getObjectPersister()->commit();
+        } catch (\Exception $e) {
+        }
+        $this->assertInstanceOf(
+            'umi\orm\exception\RuntimeException',
+            $e,
+            'Ожидается, что невозможно переместить объект, если его версия была ранее изменена'
+        );
+    }
+
     public function testImpossibleMove()
     {
-
         $e = null;
         try {
             $this->hierarchy->move($this->blog3, $this->post3);
@@ -185,30 +194,6 @@ class CommonHierarchyMoveTest extends ORMDbTestCase
             'Ожидается, что невозможно переместить объект, если его новый итоговый урл совпадает с уже существующим'
         );
 
-        $this->blog3->setVersion(10);
-        $e = null;
-        try {
-            $this->hierarchy->move($this->blog3, $this->blog1);
-        } catch (\Exception $e) {
-        }
-        $this->assertInstanceOf(
-            'umi\orm\exception\RuntimeException',
-            $e,
-            'Ожидается, что невозможно переместить объект, если его версия была ранее изменена'
-        );
-
-        $this->blog1->setVersion(10);
-        $e = null;
-        try {
-            $this->hierarchy->move($this->post2, $this->blog1);
-        } catch (\Exception $e) {
-        }
-        $this->assertInstanceOf(
-            'umi\orm\exception\RuntimeException',
-            $e,
-            'Ожидается, что невозможно переместить объект, если версия бранча была изменена'
-        );
-
         $this->blog4->setValue('title', 'new_title');
         $e = null;
         try {
@@ -224,107 +209,18 @@ class CommonHierarchyMoveTest extends ORMDbTestCase
 
     public function testMoveFirstWithoutSwitchingTheBranch()
     {
-
         $this->hierarchy->move($this->blog3, $this->blog1);
-
-        $this->assertEquals(
-            [
-                //выбор коллекций, которые будут затронуты при изменении порядка следования
-                'SELECT "type"
-FROM "umi_mock_hierarchy"
-WHERE "pid" = 1
-GROUP BY "type"',
-                '"START TRANSACTION"',
-                //проверка возможности перемещения
-                'SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "id" = 4 AND "version" = 2',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "id" = 4 AND "version" = 2)',
-                'SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "id" = 1 AND "version" = 1',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "id" = 1 AND "version" = 1)',
-                //изменение порядка у перемещаемого объекта
-                'UPDATE "umi_mock_hierarchy"
-SET "order" = 1, "version" = "version" + 1
-WHERE "id" = 4',
-                'UPDATE "umi_mock_blogs"
-SET "order" = 1, "version" = "version" + 1
-WHERE "id" = 4',
-                //изменение порядка у остальных объектов
-                'UPDATE "umi_mock_blogs"
-SET "order" = "order" + 1, "version" = "version" + 1
-WHERE "id" != 4 AND "pid" = 1 AND "order" >= 1',
-                'UPDATE "umi_mock_posts"
-SET "order" = "order" + 1, "version" = "version" + 1
-WHERE "id" != 4 AND "pid" = 1 AND "order" >= 1',
-                'UPDATE "umi_mock_hierarchy"
-SET "order" = "order" + 1, "version" = "version" + 1
-WHERE "id" != 4 AND "pid" = 1 AND "order" >= 1',
-                '"COMMIT"',
-            ],
-            $this->getQueries(true),
-            'Неверные запросы на перемещение'
-        );
+        $this->getObjectPersister()->commit();
 
         $this->assertEquals(2, $this->blog2->getOrder());
         $this->assertEquals(3, $this->post1->getOrder());
         $this->assertEquals(1, $this->blog3->getOrder());
-
     }
 
     public function testMoveAfterWithoutSwitchingTheBranch()
     {
-
         $this->hierarchy->move($this->blog3, $this->blog1, $this->blog2);
-
-        $this->assertEquals(
-            [
-                //выбор коллекций, которые будут затронуты при изменении порядка следования
-                'SELECT "type"
-FROM "umi_mock_hierarchy"
-WHERE "pid" = 1
-GROUP BY "type"',
-                '"START TRANSACTION"',
-                //проверка возможности перемещения
-                'SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "id" = 4 AND "version" = 2',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "id" = 4 AND "version" = 2)',
-                'SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "id" = 1 AND "version" = 1',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "id" = 1 AND "version" = 1)',
-                //изменение порядка у перемещаемого объекта
-                'UPDATE "umi_mock_hierarchy"
-SET "order" = 2, "version" = "version" + 1
-WHERE "id" = 4',
-                'UPDATE "umi_mock_blogs"
-SET "order" = 2, "version" = "version" + 1
-WHERE "id" = 4',
-                //изменение порядка у остальных объектов
-                'UPDATE "umi_mock_blogs"
-SET "order" = "order" + 1, "version" = "version" + 1
-WHERE "id" != 4 AND "pid" = 1 AND "order" >= 2',
-                'UPDATE "umi_mock_posts"
-SET "order" = "order" + 1, "version" = "version" + 1
-WHERE "id" != 4 AND "pid" = 1 AND "order" >= 2',
-                'UPDATE "umi_mock_hierarchy"
-SET "order" = "order" + 1, "version" = "version" + 1
-WHERE "id" != 4 AND "pid" = 1 AND "order" >= 2',
-                '"COMMIT"',
-            ],
-            $this->getQueries(true),
-            'Неверные запросы на перемещение'
-        );
+        $this->getObjectPersister()->commit();
 
         $this->assertEquals(1, $this->blog2->getOrder());
         $this->assertEquals(3, $this->post1->getOrder());
@@ -334,96 +230,8 @@ WHERE "id" != 4 AND "pid" = 1 AND "order" >= 2',
 
     public function testMoveFirstWithSwitchingBranch()
     {
-
         $this->hierarchy->move($this->post2, $this->blog1);
-
-        $this->assertEquals(
-            [
-                //выбор коллекций, которые будут затронуты при изменении порядка следования
-                'SELECT "type"
-FROM "umi_mock_hierarchy"
-WHERE "pid" = 1
-GROUP BY "type"',
-                //выбор коллекций, в которых находятся дети перемещаемого объекта
-                'SELECT "type"
-FROM "umi_mock_hierarchy"
-WHERE "mpath" like #1.4.5.%
-GROUP BY "type"',
-                '"START TRANSACTION"',
-                //проверка возможности перемещения
-                'SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "id" = 5 AND "version" = 2',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "id" = 5 AND "version" = 2)',
-                'SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "id" = 1 AND "version" = 1',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "id" = 1 AND "version" = 1)',
-                'SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "uri" = //blog1/post2',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "uri" = //blog1/post2)',
-                //изменение порядка у перемещаемого объекта
-                'UPDATE "umi_mock_hierarchy"
-SET "order" = 1, "version" = "version" + 1
-WHERE "id" = 5',
-                'UPDATE "umi_mock_posts"
-SET "order" = 1, "version" = "version" + 1
-WHERE "id" = 5',
-                //изменение порядка у остальных объектов
-                'UPDATE "umi_mock_blogs"
-SET "order" = "order" + 1, "version" = "version" + 1
-WHERE "id" != 5 AND "pid" = 1 AND "order" >= 1',
-                'UPDATE "umi_mock_posts"
-SET "order" = "order" + 1, "version" = "version" + 1
-WHERE "id" != 5 AND "pid" = 1 AND "order" >= 1',
-                'UPDATE "umi_mock_hierarchy"
-SET "order" = "order" + 1, "version" = "version" + 1
-WHERE "id" != 5 AND "pid" = 1 AND "order" >= 1',
-                //изменение количества детей у старого родителя и нового
-                'UPDATE "umi_mock_hierarchy"
-SET "child_count" = "child_count" + (-1)
-WHERE "id" = 4',
-                'UPDATE "umi_mock_blogs"
-SET "child_count" = "child_count" + (-1)
-WHERE "id" = 4',
-                'UPDATE "umi_mock_hierarchy"
-SET "child_count" = "child_count" + (1)
-WHERE "id" = 1',
-                'UPDATE "umi_mock_blogs"
-SET "child_count" = "child_count" + (1)
-WHERE "id" = 1',
-                //изменение иерархических свойств перемещаемого объекта
-                'UPDATE "umi_mock_hierarchy"
-SET "uri" = //blog1/post2, "mpath" = #1.5, "pid" = 1, "level" = "level" + (-1), "version" = "version" + 1
-WHERE "id" = 5',
-                'UPDATE "umi_mock_posts"
-SET "uri" = //blog1/post2, "mpath" = #1.5, "pid" = 1, "level" = "level" + (-1), "version" = "version" + 1
-WHERE "id" = 5',
-                //изменения иерархических свойств детей перемещаемого объекта
-                'UPDATE "umi_mock_blogs"
-SET "level" = "level" + (-1), "version" = "version" + 1, "mpath" = REPLACE("mpath", \'#1.4.\', \'#1.\'), '
-                . '"uri" = REPLACE("uri", \'//blog1/blog3/\', \'//blog1/\')
-WHERE "mpath" like #1.4.5.%',
-                'UPDATE "umi_mock_posts"
-SET "level" = "level" + (-1), "version" = "version" + 1, "mpath" = REPLACE("mpath", \'#1.4.\', \'#1.\'), '
-                . '"uri" = REPLACE("uri", \'//blog1/blog3/\', \'//blog1/\')
-WHERE "mpath" like #1.4.5.%',
-                'UPDATE "umi_mock_hierarchy"
-SET "level" = "level" + (-1), "version" = "version" + 1, "mpath" = REPLACE("mpath", \'#1.4.\', \'#1.\'),'
-                . ' "uri" = REPLACE("uri", \'//blog1/blog3/\', \'//blog1/\')
-WHERE "mpath" like #1.4.5.%',
-                '"COMMIT"',
-            ],
-            $this->getQueries(true),
-            'Неверные запросы на перемещение'
-        );
+        $this->getObjectPersister()->commit();
 
         $this->assertEquals(1, $this->post2->getOrder());
         $this->assertEquals(
@@ -436,12 +244,6 @@ WHERE "mpath" like #1.4.5.%',
         $this->assertEquals(1, $this->post2->getLevel());
         $this->assertEquals(2, $this->post3->getLevel());
 
-        $this->assertEquals(4, $this->post2->getVersion());
-        $this->assertEquals(3, $this->post3->getVersion());
-
-        $this->assertEquals(4, $this->blog1->getChildCount());
-        $this->assertEquals(0, $this->blog3->getChildCount());
-
         $this->assertEquals('//blog1/post2', $this->post2->getURI());
         $this->assertEquals('//blog1/post2/post3', $this->post3->getURI());
 
@@ -449,81 +251,8 @@ WHERE "mpath" like #1.4.5.%',
 
     public function testMoveAfterWithSwitchingBranch()
     {
-
         $this->hierarchy->move($this->blog2, $this->post2, $this->post3);
-
-        $this->assertEquals(
-            [
-                //выбор коллекций, которые будут затронуты при изменении порядка следования
-                'SELECT "type"
-FROM "umi_mock_hierarchy"
-WHERE "pid" = 5
-GROUP BY "type"',
-                //выбор коллекций, в которых находятся дети перемещаемого объекта
-                'SELECT "type"
-FROM "umi_mock_hierarchy"
-WHERE "mpath" like #1.2.%
-GROUP BY "type"',
-                '"START TRANSACTION"',
-                //проверка возможности перемещения
-                'SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "id" = 2 AND "version" = 2',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "id" = 2 AND "version" = 2)',
-                'SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "id" = 5 AND "version" = 2',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "id" = 5 AND "version" = 2)',
-                'SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "uri" = //blog1/blog3/post2/blog2',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "uri" = //blog1/blog3/post2/blog2)',
-                //изменение порядка у перемещаемого объекта
-                'UPDATE "umi_mock_hierarchy"
-SET "order" = 2, "version" = "version" + 1
-WHERE "id" = 2',
-                'UPDATE "umi_mock_blogs"
-SET "order" = 2, "version" = "version" + 1
-WHERE "id" = 2',
-                //изменение порядка у остальных объектов
-                'UPDATE "umi_mock_posts"
-SET "order" = "order" + 1, "version" = "version" + 1
-WHERE "id" != 2 AND "pid" = 5 AND "order" >= 2',
-                'UPDATE "umi_mock_hierarchy"
-SET "order" = "order" + 1, "version" = "version" + 1
-WHERE "id" != 2 AND "pid" = 5 AND "order" >= 2',
-                //изменение количества детей у старого родителя и нового
-                'UPDATE "umi_mock_hierarchy"
-SET "child_count" = "child_count" + (-1)
-WHERE "id" = 1',
-                'UPDATE "umi_mock_blogs"
-SET "child_count" = "child_count" + (-1)
-WHERE "id" = 1',
-                'UPDATE "umi_mock_hierarchy"
-SET "child_count" = "child_count" + (1)
-WHERE "id" = 5',
-                'UPDATE "umi_mock_posts"
-SET "child_count" = "child_count" + (1)
-WHERE "id" = 5',
-                //изменение иерархических свойств перемещаемого объекта
-                'UPDATE "umi_mock_hierarchy"
-SET "uri" = //blog1/blog3/post2/blog2, "mpath" = #1.4.5.2, "pid" = 5, "level" = "level" + (2), "version" = "version" + 1
-WHERE "id" = 2',
-                'UPDATE "umi_mock_blogs"
-SET "uri" = //blog1/blog3/post2/blog2, "mpath" = #1.4.5.2, "pid" = 5, "level" = "level" + (2), "version" = "version" + 1
-WHERE "id" = 2',
-                //изменения иерархических свойств детей перемещаемого объекта
-                '"COMMIT"',
-            ],
-            $this->getQueries(true),
-            'Неверные запросы на перемещение'
-        );
+        $this->getObjectPersister()->commit();
 
         $this->assertEquals(2, $this->blog2->getOrder());
         $this->assertEquals(
@@ -532,93 +261,14 @@ WHERE "id" = 2',
                 ->getId()
         );
         $this->assertEquals('#1.4.5.2', $this->blog2->getMaterializedPath());
-        $this->assertEquals(3, $this->blog2->getLevel());
-        $this->assertEquals(4, $this->blog2->getVersion());
         $this->assertEquals('//blog1/blog3/post2/blog2', $this->blog2->getURI());
-
-        $this->assertEquals(2, $this->blog1->getChildCount());
-        $this->assertEquals(2, $this->post2->getChildCount());
 
     }
 
     public function testMoveFromRoot()
     {
-
         $this->hierarchy->move($this->blog1, $this->blog5);
-
-        $this->assertEquals(
-            [
-                //выбор коллекций, которые будут затронуты при изменении порядка следования
-                'SELECT "type"
-FROM "umi_mock_hierarchy"
-WHERE "pid" = 8
-GROUP BY "type"',
-                //выбор коллекций, в которых находятся дети перемещаемого объекта
-                'SELECT "type"
-FROM "umi_mock_hierarchy"
-WHERE "mpath" like #1.%
-GROUP BY "type"',
-                '"START TRANSACTION"',
-                //проверка возможности перемещения
-                'SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "id" = 1 AND "version" = 1',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "id" = 1 AND "version" = 1)',
-                'SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "id" = 8 AND "version" = 1',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "id" = 8 AND "version" = 1)',
-                'SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "uri" = //blog5/blog1',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "uri" = //blog5/blog1)',
-                //изменение порядка у перемещаемого объекта
-                'UPDATE "umi_mock_hierarchy"
-SET "order" = 1, "version" = "version" + 1
-WHERE "id" = 1',
-                'UPDATE "umi_mock_blogs"
-SET "order" = 1, "version" = "version" + 1
-WHERE "id" = 1',
-                //изменение порядка у остальных объектов
-
-                //изменение количества детей у старого родителя и нового
-                'UPDATE "umi_mock_hierarchy"
-SET "child_count" = "child_count" + (1)
-WHERE "id" = 8',
-                'UPDATE "umi_mock_blogs"
-SET "child_count" = "child_count" + (1)
-WHERE "id" = 8',
-                //изменение иерархических свойств перемещаемого объекта
-                'UPDATE "umi_mock_hierarchy"
-SET "uri" = //blog5/blog1, "mpath" = #8.1, "pid" = 8, "level" = "level" + (1), "version" = "version" + 1
-WHERE "id" = 1',
-                'UPDATE "umi_mock_blogs"
-SET "uri" = //blog5/blog1, "mpath" = #8.1, "pid" = 8, "level" = "level" + (1), "version" = "version" + 1
-WHERE "id" = 1',
-                //изменения иерархических свойств детей перемещаемого объекта
-                'UPDATE "umi_mock_blogs"
-SET "level" = "level" + (1), "version" = "version" + 1, "mpath" = REPLACE("mpath", \'#\', \'#8.\'), '
-                . '"uri" = REPLACE("uri", \'//\', \'//blog5/\')
-WHERE "mpath" like #1.%',
-                'UPDATE "umi_mock_posts"
-SET "level" = "level" + (1), "version" = "version" + 1, "mpath" = REPLACE("mpath", \'#\', \'#8.\'), '
-                . '"uri" = REPLACE("uri", \'//\', \'//blog5/\')
-WHERE "mpath" like #1.%',
-                'UPDATE "umi_mock_hierarchy"
-SET "level" = "level" + (1), "version" = "version" + 1, "mpath" = REPLACE("mpath", \'#\', \'#8.\'), '
-                . '"uri" = REPLACE("uri", \'//\', \'//blog5/\')
-WHERE "mpath" like #1.%',
-                '"COMMIT"'
-            ],
-            $this->getQueries(true),
-            'Неверные запросы на перемещение'
-        );
+        $this->getObjectPersister()->commit();
 
         $this->assertEquals(1, $this->blog1->getOrder());
         $this->assertEquals(1, $this->blog1->getLevel());
@@ -637,81 +287,8 @@ WHERE "mpath" like #1.%',
 
     public function testMoveFirstToRoot()
     {
-
         $this->hierarchy->move($this->blog3, null);
-
-        $this->assertEquals(
-            [
-                //выбор коллекций, которые будут затронуты при изменении порядка следования
-                'SELECT "type"
-FROM "umi_mock_hierarchy"
-WHERE "pid" IS NULL
-GROUP BY "type"',
-                //выбор коллекций, в которых находятся дети перемещаемого объекта
-                'SELECT "type"
-FROM "umi_mock_hierarchy"
-WHERE "mpath" like #1.4.%
-GROUP BY "type"',
-                '"START TRANSACTION"',
-                //проверка возможности перемещения
-                'SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "id" = 4 AND "version" = 2',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "id" = 4 AND "version" = 2)',
-                'SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "uri" = //blog3',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "uri" = //blog3)',
-                //изменение порядка у перемещаемого объекта
-                'UPDATE "umi_mock_hierarchy"
-SET "order" = 1, "version" = "version" + 1
-WHERE "id" = 4',
-                'UPDATE "umi_mock_blogs"
-SET "order" = 1, "version" = "version" + 1
-WHERE "id" = 4',
-                //изменение порядка у остальных объектов
-                'UPDATE "umi_mock_blogs"
-SET "order" = "order" + 1, "version" = "version" + 1
-WHERE "id" != 4 AND "pid" IS NULL AND "order" >= 1',
-                'UPDATE "umi_mock_hierarchy"
-SET "order" = "order" + 1, "version" = "version" + 1
-WHERE "id" != 4 AND "pid" IS NULL AND "order" >= 1',
-                //изменение количества детей у старого родителя и нового
-                'UPDATE "umi_mock_hierarchy"
-SET "child_count" = "child_count" + (-1)
-WHERE "id" = 1',
-                'UPDATE "umi_mock_blogs"
-SET "child_count" = "child_count" + (-1)
-WHERE "id" = 1',
-                //изменение иерархических свойств перемещаемого объекта
-                'UPDATE "umi_mock_hierarchy"
-SET "uri" = //blog3, "mpath" = #4, "pid" = NULL, "level" = "level" + (-1), "version" = "version" + 1
-WHERE "id" = 4',
-                'UPDATE "umi_mock_blogs"
-SET "uri" = //blog3, "mpath" = #4, "pid" = NULL, "level" = "level" + (-1), "version" = "version" + 1
-WHERE "id" = 4',
-                //изменения иерархических свойств детей перемещаемого объекта
-                'UPDATE "umi_mock_blogs"
-SET "level" = "level" + (-1), "version" = "version" + 1, "mpath" = REPLACE("mpath", \'#1.\', \'#\'), '
-                . '"uri" = REPLACE("uri", \'//blog1/\', \'//\')
-WHERE "mpath" like #1.4.%',
-                'UPDATE "umi_mock_posts"
-SET "level" = "level" + (-1), "version" = "version" + 1, "mpath" = REPLACE("mpath", \'#1.\', \'#\'), '
-                . '"uri" = REPLACE("uri", \'//blog1/\', \'//\')
-WHERE "mpath" like #1.4.%',
-                'UPDATE "umi_mock_hierarchy"
-SET "level" = "level" + (-1), "version" = "version" + 1, "mpath" = REPLACE("mpath", \'#1.\', \'#\'), '
-                . '"uri" = REPLACE("uri", \'//blog1/\', \'//\')
-WHERE "mpath" like #1.4.%',
-                '"COMMIT"',
-            ],
-            $this->getQueries(true),
-            'Неверные запросы на перемещение'
-        );
+        $this->getObjectPersister()->commit();
 
         $this->assertEquals(1, $this->blog3->getOrder());
         $this->assertEquals(0, $this->blog3->getLevel());
@@ -725,81 +302,8 @@ WHERE "mpath" like #1.4.%',
 
     public function testMoveAfterToRoot()
     {
-
         $this->hierarchy->move($this->blog3, null, $this->blog1);
-
-        $this->assertEquals(
-            [
-                //выбор коллекций, которые будут затронуты при изменении порядка следования
-                'SELECT "type"
-FROM "umi_mock_hierarchy"
-WHERE "pid" IS NULL
-GROUP BY "type"',
-                //выбор коллекций, в которых находятся дети перемещаемого объекта
-                'SELECT "type"
-FROM "umi_mock_hierarchy"
-WHERE "mpath" like #1.4.%
-GROUP BY "type"',
-                '"START TRANSACTION"',
-                //проверка возможности перемещения
-                'SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "id" = 4 AND "version" = 2',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "id" = 4 AND "version" = 2)',
-                'SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "uri" = //blog3',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "uri" = //blog3)',
-                //изменение порядка у перемещаемого объекта
-                'UPDATE "umi_mock_hierarchy"
-SET "order" = 2, "version" = "version" + 1
-WHERE "id" = 4',
-                'UPDATE "umi_mock_blogs"
-SET "order" = 2, "version" = "version" + 1
-WHERE "id" = 4',
-                //изменение порядка у остальных объектов
-                'UPDATE "umi_mock_blogs"
-SET "order" = "order" + 1, "version" = "version" + 1
-WHERE "id" != 4 AND "pid" IS NULL AND "order" >= 2',
-                'UPDATE "umi_mock_hierarchy"
-SET "order" = "order" + 1, "version" = "version" + 1
-WHERE "id" != 4 AND "pid" IS NULL AND "order" >= 2',
-                //изменение количества детей у старого родителя и нового
-                'UPDATE "umi_mock_hierarchy"
-SET "child_count" = "child_count" + (-1)
-WHERE "id" = 1',
-                'UPDATE "umi_mock_blogs"
-SET "child_count" = "child_count" + (-1)
-WHERE "id" = 1',
-                //изменение иерархических свойств перемещаемого объекта
-                'UPDATE "umi_mock_hierarchy"
-SET "uri" = //blog3, "mpath" = #4, "pid" = NULL, "level" = "level" + (-1), "version" = "version" + 1
-WHERE "id" = 4',
-                'UPDATE "umi_mock_blogs"
-SET "uri" = //blog3, "mpath" = #4, "pid" = NULL, "level" = "level" + (-1), "version" = "version" + 1
-WHERE "id" = 4',
-                //изменения иерархических свойств детей перемещаемого объекта
-                'UPDATE "umi_mock_blogs"
-SET "level" = "level" + (-1), "version" = "version" + 1, "mpath" = REPLACE("mpath", \'#1.\', \'#\'), '
-                . '"uri" = REPLACE("uri", \'//blog1/\', \'//\')
-WHERE "mpath" like #1.4.%',
-                'UPDATE "umi_mock_posts"
-SET "level" = "level" + (-1), "version" = "version" + 1, "mpath" = REPLACE("mpath", \'#1.\', \'#\'), '
-                . '"uri" = REPLACE("uri", \'//blog1/\', \'//\')
-WHERE "mpath" like #1.4.%',
-                'UPDATE "umi_mock_hierarchy"
-SET "level" = "level" + (-1), "version" = "version" + 1, "mpath" = REPLACE("mpath", \'#1.\', \'#\'), '
-                . '"uri" = REPLACE("uri", \'//blog1/\', \'//\')
-WHERE "mpath" like #1.4.%',
-                '"COMMIT"'
-            ],
-            $this->getQueries(true),
-            'Неверные запросы на перемещение'
-        );
+        $this->getObjectPersister()->commit();
 
         $this->assertEquals(2, $this->blog3->getOrder());
         $this->assertEquals(3, $this->blog5->getOrder());

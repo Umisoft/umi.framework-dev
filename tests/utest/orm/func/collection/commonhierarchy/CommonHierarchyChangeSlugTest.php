@@ -95,18 +95,15 @@ class CommonHierarchyChangeSlugTest extends ORMDbTestCase
 
     public function testUrl()
     {
-
         $blog1 = $this->blogsCollection->get($this->guid4);
         $post3 = $this->postsCollection->get($this->guid3);
 
         $this->assertEquals('//blog1/post1/post3', $post3->getURI());
         $this->assertEquals('//blog1', $blog1->getURI());
-
     }
 
     public function testChangeSlugPossibility()
     {
-
         $post2 = $this->postsCollection->get($this->guid2);
 
         $e = null;
@@ -120,18 +117,6 @@ class CommonHierarchyChangeSlugTest extends ORMDbTestCase
             'Ожидается, что невозможно изменить uri объекта, если итоговый uri не уникальный'
         );
 
-        $post2->setVersion(10);
-        $e = null;
-        try {
-            $this->hierarchy->changeSlug($post2, 'new_slug');
-        } catch (\Exception $e) {
-        }
-        $this->assertInstanceOf(
-            'umi\orm\exception\RuntimeException',
-            $e,
-            'Ожидается, что невозможно изменить uri объекта, если его версия была ранее изменена'
-        );
-
         $post2->setValue('title', '1');
         $e = null;
         try {
@@ -143,48 +128,30 @@ class CommonHierarchyChangeSlugTest extends ORMDbTestCase
             $e,
             'Ожидается, что невозможно изменить uri объекта, если есть модифицированные объекты'
         );
+    }
 
+    public function testOutOfDateChangeSlug()
+    {
+        $post2 = $this->postsCollection->get($this->guid2);
+        $post2->setVersion(10);
+        $e = null;
+        try {
+            $this->hierarchy->changeSlug($post2, 'new_slug');
+            $this->getObjectPersister()->commit();
+        } catch (\Exception $e) {
+        }
+        $this->assertInstanceOf(
+            'umi\orm\exception\RuntimeException',
+            $e,
+            'Ожидается, что невозможно изменить uri объекта, если его версия была ранее изменена'
+        );
     }
 
     public function testChangeSlug()
     {
         $blog1 = $this->blogsCollection->get($this->guid4);
-        $this->resetQueries();
         $this->hierarchy->changeSlug($blog1, 'new_slug');
-
-        $this->assertEquals(
-            [
-                '"START TRANSACTION"',
-                //выбор затрагиваемых изменением slug коллекций
-                'SELECT "type"
-FROM "umi_mock_hierarchy"
-WHERE "mpath" like #1.%
-GROUP BY "type"',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "id" = 1 AND "version" = 1)',
-                //проверка актуальности изменяемого объекта
-                'SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "uri" = //new_slug AND "id" != 1',
-                'SELECT count(*) FROM (SELECT "id"
-FROM "umi_mock_hierarchy"
-WHERE "uri" = //new_slug AND "id" != 1)',
-                //обновление всей slug у всей ветки изменяемого объекта
-                'UPDATE "umi_mock_hierarchy"
-SET "version" = "version" + 1, "uri" = REPLACE("uri", \'//blog1\', \'//new_slug\')
-WHERE "uri" like //blog1/% OR "uri" = //blog1',
-                'UPDATE "umi_mock_blogs"
-SET "version" = "version" + 1, "uri" = REPLACE("uri", \'//blog1\', \'//new_slug\')
-WHERE "uri" like //blog1/% OR "uri" = //blog1',
-                'UPDATE "umi_mock_posts"
-SET "version" = "version" + 1, "uri" = REPLACE("uri", \'//blog1\', \'//new_slug\')
-WHERE "uri" like //blog1/% OR "uri" = //blog1',
-                '"COMMIT"',
-            ],
-            $this->getQueries(true),
-            'Неверные запросы на изменение slug в общей иерархической коллекции'
-        );
+        $this->getObjectPersister()->commit();
 
         $post3 = $this->postsCollection->get($this->guid3);
         $blog2 = $this->postsCollection->get($this->guid2);

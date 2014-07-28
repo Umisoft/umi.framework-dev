@@ -10,6 +10,7 @@
 namespace utest\orm\func\object\property;
 
 use umi\orm\collection\ICollectionFactory;
+use umi\orm\object\property\calculable\ICalculableProperty;
 use utest\orm\ORMDbTestCase;
 
 /**
@@ -49,7 +50,7 @@ class ObjectFormulaPropertiesTest extends ORMDbTestCase
         ];
     }
 
-    public function testObject()
+    public function testNewObject()
     {
         $userCollection = $this->getCollectionManager()->getCollection(self::USERS_USER);
 
@@ -69,6 +70,46 @@ class ObjectFormulaPropertiesTest extends ORMDbTestCase
             $loadedUser->getValue('fullName'),
             'Ожидается, что значение для полного имени было высчитано автоматически'
         );
+
+    }
+
+    public function testModifiedObject()
+    {
+        $userCollection = $this->getCollectionManager()->getCollection(self::USERS_USER);
+
+        $user = $userCollection->add('supervisor');
+        $user->setValue('firstName', 'Name');
+        $user->setValue('lastName', 'LastName');
+
+        $this->getObjectPersister()->commit();
+
+        $this->assertEquals(2, $user->getVersion());
+
+        $user->setValue('firstName', 'New name');
+        $this->getObjectPersister()->commit();
+        $this->assertEquals(3, $user->getVersion());
+
+        $this->assertEquals(
+            'Name LastName',
+            $user->getValue('fullName'),
+            'Ожидается, что значение для полного имени не было пересчитано'
+        );
+
+        /**
+         * @var ICalculableProperty $fullNameProperty
+         */
+        $fullNameProperty = $user->getProperty('fullName');
+        $fullNameProperty->recalculate();
+        $this->getObjectPersister()->commit();
+
+        $this->assertEquals(4, $user->getVersion());
+
+        $this->assertEquals(
+            'New name LastName',
+            $user->getValue('fullName'),
+            'Ожидается, что значение для полного имени было пересчитано'
+        );
+
 
     }
 }

@@ -8,7 +8,7 @@ return [
     ],
     'fields' => [
         IObject::FIELD_IDENTIFY => ['type' => IField::TYPE_IDENTIFY, 'columnName' => 'id', 'accessor' => 'getId'],
-        IObject::FIELD_GUID => ['type' => IField::TYPE_GUID, 'columnName' => 'guid', 'accessor' => 'getGuid', 'mutator' => 'setGuid'],
+        IObject::FIELD_GUID => ['type' => IField::TYPE_GUID, 'columnName' => 'guid', 'accessor' => 'getGuid', 'readOnly' => true],
         IObject::FIELD_TYPE => ['type' => IField::TYPE_STRING, 'columnName' => 'type', 'accessor' => 'getType', 'readOnly' => true],
         IObject::FIELD_VERSION => ['type' => IField::TYPE_VERSION, 'columnName' => 'version', 'accessor' => 'getVersion', 'mutator' => 'setVersion', 'defaultValue' => 1],
 

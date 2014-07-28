@@ -139,7 +139,7 @@ WHERE (("system_hierarchy"."order" = :value0))'
             . '"blogs_blog"."type" AS "blogs_blog:type", "blogs_blog"."version" AS "blogs_blog:version",'
             . ' "blogs_blog"."pid" AS "blogs_blog:parent", "blogs_blog"."mpath" AS "blogs_blog:mpath", '
             . '"blogs_blog"."slug" AS "blogs_blog:slug", "blogs_blog"."uri" AS "blogs_blog:uri", '
-            . '"blogs_blog"."child_count" AS "blogs_blog:childCount", "blogs_blog"."order" AS "blogs_blog:order", '
+            . '"blogs_blog"."order" AS "blogs_blog:order", '
             . '"blogs_blog"."level" AS "blogs_blog:level", "blogs_blog"."title" AS "blogs_blog:title#ru-RU", '
             . '"blogs_blog"."title_en" AS "blogs_blog:title#en-US", '
             . '"blogs_blog"."publish_time" AS "blogs_blog:publishTime", "blogs_blog"."owner_id" AS "blogs_blog:owner"

@@ -11,7 +11,7 @@ return [
         IObject::FIELD_GUID     => ['type'       => IField::TYPE_GUID,
                                     'columnName' => 'guid',
                                     'accessor'   => 'getGuid',
-                                    'mutator'    => 'setGuid'
+                                    'readOnly'    => true
         ],
         IObject::FIELD_TYPE     => ['type'       => IField::TYPE_STRING,
                                     'columnName' => 'type',

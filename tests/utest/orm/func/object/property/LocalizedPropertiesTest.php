@@ -65,7 +65,6 @@ class LocalizedPropertiesTest extends ORMDbTestCase
                 . '"blogs_blog"."type" AS "blogs_blog:type", "blogs_blog"."version" AS "blogs_blog:version", '
                 . '"blogs_blog"."pid" AS "blogs_blog:parent", "blogs_blog"."mpath" AS "blogs_blog:mpath", '
                 . '"blogs_blog"."slug" AS "blogs_blog:slug", "blogs_blog"."uri" AS "blogs_blog:uri", '
-                . '"blogs_blog"."child_count" AS "blogs_blog:childCount", '
                 . '"blogs_blog"."order" AS "blogs_blog:order", "blogs_blog"."level" AS "blogs_blog:level", '
                 . '"blogs_blog"."title" AS "blogs_blog:title#ru-RU", '
                 . '"blogs_blog"."title_en" AS "blogs_blog:title#en-US", '
@@ -146,7 +145,7 @@ WHERE (("blogs_blog"."id" = :value0))'
             . '"blogs_blog"."type" AS "blogs_blog:type", "blogs_blog"."version" AS "blogs_blog:version", '
             . '"blogs_blog"."pid" AS "blogs_blog:parent", "blogs_blog"."mpath" AS "blogs_blog:mpath", '
             . '"blogs_blog"."slug" AS "blogs_blog:slug", "blogs_blog"."uri" AS "blogs_blog:uri", '
-            . '"blogs_blog"."child_count" AS "blogs_blog:childCount", "blogs_blog"."order" AS "blogs_blog:order", '
+            . '"blogs_blog"."order" AS "blogs_blog:order", '
             . '"blogs_blog"."level" AS "blogs_blog:level", "blogs_blog"."title_en" AS "blogs_blog:title#en-US", '
             . '"blogs_blog"."publish_time" AS "blogs_blog:publishTime", "blogs_blog"."owner_id" AS "blogs_blog:owner"
 FROM "umi_mock_blogs" AS "blogs_blog"
@@ -180,11 +179,11 @@ WHERE (("blogs_blog"."guid" = :value0))'
 FROM "umi_mock_hierarchy"
 WHERE "pid" IS :parent',
             'UPDATE "umi_mock_hierarchy"
-SET "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
-WHERE "id" = :objectId',
+SET "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level, "version" = "version" + (1)
+WHERE "id" = :objectId AND "version" = :version',
             'UPDATE "umi_mock_blogs"
-SET "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
-WHERE "id" = :objectId',
+SET "version" = "version" + (1), "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
+WHERE "id" = :objectId AND "version" = :version',
             '"COMMIT"',
         ];
 
@@ -208,7 +207,7 @@ WHERE "id" = :objectId',
             . '"blogs_blog"."type" AS "blogs_blog:type", "blogs_blog"."version" AS "blogs_blog:version", '
             . '"blogs_blog"."pid" AS "blogs_blog:parent", "blogs_blog"."mpath" AS "blogs_blog:mpath", '
             . '"blogs_blog"."slug" AS "blogs_blog:slug", "blogs_blog"."uri" AS "blogs_blog:uri", '
-            . '"blogs_blog"."child_count" AS "blogs_blog:childCount", "blogs_blog"."order" AS "blogs_blog:order", '
+            . '"blogs_blog"."order" AS "blogs_blog:order", '
             . '"blogs_blog"."level" AS "blogs_blog:level", "blogs_blog"."title" AS "blogs_blog:title#ru-RU", '
             . '"blogs_blog"."title_en" AS "blogs_blog:title#en-US", '
             . '"blogs_blog"."publish_time" AS "blogs_blog:publishTime", "blogs_blog"."owner_id" AS "blogs_blog:owner"
@@ -248,11 +247,11 @@ WHERE (("blogs_blog"."guid" = :value0))'
 FROM "umi_mock_hierarchy"
 WHERE "pid" IS :parent',
             'UPDATE "umi_mock_hierarchy"
-SET "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
-WHERE "id" = :objectId',
+SET "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level, "version" = "version" + (1)
+WHERE "id" = :objectId AND "version" = :version',
             'UPDATE "umi_mock_blogs"
-SET "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
-WHERE "id" = :objectId',
+SET "version" = "version" + (1), "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
+WHERE "id" = :objectId AND "version" = :version',
             '"COMMIT"',
         ];
 
@@ -297,11 +296,11 @@ WHERE "id" = :objectId',
 FROM "umi_mock_hierarchy"
 WHERE "pid" IS :parent',
             'UPDATE "umi_mock_hierarchy"
-SET "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
-WHERE "id" = :objectId',
+SET "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level, "version" = "version" + (1)
+WHERE "id" = :objectId AND "version" = :version',
             'UPDATE "umi_mock_blogs"
-SET "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
-WHERE "id" = :objectId',
+SET "version" = "version" + (1), "mpath" = :mpath, "uri" = :uri, "order" = :order, "level" = :level
+WHERE "id" = :objectId AND "version" = :version',
             '"COMMIT"',
         ];
 
@@ -457,7 +456,6 @@ WHERE "id" = :objectId AND "version" = :version',
                 . '"blogs_blog"."type" AS "blogs_blog:type", "blogs_blog"."version" AS "blogs_blog:version", '
                 . '"blogs_blog"."pid" AS "blogs_blog:parent", "blogs_blog"."mpath" AS "blogs_blog:mpath", '
                 . '"blogs_blog"."slug" AS "blogs_blog:slug", "blogs_blog"."uri" AS "blogs_blog:uri", '
-                . '"blogs_blog"."child_count" AS "blogs_blog:childCount", '
                 . '"blogs_blog"."order" AS "blogs_blog:order", "blogs_blog"."level" AS "blogs_blog:level", '
                 . '"blogs_blog"."title_gb" AS "blogs_blog:title#en-GB", '
                 . '"blogs_blog"."title_en" AS "blogs_blog:title#en-US", '
@@ -496,7 +494,6 @@ WHERE (("blogs_blog"."guid" = :value0))'
                 . '"blogs_blog"."type" AS "blogs_blog:type", "blogs_blog"."version" AS "blogs_blog:version", '
                 . '"blogs_blog"."pid" AS "blogs_blog:parent", "blogs_blog"."mpath" AS "blogs_blog:mpath", '
                 . '"blogs_blog"."slug" AS "blogs_blog:slug", "blogs_blog"."uri" AS "blogs_blog:uri", '
-                . '"blogs_blog"."child_count" AS "blogs_blog:childCount", '
                 . '"blogs_blog"."order" AS "blogs_blog:order", "blogs_blog"."level" AS "blogs_blog:level", '
                 . '"blogs_blog"."title_gb" AS "blogs_blog:title#en-GB", '
                 . '"blogs_blog"."title_en" AS "blogs_blog:title#en-US"
