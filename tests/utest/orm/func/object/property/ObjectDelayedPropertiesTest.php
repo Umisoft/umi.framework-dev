@@ -16,7 +16,7 @@ use utest\orm\ORMDbTestCase;
 /**
  * Тесты для вычисляемых при сохранении свойств объекта
  */
-class ObjectFormulaPropertiesTest extends ORMDbTestCase
+class ObjectDelayedPropertiesTest extends ORMDbTestCase
 {
 
     /**
