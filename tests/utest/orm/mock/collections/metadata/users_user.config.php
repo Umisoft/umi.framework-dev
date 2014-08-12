@@ -22,7 +22,7 @@ return [
 
         'firstName' => ['type' => IField::TYPE_STRING, 'columnName' => 'first_name'],
         'lastName' => ['type' => IField::TYPE_STRING, 'columnName' => 'last_name'],
-        'fullName' => ['type' => IField::TYPE_FORMULA, 'columnName' => 'full_name', 'formula' => 'calculateFullName', 'dataType' => 'string'],
+        'fullName' => ['type' => IField::TYPE_DELAYED, 'columnName' => 'full_name', 'formula' => 'calculateFullName', 'dataType' => 'string'],
 
         'group' => ['type' => IField::TYPE_BELONGS_TO, 'columnName' => 'group_id', 'target' => 'users_group'],
         'profile' => ['type' => IField::TYPE_HAS_ONE, 'target' => 'users_profile', 'targetField' => 'user'],

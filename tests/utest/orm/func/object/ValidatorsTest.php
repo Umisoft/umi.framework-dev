@@ -29,9 +29,18 @@ class ValidatorsTest extends ORMDbTestCase
                 self::USERS_USER             => [
                     'type' => ICollectionFactory::TYPE_SIMPLE
                 ],
+                self::USERS_PROFILE             => [
+                    'type' => ICollectionFactory::TYPE_SIMPLE
+                ],
                 self::USERS_GROUP            => [
                     'type' => ICollectionFactory::TYPE_SIMPLE
-                ]
+                ],
+                self::BLOGS_BLOG             => [
+                    'type'      => ICollectionFactory::TYPE_SIMPLE_HIERARCHIC,
+                ],
+                self::BLOGS_SUBSCRIBER => [
+                    'type' => ICollectionFactory::TYPE_SIMPLE
+                ],
             ],
             true
         ];

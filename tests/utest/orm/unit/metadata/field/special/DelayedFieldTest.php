@@ -10,13 +10,13 @@
 namespace utest\orm\unit\metadata\field\special;
 
 use umi\orm\metadata\field\IField;
-use umi\orm\metadata\field\special\FormulaField;
+use umi\orm\metadata\field\special\DelayedField;
 use utest\orm\unit\metadata\field\FieldTestCase;
 
 /**
  * Тест поля хранителя связи.
  */
-class FormulaFieldTest extends FieldTestCase
+class DelayedFieldTest extends FieldTestCase
 {
 
     /**
@@ -24,9 +24,9 @@ class FormulaFieldTest extends FieldTestCase
      */
     protected function getField()
     {
-        return new FormulaField(
+        return new DelayedField(
             'mock',
-            IField::TYPE_FORMULA,
+            IField::TYPE_DELAYED,
             [
                 'dataType' => 'string',
                 'formula' => 'recalculateValue'
@@ -39,37 +39,37 @@ class FormulaFieldTest extends FieldTestCase
         $config = [];
         $e = null;
         try {
-            new FormulaField('mock', IField::TYPE_FORMULA, $config);
+            new DelayedField('mock', IField::TYPE_DELAYED, $config);
         } catch (\Exception $e) {
         }
         $this->assertInstanceOf(
             'umi\orm\exception\UnexpectedValueException',
             $e,
-            'Ожидается исключение при попытке создать поле FormulaField без указания типа данных'
+            'Ожидается исключение при попытке создать поле DelayedField без указания типа данных'
         );
 
         $config['dataType'] = 'wrongDataType';
         $e = null;
         try {
-            new FormulaField('mock', IField::TYPE_FORMULA, $config);
+            new DelayedField('mock', IField::TYPE_DELAYED, $config);
         } catch (\Exception $e) {
         }
         $this->assertInstanceOf(
             'umi\orm\exception\OutOfBoundsException',
             $e,
-            'Ожидается исключение при попытке создать поле FormulaField с неверным типом данных'
+            'Ожидается исключение при попытке создать поле DelayedField с неверным типом данных'
         );
 
         $config['dataType'] = 'string';
         $e = null;
         try {
-            new FormulaField('mock', IField::TYPE_FORMULA, $config);
+            new DelayedField('mock', IField::TYPE_DELAYED, $config);
         } catch (\Exception $e) {
         }
         $this->assertInstanceOf(
             'umi\orm\exception\UnexpectedValueException',
             $e,
-            'Ожидается исключение при попытке создать поле FormulaField без указания на метод, вычисляющий значение'
+            'Ожидается исключение при попытке создать поле DelayedField без указания на метод, вычисляющий значение'
         );
 
     }
