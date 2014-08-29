@@ -32,7 +32,7 @@ if (!defined('EXTENSIONS_PATH')) {
     define('EXTENSIONS_PATH', dirname(TESTS_ROOT) . '/extension');
 }
 
-$loader = require_once($vendorDir . '/autoload.php');
+$loader = require($vendorDir . '/autoload.php');
 $loader->add('utest', __DIR__);
 
 $session = new Session();
