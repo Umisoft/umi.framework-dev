@@ -16,6 +16,13 @@ use umi\filter\IFilter;
  */
 class FilterFixture2 implements IFilter
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function setOptions(array $options)
+    {
+        return $this;
+    }
 
     /**
      * {@inheritdoc}
