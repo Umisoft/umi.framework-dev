@@ -524,4 +524,22 @@ class SelectorTest extends ORMDbTestCase
             'Ожидается, что общее количество обновилось, если были добавлены новые объекты'
         );
     }
+
+    public function testArrayAccess()
+    {
+        $this->assertTrue(isset($this->selector[1]));
+
+        $this->assertFalse(isset($this->selector[100]));
+
+        $this->assertInstanceOf('umi\orm\object\IObject', $this->selector[1]);
+
+        @$this->selector[100];
+        $this->assertTrue(is_array(error_get_last()) && error_get_last()['message'] === 'Undefined offset: 100');
+
+        $this->selector[1] = 0;
+        $this->assertInstanceOf('umi\orm\object\IObject', $this->selector[1]);
+
+        unset($this->selector[1]);
+        $this->assertInstanceOf('umi\orm\object\IObject', $this->selector[1]);
+    }
 }

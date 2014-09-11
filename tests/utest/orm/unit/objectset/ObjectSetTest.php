@@ -25,6 +25,9 @@ class ObjectSetTest extends ORMDbTestCase
      * @var IObjectSet $objectsSet
      */
     protected $objectsSet;
+    /**
+     * @var int $counterId
+     */
     protected $counterId = 1;
 
     /**
@@ -187,5 +190,23 @@ class ObjectSetTest extends ORMDbTestCase
             'umi\orm\object\IObject',
             $this->objectsSet->fetch()
         );
+    }
+
+    public function testArrayAccess()
+    {
+        $this->assertTrue(isset($this->objectsSet[1]));
+
+        $this->assertFalse(isset($this->objectsSet[100]));
+
+        $this->assertInstanceOf('umi\orm\object\IObject', $this->objectsSet[1]);
+
+        @$this->objectsSet[100];
+        $this->assertTrue(is_array(error_get_last()) && error_get_last()['message'] === 'Undefined offset: 100');
+
+        $this->objectsSet[1] = 0;
+        $this->assertInstanceOf('umi\orm\object\IObject', $this->objectsSet[1]);
+
+        unset($this->objectsSet[1]);
+        $this->assertInstanceOf('umi\orm\object\IObject', $this->objectsSet[1]);
     }
 }
