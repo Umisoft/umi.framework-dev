@@ -11,7 +11,6 @@
     },
     "require": {
         "php": ">=5.4.0",
-        "umisoft/umi.framework": "~1.0",
         "monolog/monolog": "1.7.*",
         "firephp/firephp-core": "dev-master",
         "swiftmailer/swiftmailer": "5.0.*"

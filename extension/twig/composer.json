@@ -10,7 +10,6 @@
         }
     },
     "require": {
-        "umisoft/umi.framework": "~1.0",
         "php": ">=5.4.0",
         "twig/twig": "1.*"
     },
