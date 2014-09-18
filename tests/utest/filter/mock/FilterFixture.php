@@ -25,16 +25,6 @@ class FilterFixture implements IFilter
     /**
      * {@inheritdoc}
      */
-    public function setOptions(array $options)
-    {
-        $this->options = $options;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function __construct(array $options)
     {
         $this->options = $options;

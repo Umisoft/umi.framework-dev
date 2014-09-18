@@ -19,14 +19,6 @@ class FilterFixture2 implements IFilter
     /**
      * {@inheritdoc}
      */
-    public function setOptions(array $options)
-    {
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function filter($var)
     {
         return true;

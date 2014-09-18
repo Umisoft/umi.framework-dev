@@ -48,23 +48,6 @@ class FilterTest extends FilterTestCase
     }
 
     /**
-     * Тестирование работы сеттера свойств
-     */
-    public function testSetOptions()
-    {
-        $filter = $this->filterFactory
-            ->createFilter(IFilterFactory::TYPE_NULL);
-
-        $filter->setOptions(
-            ['optional_values' => ['null', 'false']]
-        );
-
-        $this->assertEquals('string', $filter->filter('string'), "Ожидается, что значение не будет изменено");
-
-        $this->assertNull($filter->filter('false'), "Ожидается, что отфильтрованное значение будет null");
-    }
-
-    /**
      * Тестирование работы коллекции валидаторов
      */
     public function testMultipleFilter()
