@@ -19,7 +19,7 @@
         "psr/log": "1.*",
         "doctrine/dbal": "2.4.*",
         "twig/twig": "1.*",
-        "swiftmailer/swiftmailer": "5.0.*",
+        "swiftmailer/swiftmailer": "5.*",
         "monolog/monolog": "1.7.*",
         "firephp/firephp-core": "dev-master"
     },

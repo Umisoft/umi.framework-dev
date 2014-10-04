@@ -29,14 +29,4 @@ class MessageTransportTest extends MessageTestCase
 
         $this->assertContains('name=attach-plain.txt', $transport->getSentContent(), "Attach must present in mail body");
     }
-
-    protected function tearDownFixtures()
-    {
-        parent::tearDownFixtures();
-        if ($tmpFiles = glob(__DIR__ . '/tmp/*')) {
-            foreach ($tmpFiles as $f) {
-                unlink($f);
-            }
-        }
-    }
 }

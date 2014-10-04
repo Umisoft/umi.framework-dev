@@ -10,8 +10,6 @@
 namespace utest\messages\unit;
 
 use umi\messages\exception\InvalidArgumentException;
-use utest\messages\mock\SwiftMailerAware;
-use utest\messages\mock\TestTransport;
 
 /**
  * Тесты на работоспособность конфигурации инструментов службы сообщений
@@ -88,21 +86,4 @@ class MessagesConfigTest extends MessageTestCase
         ];
     }
 
-    public function testMailerAware()
-    {
-        $swiftMailerAware = new SwiftMailerAware();
-        $transport = new TestTransport();
-        $this->messagesTools->setTransport($transport);
-        $swiftMailerAware->setSwiftMailer($this->messagesTools->getService('umi\messages\SwiftMailer', null));
-
-        try {
-            $swiftMailerAware->testSend('foo', 'bodyfoo', 'text/html');
-        } catch (\Exception $e) {
-            $this->assertInstanceOf(
-                'umi\messages\exception\FailedRecipientsException',
-                $e,
-                'fake addresses must raise FailedRecipientsException'
-            );
-        }
-    }
 }
