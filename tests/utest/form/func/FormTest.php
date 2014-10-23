@@ -216,4 +216,18 @@ class FormTest extends FormTestCase
             'Ожидается, что будут получены данные прошедшие фильтрацию.'
         );
     }
+
+    public function testIdFormViewAttribute()
+    {
+        $this->assertNull($this->form->getId());
+
+        $view = $this->form->getView();
+        $this->assertNull($view->attributes['id']);
+        $this->assertEquals('email', $view->elements[0]->attributes['id']);
+
+        $this->form->setId('test');
+        $view = $this->form->getView();
+        $this->assertEquals('test', $view->attributes['id']);
+        $this->assertEquals('test_email', $view->elements[0]->attributes['id']);
+    }
 }
