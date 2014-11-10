@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<project name="UmiFrameworkBuild" basedir=".." default="build">
+
+    <property name="version" value="1.0.0"/>
+
+    <property name="build.dir" value="${project.basedir}/build"/>
+
+    <property name="umi.framework-dev.git" value="git@github.com:Umisoft/umi.framework-dev.git"/>
+
+    <property name="temp.dir" value="${build.dir}/temp"/>
+    <property name="log.dir" value="${build.dir}/log"/>
+
+    <property name="git.sync.branch" value="master"/>
+
+    <target name="cleanup">
+        <delete dir="${temp.dir}" includeemptydirs="true" failonerror="false" verbose="false"/>
+    </target>
+
+    <target name="build" description="Build UMI.Framework." depends="cleanup,gitCheckout">
+        <phingcall target="syncRepository"/>
+    </target>
+
+    <target name="gitUpdate" description="Клонируем или обновляем репозиторий...">
+        <if>
+            <available property="clone-exists" type="dir" file="${temp.dir}"/>
+            <then>
+                <echo>Development repository already cloned. Updating...</echo>
+                <gitfetch repository="${temp.dir}" all="true"/>
+                <gitpull repository="${temp.dir}" all="true" force="true"/>
+            </then>
+            <else>
+                <echo message="Cloning ${umi.framework-dev.git} to ${temp.dir}"/>
+                <gitclone repository="${umi.framework-dev.git}" targetPath="${temp.dir}"/>
+            </else>
+        </if>
+    </target>
+
+    <target name="initSubtreeTool">
+        <chmod mode="0755" file="${build.dir}/git-subsplit.sh"/>
+        <!--<chmod mode="0755" file="${bin.dir}/subtree.phar"/>-->
+    </target>
+
+    <target name="gitCheckout" depends="gitUpdate" description="Переключаем ветку...">
+        <echo message="Checkout to branch ${git.sync.branch}"/>
+        <gitcheckout repository="${temp.dir}" branchname="${git.sync.branch}" force="true"/>
+    </target>
+
+    <target name="syncRepository" description="Synchronize developer package" depends="initSubtreeTool">
+        <exec passthru="true" executable="php" dir="${temp.dir}">
+            <arg file="${build.dir}/subtree.phar"/>
+            <arg value="update"/>
+            <arg value="--logs=${build.dir}/logs"/>
+            <arg value="--branches=${git.sync.branch}"/>
+            <arg file="${build.dir}/subtree.yaml"/>
+        </exec>
+    </target>
+
+
+</project>

@@ -1,0 +1,4 @@
+# map folders to subtrees
+library: git@github.com:Umisoft/umi.framework.git
+extension/twig: git@github.com:Umisoft/umi-extension-twig.git
+extension/monolog: git@github.com:Umisoft/umi-extension-monolog.git
