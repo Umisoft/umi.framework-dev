@@ -38,7 +38,7 @@
 
     <target name="initSubtreeTool">
         <chmod mode="0755" file="${build.dir}/git-subsplit.sh"/>
-        <!--<chmod mode="0755" file="${bin.dir}/subtree.phar"/>-->
+        <chmod mode="0755" file="${build.dir}/subtree.phar"/>
     </target>
 
     <target name="gitCheckout" depends="gitUpdate" description="Переключаем ветку...">
