@@ -17,10 +17,6 @@
         <delete dir="${temp.dir}" includeemptydirs="true" failonerror="false" verbose="false"/>
     </target>
 
-    <target name="build" description="Build UMI.Framework." depends="cleanup,gitCheckout">
-        <phingcall target="syncRepository"/>
-    </target>
-
     <target name="gitUpdate" description="Клонируем или обновляем репозиторий...">
         <if>
             <available property="clone-exists" type="dir" file="${temp.dir}"/>
@@ -36,14 +32,18 @@
         </if>
     </target>
 
-    <target name="initSubtreeTool">
-        <chmod mode="0755" file="${build.dir}/git-subsplit.sh"/>
-        <chmod mode="0755" file="${build.dir}/subtree.phar"/>
-    </target>
-
     <target name="gitCheckout" depends="gitUpdate" description="Переключаем ветку...">
         <echo message="Checkout to branch ${git.sync.branch}"/>
         <exec command="git checkout -f ${git.sync.branch}" dir="${temp.dir}" />
+    </target>
+
+    <target name="build" description="Build UMI.Framework." depends="cleanup,gitCheckout">
+        <phingcall target="syncRepository"/>
+    </target>
+
+    <target name="initSubtreeTool">
+        <chmod mode="0755" file="${build.dir}/git-subsplit.sh"/>
+        <chmod mode="0755" file="${build.dir}/subtree.phar"/>
     </target>
 
     <target name="syncRepository" description="Synchronize developer package" depends="initSubtreeTool">
