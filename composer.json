@@ -32,8 +32,7 @@
 
     "require-dev" : {
         "phing/phing": "2.7.*",
-        "phpunit/phpunit": "3.*",
-        "pear/versioncontrol_git": "dev-master"
+        "phpunit/phpunit": "3.*"
     },
 
     "autoload": {

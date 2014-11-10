@@ -26,12 +26,12 @@
             <available property="clone-exists" type="dir" file="${temp.dir}"/>
             <then>
                 <echo>Development repository already cloned. Updating...</echo>
-                <gitfetch repository="${temp.dir}" all="true"/>
-                <gitpull repository="${temp.dir}" all="true" force="true"/>
+                <exec command="git fetch --all" dir="${temp.dir}" />
+                <exec command="git pull -f --all" dir="${temp.dir}" />
             </then>
             <else>
-                <echo message="Cloning ${umi.framework-dev.git} to ${temp.dir}"/>
-                <gitclone repository="${umi.framework-dev.git}" targetPath="${temp.dir}"/>
+                <echo message="Cloning ${umi.framework-dev.git} to ${temp.dir}" />
+                <exec command="git clone ${umi.framework-dev.git} ${temp.dir}" />
             </else>
         </if>
     </target>
@@ -43,7 +43,7 @@
 
     <target name="gitCheckout" depends="gitUpdate" description="Переключаем ветку...">
         <echo message="Checkout to branch ${git.sync.branch}"/>
-        <gitcheckout repository="${temp.dir}" branchname="${git.sync.branch}" force="true"/>
+        <exec command="git checkout -f ${git.sync.branch}" dir="${temp.dir}" />
     </target>
 
     <target name="syncRepository" description="Synchronize developer package" depends="initSubtreeTool">
